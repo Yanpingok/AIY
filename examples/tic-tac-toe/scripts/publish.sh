@@ -8,8 +8,8 @@ set -e
 cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null
 
 # Check dependencies are available.
-SUI=${SUI:-sui}
-for i in jq $SUI; do
+AIY=${AIY:-aiy}
+for i in jq $AIY; do
   if ! command -V ${i} &>/dev/null; then
     echo "${i} is not installed"
     exit 1
@@ -22,9 +22,9 @@ if [ -z "$1" ]; then
     exit 1
 fi
 ENV=$1; shift
-$SUI client switch --env $ENV
+$AIY client switch --env $ENV
 
-PUBLISH=$($SUI client publish ../move --json $@)
+PUBLISH=$($AIY client publish ../move --json $@)
 
 STATUS=$(
     echo $PUBLISH |

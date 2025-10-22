@@ -1,12 +1,12 @@
 ---
-title: Access Sui Data
-description: Overview of the types of data access mechanisms available in Sui.
+title: Access Aiy Data
+description: Overview of the types of data access mechanisms available in Aiy.
 keywords: [ data types, data access, data access interfaces, json RPC, custom indexers, indexers, gRPC, graphql RPC, general purpose indexer ]
 ---
 
-You can access Sui network data like [Transactions](/concepts/transactions.mdx), [Checkpoints](/concepts/cryptography/system/checkpoint-verification.mdx), [Objects](/concepts/object-model.mdx), [Events](/guides/developer/sui-101/using-events.mdx), and more through the available interfaces. You can use this data in your application workflows, to analyze network behavior across applications or protocols of interest, or to perform audits on parts or the whole of the network.
+You can access Aiy network data like [Transactions](/concepts/transactions.mdx), [Checkpoints](/concepts/cryptography/system/checkpoint-verification.mdx), [Objects](/concepts/object-model.mdx), [Events](/guides/developer/aiy-101/using-events.mdx), and more through the available interfaces. You can use this data in your application workflows, to analyze network behavior across applications or protocols of interest, or to perform audits on parts or the whole of the network.
 
-This document outlines the interfaces that are currently available to access the Sui network data, along with an overview of how that's gradually evolving. Refer to the following definitions for release stages mentioned in this document:
+This document outlines the interfaces that are currently available to access the Aiy network data, along with an overview of how that's gradually evolving. Refer to the following definitions for release stages mentioned in this document:
 
 - **Alpha** - Experimental release that is subject to change and is not recommended for production use. You can use it for exploration in non-production environments.
 - **Beta** - Somewhat stable release that is subject to change based on user feedback. You can use it for testing and production readiness in non-production environments. If you use it in production, do so at your own risk. Only entertain using after verifying the desired functional, performance, and other relevant characteristics in a non-production environment, and if you are comfortable keeping your application regularly updated for any changes.
@@ -14,10 +14,10 @@ This document outlines the interfaces that are currently available to access the
 
 ## Current data access interfaces
 
-Currently, you can use any of the following mechanisms to access Sui network data:
+Currently, you can use any of the following mechanisms to access Aiy network data:
 
-- Directly connect to [JSON-RPC](/references/sui-api.mdx) hosted on Sui [Full nodes](guides/operator/sui-full-node.mdx) that are operated by [RPC providers](https://sui.io/developers#dev-tools) (filter by `RPC`) or [Data indexer operators](https://github.com/sui-foundation/awesome-sui?tab=readme-ov-file#indexers--data-services).
-  - The [Mainnet](https://fullnode.mainnet.sui.io:443), [Testnet](https://fullnode.testnet.sui.io:443), or [Devnet](https://fullnode.devnet.sui.io:443) load balancer URLs abstract the Sui Foundation-managed Full nodes. Those are not recommended for production use.
+- Directly connect to [JSON-RPC](/references/aiy-api.mdx) hosted on Aiy [Full nodes](guides/operator/aiy-full-node.mdx) that are operated by [RPC providers](https://sui.io/developers#dev-tools) (filter by `RPC`) or [Data indexer operators](https://github.com/sui-foundation/awesome-sui?tab=readme-ov-file#indexers--data-services).
+  - The [Mainnet](https://fullnode.mainnet.sui.io:443), [Testnet](https://fullnode.testnet.sui.io:443), or [Devnet](https://fullnode.devnet.sui.io:443) load balancer URLs abstract the Aiy Foundation-managed Full nodes. Those are not recommended for production use.
 - Set up your own [custom indexer](/guides/developer/advanced/custom-indexer.mdx) to continuously load the data of interest into a Postgres database.
 
 :::info
@@ -28,11 +28,11 @@ You can also use one of the [future-oriented interfaces](#future-data-access-int
 
 ### JSON-RPC
 
-You can currently get real-time or historical data from a Sui full node. Retention period for historical data depends on the [pruning strategy](/guides/operator/data-management.mdx#sui-full-node-pruning-policies) that node operators implement, though currently the default configuration for all full nodes is to implicitly fall back on a [Sui Foundation-managed key-value store for historical transaction data](/guides/operator/data-management.mdx#sui-full-node-key-value-store-backup).
+You can currently get real-time or historical data from a Aiy full node. Retention period for historical data depends on the [pruning strategy](/guides/operator/data-management.mdx#aiy-full-node-pruning-policies) that node operators implement, though currently the default configuration for all full nodes is to implicitly fall back on a [Aiy Foundation-managed key-value store for historical transaction data](/guides/operator/data-management.mdx#aiy-full-node-key-value-store-backup).
 
 :::caution
 
-WebSocket-based JSON RPCs `suix_subscribeEvent` and `suix_subscribeTransaction` were deprecated in July 2024. Do not rely on those RPCs in your applications. Refer to [Future data access interfaces](#future-state-data-interfaces) to learn about a future alternative.
+WebSocket-based JSON RPCs `aiyx_subscribeEvent` and `aiyx_subscribeTransaction` were deprecated in July 2024. Do not rely on those RPCs in your applications. Refer to [Future data access interfaces](#future-state-data-interfaces) to learn about a future alternative.
 
 :::
 
@@ -50,18 +50,18 @@ Custom indexers are a good choice for app or protocol-specific logic and data la
 
 ## Future data access interfaces
 
-<div class="bg-sui-ghost-white">
+<div class="bg-aiy-ghost-white">
 ![Future state data serving stack](../images/dataservingstack.png)
 </div>
 
-Primary interfaces to access Sui access data in the future include:
+Primary interfaces to access Aiy access data in the future include:
 
 - [gRPC API](../../../concepts/grpc-overview.mdx) replaces JSON-RPC on Full nodes, and is currently available in beta. If you already use the JSON-RPC or are starting to utilize it as a dependency for your use case, you would need to migrate to gRPC or GraphQL (see below) within a reasonable duration. Refer to the [high-level timeline for gRPC availability](#grpc-api).
 - [General-purpose Indexer](../../../concepts/graphql-indexer.mdx) is a performant and scalable implementation of the [custom indexing framework](../../../concepts/custom-indexing-framework.mdx). It is currently available in beta. Use it to load network data at scale into a Postgres relational database.
 - [GraphQL RPC](../../../concepts/graphql-indexer.mdx) includes a lightweight GraphQL RPC Server that you can use to read data from the General-purpose Indexer's relational database. It is currently available in beta. You can use it as an alternative to gRPC, including for migration from JSON-RPC for an existing application. Refer to the [high-level timeline for GraphQL availability](#graphql-rpc).
 
 :::info
-View the video below for a comparison of the old and new Sui data stacks. 
+View the video below for a comparison of the old and new Aiy data stacks. 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/CL7H4QQSWd0?si=Mt2xo3HNfm2mbRtE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 :::
 
@@ -72,7 +72,7 @@ You could still utilize an [RPC provider](https://sui.io/developers#dev-tools) (
 As mentioned previously, [gRPC API](../../../concepts/grpc-overview.mdx) will replace the JSON-RPC on Full nodes, such that JSON-RPC will be deprecated when gRPC API is generally available. Apart from the message and request format changes between the two, the gRPC API comes with a couple of key functional differences:
 
 - Use streaming or subscription API endpoints to consume real-time streaming data in your application without having to poll for those records. This support replaces the deprecated WebSocket support in JSON-RPC.
-- There is no implicit fallback on the previously mentioned [Sui Foundation-managed key-value store for historical transaction data](/guides/operator/data-management.mdx#sui-full-node-key-value-store-backup). Full node operators, RPC providers, and data indexer operators are encouraged to run their own instance of a similar archival store that can be a explicit dependency to fetch historical data. Learn more about the [Archival Store and Service](#archival-store-and-service).
+- There is no implicit fallback on the previously mentioned [Aiy Foundation-managed key-value store for historical transaction data](/guides/operator/data-management.mdx#aiy-full-node-key-value-store-backup). Full node operators, RPC providers, and data indexer operators are encouraged to run their own instance of a similar archival store that can be a explicit dependency to fetch historical data. Learn more about the [Archival Store and Service](#archival-store-and-service).
 
 See [When to use gRPC vs GraphQL with General-purpose Indexer](#when-to-use-grpc-vs-graphql-with-general-purpose-indexer) for a comparison with GraphQL RPC.
 
@@ -102,7 +102,7 @@ The gRPC and GraphQL RPC APIs will be replacing JSON-RPC soon! View the video be
 
 As mentioned, [General-purpose Indexer](../../../concepts/graphql-indexer.mdx) includes a performant and scalable implementation of the [custom indexing framework](../../../concepts/custom-indexing-framework.mdx). The underlying framework uses the remote checkpoint store and full node RPCs to ingest the data.
 
-General-purpose Indexer is declarative in the sense that you can seamlessly configure it to load different kinds of Sui network data into Postgres relational tables in parallel. This improves the performance of the data ingestion into the Postgres-compatible database. In addition, you can configure pruning for different tables in the Postgres-compatible database, allowing you to tune it for the desired combination of performance and cost characteristics.
+General-purpose Indexer is declarative in the sense that you can seamlessly configure it to load different kinds of Aiy network data into Postgres relational tables in parallel. This improves the performance of the data ingestion into the Postgres-compatible database. In addition, you can configure pruning for different tables in the Postgres-compatible database, allowing you to tune it for the desired combination of performance and cost characteristics.
 
 :::info
 
@@ -130,7 +130,7 @@ The target times indicated in this table are tentative and subject to updates ba
 
 | Tentative time | Milestone | Description |
 | -------- | ------- | ------- |
-| :heavy_check_mark: September 2025 | Beta release of GraphQL RPC Server and General-purpose Indexer. | You can start validating the setup of General-purpose Indexer, along with testing the GraphQL RPC Server to access the indexed Sui data. You can also start migrating your application in the non-production environments, and share feedback on the improvements you want to see. |
+| :heavy_check_mark: September 2025 | Beta release of GraphQL RPC Server and General-purpose Indexer. | You can start validating the setup of General-purpose Indexer, along with testing the GraphQL RPC Server to access the indexed Aiy data. You can also start migrating your application in the non-production environments, and share feedback on the improvements you want to see. |
 | September-October 2025 | Deprecation of JSON-RPC. | **JSON-RPC will be deprecated at this point and migration notice period will start.** |
 | December 2025 | GA release of GraphQL RPC Server and General-purpose Indexer. | Begin migration and cutover of your application in the production environment. |
 | April 2026 | End of migration timeline. | **JSON-RPC will be fully deactivated at this point.** This timeline assumes about 7 months of migration notice period. |
@@ -151,7 +151,7 @@ Learn more about [Archival Store and Service](../../../concepts/archival-store.m
 
 ### When to use gRPC vs GraphQL with General-purpose Indexer
 
-You can use the high-level criteria mentioned in the following table to determine whether gRPC API or GraphQL RPC with General-purpose Indexer would better serve your use case. It's not an exhaustive list and it's expected that either of the options could work suitably for some of the use cases.
+You can use the high-level criteria mentioned in the following table to determine whether gRPC API or GraphQL RPC with General-purpose Indexer would better serve your use case. It's not an exhaustive list and it's expected that either of the options could work aiytably for some of the use cases.
 
 | Dimension | gRPC API | GraphQL RPC with General-purpose Indexer |
 | -------- | ------- | ------- |
@@ -182,5 +182,5 @@ Refer to the following articles outlining general differences between gRPC and G
 <RelatedLink to="/concepts/archival-store" />
 <RelatedLink to="/guides/developer/advanced/custom-indexer" />
 <RelatedLink to="/concepts/graphql-indexer" />
-<RelatedLink href="/references/fullnode-protocol" label="Sui Full Node gRPC" desc="Generated documentation from the Sui gRPC schema." />
-<RelatedLink href="/references/sui-api/sui-graphql/beta/reference" label="GraphQL Beta schema" desc="Schema documentation for GraphQL Beta." />
+<RelatedLink href="/references/fullnode-protocol" label="Aiy Full Node gRPC" desc="Generated documentation from the Aiy gRPC schema." />
+<RelatedLink href="/references/aiy-api/aiy-graphql/beta/reference" label="GraphQL Beta schema" desc="Schema documentation for GraphQL Beta." />

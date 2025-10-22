@@ -1,0 +1,28 @@
+[package]
+name = "aiy-kv-rpc"
+authors = ["Mysten Labs <build@mystenlabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+version.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+axum.workspace = true
+bin-version.workspace = true
+clap.workspace = true
+prometheus.workspace = true
+mysten-metrics.workspace = true
+mysten-network.workspace = true
+aiy-data-ingestion-core.workspace = true
+aiy-kvstore.workspace = true
+aiy-rpc-api.workspace = true
+aiy-rpc.workspace = true
+aiy-types.workspace = true
+aiy-sdk-types.workspace = true
+telemetry-subscribers.workspace = true
+tokio.workspace = true
+tonic.workspace = true
+tonic-reflection.workspace = true
+tracing.workspace = true
+aiy-protocol-config.workspace = true

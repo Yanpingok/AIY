@@ -4,14 +4,14 @@
 #
 # Check whether the version of framework in the repo is compatible
 # with the version on chain, as reported by the currently active
-# environment, using the binary in environment variable $SUI.
+# environment, using the binary in environment variable $AIY.
 
 set -e
 
-SUI=${SUI:-sui}
+AIY=${AIY:-aiy}
 REPO=$(git rev-parse --show-toplevel)
 
-for PACKAGE in "$REPO"/crates/sui-framework/packages/*; do
-    $SUI client verify-source "$PACKAGE"
+for PACKAGE in "$REPO"/crates/aiy-framework/packages/*; do
+    $AIY client verify-source "$PACKAGE"
 done
 

@@ -1,0 +1,10 @@
+[package]
+name = "Examples"
+version = "0.0.1"
+edition = "2024.beta"
+
+[dependencies]
+Aiy = { local = "../../../../aiy-framework/packages/aiy-framework" }
+
+[addresses]
+examples = "0x0"

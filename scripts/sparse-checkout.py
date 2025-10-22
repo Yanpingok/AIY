@@ -62,9 +62,9 @@ def read_sparse_config(sparse_file=".sparse"):
             print(f"No crates found in {sparse_file}. Exiting.")
             sys.exit(1)
 
-        # sui-benchmark tests use sui-surfer which requires move sources to be checked out
-        if "crates/sui-surfer" not in crates and "crates/sui-benchmark" in crates:
-            crates.append("crates/sui-surfer")
+        # aiy-benchmark tests use aiy-surfer which requires move sources to be checked out
+        if "crates/aiy-surfer" not in crates and "crates/aiy-benchmark" in crates:
+            crates.append("crates/aiy-surfer")
 
         return crates, base_commit
     else:
@@ -79,10 +79,10 @@ def update_git_sparse_checkout(crates_to_checkout):
     # You can add any default directories you always want checked out here
     default_directories = ["scripts", ".cargo", ".changeset", ".config", ".github", "examples"]
 
-    # if we don't have sui-framework, we probably need to add the move sources in order for tests
+    # if we don't have aiy-framework, we probably need to add the move sources in order for tests
     # to run
-    if "crates/sui-framework" not in crates_to_checkout:
-        default_directories.append("crates/sui-framework/packages")
+    if "crates/aiy-framework" not in crates_to_checkout:
+        default_directories.append("crates/aiy-framework/packages")
 
     # 1) Initialize sparse checkout (if not already).
     subprocess.check_call(["git", "sparse-checkout", "init", "--cone"])
@@ -261,11 +261,11 @@ def create_sparse_checkout_worktree():
         base_commit = get_merge_base(ignore_config=True)
 
         # now launch $EDITOR to configure the .sparse file. The default contents of .sparse
-        # are `crates/sui-core`. First, write the defaults
+        # are `crates/aiy-core`. First, write the defaults
         with open(".sparse", "w") as f:
             f.write("# Directories to include in the sparse checkout\n")
             f.write(f"base-commit:{base_commit}\n")
-            f.write("crates/sui-core\n")
+            f.write("crates/aiy-core\n")
         # now launch $EDITOR
         subprocess.check_call([os.getenv("EDITOR", "vi"), ".sparse"])
     else:

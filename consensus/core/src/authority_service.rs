@@ -16,7 +16,7 @@ use futures::{ready, stream, task, Stream, StreamExt};
 use mysten_metrics::spawn_monitored_task;
 use parking_lot::RwLock;
 use rand::seq::SliceRandom as _;
-use sui_macros::fail_point_async;
+use aiy_macros::fail_point_async;
 use tap::TapFallible;
 use tokio::sync::broadcast;
 use tokio_util::sync::ReusableBoxFuture;

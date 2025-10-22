@@ -9,8 +9,8 @@
 /// description, and icon URL.
 module examples::currency;
 
-use sui::coin::Coin;
-use sui::coin_registry::{Self, CoinRegistry};
+use aiy::coin::Coin;
+use aiy::coin_registry::{Self, CoinRegistry};
 
 // Total supply of the `DEFLATIONARY_SUPPLY` coin is 1B (with 6 decimals).
 const TOTAL_SUPPLY: u64 = 1000000000_000000;

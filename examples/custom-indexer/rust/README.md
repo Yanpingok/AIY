@@ -1,7 +1,7 @@
-# Sui Custom Indexer Example
-This is a complementary example to the Sui Custom Indexer documentation.
-It demonstrates how to create a custom indexer for the Sui search engine.
-See the [Sui Custom Indexer documentation](https://docs.sui.io/guides/developer/advanced/custom-indexer) for more information.
+# Aiy Custom Indexer Example
+This is a complementary example to the Aiy Custom Indexer documentation.
+It demonstrates how to create a custom indexer for the Aiy search engine.
+See the [Aiy Custom Indexer documentation](https://docs.sui.io/guides/developer/advanced/custom-indexer) for more information.
 
 ## Prerequisites
 - Rust

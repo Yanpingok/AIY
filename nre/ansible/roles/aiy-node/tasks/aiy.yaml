@@ -1,0 +1,99 @@
+---
+- name: Add a aiy user
+  ansible.builtin.user:
+    name: aiy
+    shell: /bin/bash
+
+- name: Create aiy directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "aiy"
+    group: "aiy"
+    mode: 0755
+  loop:
+    - /opt/aiy/bin
+    - /opt/aiy/config
+    - /opt/aiy/db
+    - /opt/aiy/key-pairs
+
+- name: Copy validator configuration file
+  copy:
+    src: "{{ node_config }}"
+    dest: /opt/aiy/config/validator.yaml
+    owner: "aiy"
+    group: "aiy"
+    mode: 0644
+
+- name: Copy genesis.blob
+  copy:
+    src: "{{ genesis_blob }}"
+    dest: /opt/aiy/config/genesis.blob
+    owner: "aiy"
+    group: "aiy"
+    mode: 0644
+
+- name: Copy protocol.key
+  copy:
+    src: "{{ keypair_path }}protocol.key"
+    dest: /opt/aiy/key-pairs/protocol.key
+    owner: "aiy"
+    group: "aiy"
+    mode: 0600
+
+- name: Copy network.key
+  copy:
+    src: "{{ keypair_path }}network.key"
+    dest: /opt/aiy/key-pairs/network.key
+    owner: "aiy"
+    group: "aiy"
+    mode: 0600
+
+- name: Copy worker.key
+  copy:
+    src: "{{ keypair_path }}worker.key"
+    dest: /opt/aiy/key-pairs/worker.key
+    owner: "aiy"
+    group: "aiy"
+    mode: 0600
+
+- name: Stop aiy-node
+  systemd:
+    name: aiy-node
+    state: stopped
+  ignore_errors: yes
+
+- name: Remove authorities directory
+  file:
+    state: absent
+    path: "/opt/aiy/db/authorities_db"
+  when: reset_db == true
+
+- name: Remove consensus directory
+  file:
+    state: absent
+    path: "/opt/aiy/db/consensus_db"
+  when: reset_db == true
+
+- name: Place binary
+  ansible.builtin.get_url:
+    url: "https://releases.sui.io/{{ aiy_release }}/aiy-node"
+    dest: /opt/aiy/bin/aiy-node
+    force: true
+    mode: "0755"
+
+- name: Copy aiy-node systemd service file
+  copy:
+    src: "../files/aiy-node.service"
+    dest: /etc/systemd/system/aiy-node.service
+
+- name: Reload aiy-node systemd service file
+  ansible.builtin.systemd:
+    name: aiy-node
+    state: reloaded
+
+- name: Start aiy-node service
+  systemd:
+    name: aiy-node
+    state: started
+  when: start_aiy == true

@@ -13,19 +13,19 @@ console.log("Current working directory:", process.cwd());
  * to mirror the workflow outputs (snippets/console-output/*.mdx).
  */
 const COMMANDS = [
-  { cmd: "sui client --help", out: "sui-client-help.mdx" },
-  { cmd: "sui replay --help", out: "sui-replay-help.mdx" },
-  { cmd: "sui keytool --help", out: "sui-keytool-help.mdx" },
-  { cmd: "sui keytool sign --help", out: "sui-keytool-sign-help.mdx" },
-  { cmd: "sui move --help", out: "sui-move-help.mdx" },
-  { cmd: "sui move build --help", out: "sui-move-build-help.mdx" },
-  { cmd: "sui validator --help", out: "sui-validator-help.mdx" },
+  { cmd: "aiy client --help", out: "aiy-client-help.mdx" },
+  { cmd: "aiy replay --help", out: "aiy-replay-help.mdx" },
+  { cmd: "aiy keytool --help", out: "aiy-keytool-help.mdx" },
+  { cmd: "aiy keytool sign --help", out: "aiy-keytool-sign-help.mdx" },
+  { cmd: "aiy move --help", out: "aiy-move-help.mdx" },
+  { cmd: "aiy move build --help", out: "aiy-move-build-help.mdx" },
+  { cmd: "aiy validator --help", out: "aiy-validator-help.mdx" },
   {
-    cmd: "sui validator report-validator --help",
-    out: "sui-validator-report-validator-help.mdx",
+    cmd: "aiy validator report-validator --help",
+    out: "aiy-validator-report-validator-help.mdx",
   },
-  { cmd: "sui client call --help", out: "sui-client-call-help.mdx" },
-  { cmd: "sui client ptb --help", out: "sui-client-ptb-help.mdx" },
+  { cmd: "aiy client call --help", out: "aiy-client-call-help.mdx" },
+  { cmd: "aiy client ptb --help", out: "aiy-client-ptb-help.mdx" },
 ];
 
 /** Root for snippet outputs (kept identical to the workflow paths). */

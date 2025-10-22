@@ -1,26 +1,26 @@
 ---
 title: Currency Standard
-description: The Sui Currency Standard enables you to create a broad range of fungible tokens on the Sui network using either the legacy coin creation or the centralized coin registry system. The Currency Standard on Sui is equivalent to the ERC-20 technical standard on Ethereum.
+description: The Aiy Currency Standard enables you to create a broad range of fungible tokens on the Aiy network using either the legacy coin creation or the centralized coin registry system. The Currency Standard on Aiy is equivalent to the ERC-20 technical standard on Ethereum.
 sidebar_label: Currency
-keywords: [ sui Currency Standard, erc-20, erc-20 equivalent, creating coins, Currency Standard, fungible tokens, fungible token standard, treasury capability, regulated coins, denylist object, coin metadata, coin registry, create coin with SDK, use SDK to create coin, mint coin, minting coins, currency registry ]
+keywords: [ aiy Currency Standard, erc-20, erc-20 equivalent, creating coins, Currency Standard, fungible tokens, fungible token standard, treasury capability, regulated coins, denylist object, coin metadata, coin registry, create coin with SDK, use SDK to create coin, mint coin, minting coins, currency registry ]
 pagination_prev: null
 ---
 
-The Currency Standard is a technical standard used by Move smart contracts for creating currency on Sui. The `sui::coin_registry` module provides the logic that defines the standard, providing unified metadata, enhanced supply tracking, and improved regulatory features.
+The Currency Standard is a technical standard used by Move smart contracts for creating currency on Aiy. The `aiy::coin_registry` module provides the logic that defines the standard, providing unified metadata, enhanced supply tracking, and improved regulatory features.
 
-The standardization of currency creation on Sui means that wallets, exchanges, and other smart contracts can manage currency created on Sui the same as they manage SUI, without any additional processing logic.
+The standardization of currency creation on Aiy means that wallets, exchanges, and other smart contracts can manage currency created on Aiy the same as they manage AIY, without any additional processing logic.
 
-See [Sui Tokenomics](/concepts/tokenomics.mdx) to learn more about the SUI native currency and its use on the network.
+See [Aiy Tokenomics](/concepts/tokenomics.mdx) to learn more about the AIY native currency and its use on the network.
 
-Currency on Sui can offer specialized abilities while following the Currency Standard. For example, you can create regulated currency that allows its creator to add specific addresses to a deny list, so that the identified addresses cannot use the currency as inputs to transactions. Both legacy and registry systems support regulated currency with varying levels of sophistication.
+Currency on Aiy can offer specialized abilities while following the Currency Standard. For example, you can create regulated currency that allows its creator to add specific addresses to a deny list, so that the identified addresses cannot use the currency as inputs to transactions. Both legacy and registry systems support regulated currency with varying levels of sophistication.
 
 ## Fungible tokens
 
-On Sui, the `Currency<T>` type represents open-loop fungible tokens (see `Token<T>` for closed-loop tokens). Currencies are denominated by their type parameter, `T`, which is also associated with metadata (like name, symbol, decimal precision, and so on) that applies to all instances of `Currency<T>`. The `sui::coin_registry` module exposes an interface over `Currency<T>` that treats it as fungible, meaning that a unit of `T` held in one instance of `Currency<T>` is interchangeable with any other unit of `T`, much like how traditional fiat currencies operate.
+On Aiy, the `Currency<T>` type represents open-loop fungible tokens (see `Token<T>` for closed-loop tokens). Currencies are denominated by their type parameter, `T`, which is also associated with metadata (like name, symbol, decimal precision, and so on) that applies to all instances of `Currency<T>`. The `aiy::coin_registry` module exposes an interface over `Currency<T>` that treats it as fungible, meaning that a unit of `T` held in one instance of `Currency<T>` is interchangeable with any other unit of `T`, much like how traditional fiat currencies operate.
 
 ## Currency creation 
 
-The Coin Registry is a centralized system that provides unified currency management through the `sui::coin_registry` module. 
+The Coin Registry is a centralized system that provides unified currency management through the `aiy::coin_registry` module. 
 
 :::info
 
@@ -30,9 +30,9 @@ The registry is a system-level shared object located at address `0xc`.
 
 <details>
 <summary>
-`sui::coin_registry` module
+`aiy::coin_registry` module
 </summary>
-<ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" />
+<ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" />
 </details>
 
 #### Core components
@@ -70,7 +70,7 @@ The registry supports two different currency creation flows:
 
     Use the `new_currency` function at any time after the currency type is published. The function immediately creates a shared `Currency<T>` object. The type `T` must be a key-only type, as in `public struct MyCoin has key { id: UID }`.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="new_currency" signatureOnly noComments />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="new_currency" signatureOnly noComments />
 
 - **One-Time Witness (OTW) creation:**
 
@@ -82,7 +82,7 @@ The registry supports two different currency creation flows:
 
     The `new_currency_with_otw` function uses an OTW for uniqueness proof. See [One-Time Witness](https://move-book.com/programmability/one-time-witness) in The Move Book for more information.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="new_currency_with_otw" signatureOnly noComments />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="new_currency_with_otw" signatureOnly noComments />
 
 #### Currency initialization
 
@@ -92,17 +92,17 @@ Both creation methods return a `CurrencyInitializer<T>` that allows for addition
 - **Set supply model:** Choose between fixed, burn-only, or flexible supply.
 - **Add extensions:** Include additional fields for custom functionality.
 
-<ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" struct="CurrencyInitializer" />
+<ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" struct="CurrencyInitializer" />
 
 #### Currency finalization
 
 A currency is not complete until after you call the `finalize` function. The function returns the `MetadataCap<T>` for metadata management. If you used an OTW to create the currency, the function sends the currency to the coin registry; otherwise, it creates the final shared `Currency<T>` object.
 
-<ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="finalize" signatureOnly />
+<ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="finalize" signatureOnly />
 
 If you publish a package that uses an OTW to create a currency in the package `init` function, then a call must be made to `finalize_registration` after initialization. The function transforms the currency into a shared object. 
 
-<ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="finalize_registration" signatureOnly />
+<ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="finalize_registration" signatureOnly />
 
 ## Regulated currency
 
@@ -117,7 +117,7 @@ Regulated coin example
 
 ### `DenyList` object
 
-A `DenyList` shared object created by the system contains addresses that aren't able to use a particular regulated currency. If you have access to the `DenyCap`, then you can use the `sui::coin` module to maintain the list of users. Use the functions `coin::deny_list_v2_add` and `coin::deny_list_v2_remove` functions to add and remove addresses.
+A `DenyList` shared object created by the system contains addresses that aren't able to use a particular regulated currency. If you have access to the `DenyCap`, then you can use the `aiy::coin` module to maintain the list of users. Use the functions `coin::deny_list_v2_add` and `coin::deny_list_v2_remove` functions to add and remove addresses.
 
 ### Global pause switch
 
@@ -129,7 +129,7 @@ The global pause functionality does not affect the deny list for the currency. A
 
 ## `TreasuryCap`
 
-When you create a currency using the `coin_registry::new_currency` or `coin_registry::new_currency_with_otw` functions, the publisher of the smart contract that creates the coin receives a `TreasuryCap` object upon finalization of the currency. The `TreasuryCap` object is required to mint new currency coins or to burn current ones (depending on currency supply state). Consequently, only addresses that have access to this object are able to maintain the currency supply on the Sui network.
+When you create a currency using the `coin_registry::new_currency` or `coin_registry::new_currency_with_otw` functions, the publisher of the smart contract that creates the coin receives a `TreasuryCap` object upon finalization of the currency. The `TreasuryCap` object is required to mint new currency coins or to burn current ones (depending on currency supply state). Consequently, only addresses that have access to this object are able to maintain the currency supply on the Aiy network.
 
 The `TreasuryCap` object is transferable, so a third party can take over the management of a currency that you create if you transfer the `TreasuryCap` to them. After transferring the object, you are no longer able to mint and burn coins yourself.
 
@@ -152,7 +152,7 @@ The fields of the metadata objects include the following:
 | `registry`          | The `CoinRegistry` system object ID (`0x3`).                                                                                                                                                             |
 | `decimals`    | The number of decimals the token uses. If you set this field to `3`, then a token of value `1000` would display as `1.000`.                                                                              |
 | `name`        | Name of the coin.                                                                                                                                                                                        |
-| `symbol`      | Symbol for the coin. This might be the same value as `name`, but is typically fewer than five letters, all capitals. For example, `SUI` is the `symbol` for the native coin on Sui but its `name` is also `SUI`. **Only ASCII printable characters allowed**.|
+| `symbol`      | Symbol for the coin. This might be the same value as `name`, but is typically fewer than five letters, all capitals. For example, `AIY` is the `symbol` for the native coin on Aiy but its `name` is also `AIY`. **Only ASCII printable characters allowed**.|
 | `description` | A short description to describe the token.                                                                                                                                                               |
 | `icon_url`    | **Required field**. The URL for the token's icon, used for display in wallets, explorers, and other apps.                                                                                                                    |
 
@@ -168,7 +168,7 @@ The Coin Registry supports advanced supply management models:
 
 Use the `coin::mint` function to create new coins.
 
-<ImportContent source="crates/sui-framework/packages/sui-framework/sources/coin.move" mode="code" fun="mint" signatureOnly noComments />
+<ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/coin.move" mode="code" fun="mint" signatureOnly noComments />
 
 The signature shows that a `Coin<T>` results from calling the function with a `TreasuryCap`, value for the coin created, and the transaction context. The function updates the total supply in `TreasuryCap` automatically. Upon display, the coin `value` respects the `decimals` value in the metadata. So, if you supply 1000000 as the coin `value` that has a `decimal` value of `6`, the coin's value displays as `1.000000`.
 
@@ -176,11 +176,11 @@ The signature shows that a `Coin<T>` results from calling the function with a `T
 
 For currencies with a burn-only supply status, coins can be burned directly through the registry using `coin_registry::burn` and `coin_registry::burn_balance` functions without requiring the `TreasuryCap`.
 
-<ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="burn,burn_balance" signatureOnly noComments />
+<ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="burn,burn_balance" signatureOnly noComments />
 
 For currencies with an unknown supply status, use the `coin::burn` function to destroy current coins.
 
-<ImportContent source="crates/sui-framework/packages/sui-framework/sources/coin.move" mode="code" fun="burn" signatureOnly noComments />
+<ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/coin.move" mode="code" fun="burn" signatureOnly noComments />
 
 The signature shows that only the `TreasuryCap` and coin object you want to burn are necessary inputs, returning the amount by which the supply was decreased (value of the coin). The function does not allow you to burn more coins than are available in the supply.
 
@@ -192,7 +192,7 @@ The deny list is only applicable to regulated currencies. When you create a regu
 
 Use the `coin::deny_list_v2_add` function to add the provided address to the deny list for your coin. The signature for the function is:
 
-<ImportContent source="crates/sui-framework/packages/sui-framework/sources/coin.move" mode="code" fun="deny_list_v2_add" noComments />
+<ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/coin.move" mode="code" fun="deny_list_v2_add" noComments />
 
 When using this function, you provide the `DenyList` object (`0x403`), the `DenyCap` you receive on coin creation, the address to add to the list, and the transaction context. After using this function, the address you provide is unable to use your coin by the next epoch.
 
@@ -200,7 +200,7 @@ When using this function, you provide the `DenyList` object (`0x403`), the `Deny
 
 Use the `coin::deny_list_v2_remove` function to remove addresses from the deny list for your coin.
 
-<ImportContent source="crates/sui-framework/packages/sui-framework/sources/coin.move" mode="code" fun="deny_list_v2_remove" noComments />
+<ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/coin.move" mode="code" fun="deny_list_v2_remove" noComments />
 
 When using this function, you provide the `DenyList` object (`0x403`), the `DenyCapV2` you receive on coin creation, the address to remove from the list, and the transaction context. If you try to remove an address that isn't on the list, you receive an `ENotFrozen` error and the function aborts. After calling this function, the address you provide is able to use your coin by the next epoch.
 
@@ -218,7 +218,7 @@ const tx = new Transaction();
 tx.moveCall({
     target: `0x2::coin::deny_list_v2_add`,
     arguments: [
-        tx.object(<SUI-DENY-LIST-OBJECT-ID>),
+        tx.object(<AIY-DENY-LIST-OBJECT-ID>),
         tx.object(<DENY-CAP-ID>),
         tx.pure.address(options.address),
     ],
@@ -226,7 +226,7 @@ tx.moveCall({
 });
 ```
 
-- `<SUI-DENY-LIST-OBJECT-ID>` is `"0x403"`.
+- `<AIY-DENY-LIST-OBJECT-ID>` is `"0x403"`.
 - `<DENY-CAP-ID>` is the object of type `DenyCapV2<REGULATED_COIN>` you receive from publishing the contract.
 - `options.address` is the address to ban.
 - `<COIN-TYPE>` is `${PACKAGE-ID}::${MODULE-NAME}::${COIN-NAME}`, which is `${PACKAGE-ID}::regulated_coin::REGULATED_COIN` based on the example.
@@ -246,7 +246,7 @@ let deny_list = ptb.obj(ObjectArg::SharedObject {
 let deny_cap = ptb.obj(ObjectArg::ImmOrOwnedObject(deny_cap))?;
 let address = ptb.pure(cmd.address())?;
 ptb.command(Command::move_call(
-    SUI_FRAMEWORK_PACKAGE_ID,
+    AIY_FRAMEWORK_PACKAGE_ID,
     Identifier::from(COIN_MODULE_NAME),
     Identifier::from_str("deny_list_v2_add".to_string())?,
     vec![<otw-type>],
@@ -261,7 +261,7 @@ let builder = ptb.finish();
   - `SequenceNumber` is the `initial_shared_version` of the `DenyList` singleton.
 - `deny_cap` is the `ObjectRef` (`(ObjectID, SequenceNumber, ObjectDigest)`) of the `DenyCapV2<REGULATED_COIN>` the publisher has received.
 - `otw_type` is the `TypeTag` created from `<PACKAGE_ID>::regulated_coin::REGULATED_COIN` type.
-- `cmd.address()` returns the address to ban as a `SuiAddress`.
+- `cmd.address()` returns the address to ban as a `AiyAddress`.
 
 </TabItem>
 
@@ -275,13 +275,13 @@ Globally pausing coin activity is only applicable to regulated coin types.
 
 To pause activity across the network for a regulated coin type with the `allow_global_pause` field set to `true`, use `coin::deny_list_v2_enable_global_pause`. You must provide the `DenyCapV2` object for the coin type to initiate the pause. Transaction activity is paused immediately, and no addresses can receive the coin in the epoch that follows the call to pause.
 
-<ImportContent source="crates/sui-framework/packages/sui-framework/sources/coin.move" mode="code" fun="deny_list_v2_enable_global_pause" noComments signatureOnly />
+<ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/coin.move" mode="code" fun="deny_list_v2_enable_global_pause" noComments signatureOnly />
 
 ### Unpause coin activity
 
 To restart network activity for a paused regulated coin, use the `coin::deny_list_v2_disable_global_pause` function. As with pausing, you must provide the `DenyCapV2` object for the coin type. Transaction activity resumes immediately, and addresses can begin receiving the coin in the epoch that follows the call to remove the pause.
 
-<ImportContent source="crates/sui-framework/packages/sui-framework/sources/coin.move" mode="code" fun="deny_list_v2_disable_global_pause" noComments signatureOnly />
+<ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/coin.move" mode="code" fun="deny_list_v2_disable_global_pause" noComments signatureOnly />
 
 ## Registry query functions
 
@@ -291,65 +291,65 @@ You can query information directly from the `Currency<T>` object.
 
 - `decimals<T>()`: Get decimal precision.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="decimals" noTitle signatureOnly noComments />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="decimals" noTitle signatureOnly noComments />
 
 - `name<T>()`: Get coin name.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="name" noTitle signatureOnly noComments />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="name" noTitle signatureOnly noComments />
 
 - `symbol<T>()`: Get coin symbol.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="symbol" noTitle signatureOnly noComments />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="symbol" noTitle signatureOnly noComments />
 
 - `description<T>()`: Get coin description.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="description" noTitle signatureOnly noComments />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="description" noTitle signatureOnly noComments />
 
 - `icon_url<T>()`: Get icon URL.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="icon_url" noTitle signatureOnly noComments />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="icon_url" noTitle signatureOnly noComments />
 
 ### Supply information
 
 - `total_supply<T>()`: Get current total supply.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="total_supply" noTitle signatureOnly noComments />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="total_supply" noTitle signatureOnly noComments />
 
 - `is_supply_fixed<T>()`: Check if supply is fixed.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="is_supply_fixed" noTitle signatureOnly noComments />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="is_supply_fixed" noTitle signatureOnly noComments />
 
 - `is_supply_burn_only<T>()`: Check if supply is burn-only.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="is_supply_burn_only" noTitle signatureOnly noComments />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="is_supply_burn_only" noTitle signatureOnly noComments />
 
 ### Capability status
 
 - `is_metadata_cap_claimed<T>()`: Check if metadata cap is claimed.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="is_metadata_cap_claimed" noTitle signatureOnly noComments />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="is_metadata_cap_claimed" noTitle signatureOnly noComments />
 
 - `is_metadata_cap_deleted<T>()`: Check if metadata cap is deleted.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="is_metadata_cap_deleted" noTitle signatureOnly noComments />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="is_metadata_cap_deleted" noTitle signatureOnly noComments />
 
 - `treasury_cap_id<T>()`: Get treasury cap object ID.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="treasury_cap_id" noTitle signatureOnly noComments />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="treasury_cap_id" noTitle signatureOnly noComments />
 
 - `metadata_cap_id<T>()`: Get metadata cap object ID.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="metadata_cap_id" noTitle signatureOnly noComments />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="metadata_cap_id" noTitle signatureOnly noComments />
 
 ### Regulatory information
 
 - `is_regulated<T>()`: Check if coin is regulated.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="is_regulated" noTitle signatureOnly noComments />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="is_regulated" noTitle signatureOnly noComments />
 
 - `deny_cap_id<T>()`: Get deny cap object ID.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="deny_cap_id" noTitle signatureOnly noComments />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="deny_cap_id" noTitle signatureOnly noComments />
 
 ## Update coin metadata
 
@@ -359,29 +359,29 @@ The bearer of the `MetadataCap` can use the available getter functions to update
 
 - `set_name<T>()`: Update coin name.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="set_name" noTitle noComments signatureOnly />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="set_name" noTitle noComments signatureOnly />
 
 - `set_symbol<T>()`: Update coin symbol.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="set_symbol" noTitle noComments signatureOnly />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="set_symbol" noTitle noComments signatureOnly />
 
 - `set_description<T>()`: Update coin description.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="set_description" noTitle noComments signatureOnly />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="set_description" noTitle noComments signatureOnly />
 
 - `set_icon_url<T>()`: Update icon URL.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="set_icon_url" noTitle noComments signatureOnly />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="set_icon_url" noTitle noComments signatureOnly />
 
 Manage the metadata capability using:
 
 - `claim_metadata_cap<T>()`: Claim the metadata capability one time.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="claim_metadata_cap" noTitle noComments signatureOnly />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="claim_metadata_cap" noTitle noComments signatureOnly />
 
 - `delete_metadata_cap<T>()`: Permanently delete the capability to prevent future updates.
 
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="delete_metadata_cap" noTitle noComments signatureOnly />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="delete_metadata_cap" noTitle noComments signatureOnly />
 
     :::caution
 
@@ -391,7 +391,7 @@ Manage the metadata capability using:
 
 ## Migration from Coin to Currency Standard
 
-The Currency Standard replaces the legacy Coin Standard. Sui provides a migration path from the `CoinMetadata<T>` system while maintaining backward compatibility.
+The Currency Standard replaces the legacy Coin Standard. Aiy provides a migration path from the `CoinMetadata<T>` system while maintaining backward compatibility.
 
 The migration system is designed with specific constraints to maintain data integrity and preserve existing functionality. Migration can only occur permissionlessly when done by reference, meaning the original `CoinMetadata` object remains intact while its data is copied to create a new `Currency` entry in the registry. This approach allows for safe registration of new currency data and updates to existing currency data, but only as long as the `MetadataCap` has not yet been claimed.
 
@@ -411,16 +411,16 @@ Some of the benefits to migrate to the Coin Registry include:
 ### Migration process
 
 1. **Metadata migration:** Use `migrate_legacy_metadata<T>()` to create a new `Currency<T>` entry based on existing `CoinMetadata<T>` information.
-    <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="migrate_legacy_metadata" noTitle signatureOnly noComments />
+    <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="migrate_legacy_metadata" noTitle signatureOnly noComments />
 
 1. **Regulatory migration:** For coins with deny list capabilities, use:
    - `migrate_regulated_state_by_metadata<T>()`: Migrate based on existing metadata.
 
-        <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="migrate_regulated_state_by_metadata" noTitle signatureOnly noComments />
+        <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="migrate_regulated_state_by_metadata" noTitle signatureOnly noComments />
    
    - `migrate_regulated_state_by_cap<T>()`: Migrate based on deny capability.
     
-        <ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="migrate_regulated_state_by_cap" noTitle signatureOnly noComments />
+        <ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="migrate_regulated_state_by_cap" noTitle signatureOnly noComments />
 
 ### Migration function mappings
 
@@ -429,7 +429,7 @@ Smart contracts should update logic that relies on the `coin` module to use the 
 - `coin::create_currency` -> `coin_registry::new_currency_with_otw`
 - `coin::create_regulated_currency_v2` -> `coin_registry::new_currency_with_otw`
 
-<ImportContent source="crates/sui-framework/packages/sui-framework/sources/registries/coin_registry.move" mode="code" fun="new_currency_with_otw" signatureOnly noComments />
+<ImportContent source="crates/aiy-framework/packages/aiy-framework/sources/registries/coin_registry.move" mode="code" fun="new_currency_with_otw" signatureOnly noComments />
 
 ## Best practices
 
@@ -477,7 +477,7 @@ The registry enforces several important validations:
 
 <RelatedLink to="/guides/developer/currency.mdx" />
 <RelatedLink to="/standards/closed-loop-token.mdx" />
-<RelatedLink to="/concepts/sui-move-concepts/derived-objects.mdx" />
-<RelatedLink href="/references/framework/sui_sui/coin" label="`coin` module rustdoc documentation" desc="Automated documentation output for the Sui framework `coin` module." />
-<RelatedLink href="/references/framework/sui_sui/token" label="`token` module rustdoc documentation" desc="Automated documentation output for the Sui framework `token` module." />
+<RelatedLink to="/concepts/aiy-move-concepts/derived-objects.mdx" />
+<RelatedLink href="/references/framework/aiy_aiy/coin" label="`coin` module rustdoc documentation" desc="Automated documentation output for the Aiy framework `coin` module." />
+<RelatedLink href="/references/framework/aiy_aiy/token" label="`token` module rustdoc documentation" desc="Automated documentation output for the Aiy framework `token` module." />
 <RelatedLink to="/concepts/tokenomics.mdx" />

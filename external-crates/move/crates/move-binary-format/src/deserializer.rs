@@ -2155,8 +2155,8 @@ impl<'a, 'b> VersionedBinary<'a, 'b> {
             return Err(PartialVMError::new(StatusCode::UNKNOWN_VERSION));
         }
 
-        // Bad flavor to the version: for version 7 and above, only SUI_FLAVOR is supported
-        if version >= VERSION_7 && flavor != Some(BinaryFlavor::SUI_FLAVOR) {
+        // Bad flavor to the version: for version 7 and above, only AIY_FLAVOR is supported
+        if version >= VERSION_7 && flavor != Some(BinaryFlavor::AIY_FLAVOR) {
             return Err(PartialVMError::new(StatusCode::UNKNOWN_VERSION));
         }
 

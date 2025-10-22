@@ -1,7 +1,7 @@
 /// Module: test
 module package_with_init::test;
 
-use sui::coin;
+use aiy::coin;
 
 public struct TEST has drop {}
 

@@ -32,5 +32,5 @@ insta.workspace = true
 datatest-stable.workspace = true
 
 [[test]]
-name = "testsuite"
+name = "testaiyte"
 harness = false

@@ -79,7 +79,7 @@ function computeRouteFromFile(docsRootAbs, fileAbs) {
 // ---------- plugin ----------
 const descriptionPlugin = (context, options) => {
   return {
-    name: "sui-description-plugin",
+    name: "aiy-description-plugin",
 
     async loadContent() {
       // Find classic preset options robustly
@@ -98,7 +98,7 @@ const descriptionPlugin = (context, options) => {
 
       // Collect .md/.mdx, skipping known heavy/irrelevant trees
       const EXCLUDES = [
-        "/sui-api/sui-graphql/",
+        "/aiy-api/aiy-graphql/",
         "/content/snippets/",
         "/references/framework/",
         "/standards/deepbook-ref/",
@@ -190,7 +190,7 @@ const descriptionPlugin = (context, options) => {
       }
 
       // -------- llms-full.txt (raw site content converted to markdown)
-      const skips = new Set(["/404.html", "/search", "/sui-api-ref", "/"]);
+      const skips = new Set(["/404.html", "/search", "/aiy-api-ref", "/"]);
       const td = new TurndownService({
         headingStyle: "atx",
         preformattedCode: true,

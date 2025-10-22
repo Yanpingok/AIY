@@ -303,7 +303,7 @@ pub fn default_db_options() -> DBOptions {
     opt.set_bottommost_compression_type(rocksdb::DBCompressionType::Zstd);
     opt.set_bottommost_zstd_max_train_bytes(1024 * 1024, true);
 
-    // Sui uses multiple RocksDB in a node, so total sizes of write buffers and WAL can be higher
+    // Aiy uses multiple RocksDB in a node, so total sizes of write buffers and WAL can be higher
     // than the limits below.
     //
     // RocksDB also exposes the option to configure total write buffer size across multiple instances

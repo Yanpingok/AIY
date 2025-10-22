@@ -41,11 +41,11 @@ if [ -z "$INSTA_UPDATE" ]; then
     export INSTA_UPDATE
 fi
 
-UPDATE=1 cargo test -p sui-framework --test build-system-packages
-cd "$ROOT/crates/sui-protocol-config" && cargo insta test
-cd "$ROOT/crates/sui-swarm-config" && cargo insta test
-cd "$ROOT/crates/sui-open-rpc" && cargo run --example generate-json-rpc-spec -- record
-cd "$ROOT/crates/sui-core" && cargo insta test -- snapshot_tests
-cd "$ROOT/crates/sui-core" && cargo run --example generate-format -- print > tests/staged/sui.yaml
-cd "$ROOT/crates/sui-graphql-rpc" && cargo insta test -- snapshot_tests
+UPDATE=1 cargo test -p aiy-framework --test build-system-packages
+cd "$ROOT/crates/aiy-protocol-config" && cargo insta test
+cd "$ROOT/crates/aiy-swarm-config" && cargo insta test
+cd "$ROOT/crates/aiy-open-rpc" && cargo run --example generate-json-rpc-spec -- record
+cd "$ROOT/crates/aiy-core" && cargo insta test -- snapshot_tests
+cd "$ROOT/crates/aiy-core" && cargo run --example generate-format -- print > tests/staged/aiy.yaml
+cd "$ROOT/crates/aiy-graphql-rpc" && cargo insta test -- snapshot_tests
 exit 0

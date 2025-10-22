@@ -4,7 +4,7 @@ description: Immutable objects cannot be changed, transferred, or deleted. Immut
 keywords: [ immutable objects, objects immutable, create immutable object, convert object, use immutable object, test immutable object ]
 ---
 
-Objects in Sui have different ownership types, with two main categories: immutable objects and mutable objects. An immutable object cannot be mutated, transferred, or deleted. These objects have no owner and are freely accessible to everyone.
+Objects in Aiy have different ownership types, with two main categories: immutable objects and mutable objects. An immutable object cannot be mutated, transferred, or deleted. These objects have no owner and are freely accessible to everyone.
 
 ## Create immutable object
 
@@ -45,8 +45,8 @@ This function creates a new `ColorObject` and immediately makes it immutable bef
 
 ## Use immutable object
 
-After an object becomes immutable, the rules of who can use this object in Sui Move calls change:
-You can only pass an immutable object as a read-only, immutable reference to Sui Move entry functions as `&T`.
+After an object becomes immutable, the rules of who can use this object in Aiy Move calls change:
+You can only pass an immutable object as a read-only, immutable reference to Aiy Move entry functions as `&T`.
 
 All network participants can access immutable objects.
 
@@ -120,48 +120,48 @@ As you have learned, the function fails when the `ColorObject` is immutable.
 First, view the objects you own:
 
 ```sh
-$ export ADDR=`sui client active-address`
+$ export ADDR=`aiy client active-address`
 ```
 ```sh
-$ sui client objects $ADDR
+$ aiy client objects $ADDR
 ```
 
-Publish the `ColorObject` code on-chain using the Sui Client CLI:
+Publish the `ColorObject` code on-chain using the Aiy Client CLI:
 
 <ImportContent source="info-gas-budget.mdx" mode="snippet" />
 
 ```sh
-$ sui client publish $ROOT/examples/move/color_object --gas-budget <GAS-AMOUNT>
+$ aiy client publish $ROOT/examples/move/color_object --gas-budget <GAS-AMOUNT>
 ```
 
 Set the package object ID to the `$PACKAGE` environment variable, if you have it set. Then create a new `ColorObject`:
 
 ```sh
-$ sui client call --gas-budget <GAS-AMOUNT> --package $PACKAGE --module "color_object" --function "create" --args 0 255 0
+$ aiy client call --gas-budget <GAS-AMOUNT> --package $PACKAGE --module "color_object" --function "create" --args 0 255 0
 ```
 
 Set the newly created object ID to `$OBJECT`. To view the objects in the current active address:
 
 ```sh
-$ sui client objects $ADDR
+$ aiy client objects $ADDR
 ```
 
 You should see an object with the ID you used for `$OBJECT`. To turn it into an immutable object:
 
 ```sh
-$ sui client call --gas-budget <GAS-AMOUNT> --package $PACKAGE --module "color_object" --function "freeze_object" --args \"$OBJECT\"
+$ aiy client call --gas-budget <GAS-AMOUNT> --package $PACKAGE --module "color_object" --function "freeze_object" --args \"$OBJECT\"
 ```
 
 View the list of objects again:
 
 ```sh
-$ sui client objects $ADDR
+$ aiy client objects $ADDR
 ```
 
 `$OBJECT` is no longer listed. It's no longer owned by anyone. You can see that it's now immutable by querying the object information:
 
 ```sh
-$ sui client object $OBJECT
+$ aiy client object $OBJECT
 ```
 
 The response includes:
@@ -173,7 +173,7 @@ Owner: Immutable  // This field shows the object's immutable status
 If you try to mutate it:
 
 ```sh
-$ sui client call --gas-budget <GAS-AMOUNT> --package $PACKAGE --module "color_object" --function "update" --args \"$OBJECT\" 0 0 0
+$ aiy client call --gas-budget <GAS-AMOUNT> --package $PACKAGE --module "color_object" --function "update" --args \"$OBJECT\" 0 0 0
 ```
 
 The response indicates that you can't pass an immutable object to a mutable argument.

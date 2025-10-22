@@ -1,0 +1,8 @@
+---
+source: crates/move-compiler/tests/move_check_testaiyte.rs
+info:
+  flavor: aiy
+  edition: legacy
+  lint: true
+---
+

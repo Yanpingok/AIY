@@ -7,7 +7,7 @@ const path = require("path");
 
 const repo = {
   owner: "MystenLabs",
-  name: "sui-apis",
+  name: "aiy-apis",
   branch: "gen-docs",
   filePath: "documentation.json",
 };

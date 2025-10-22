@@ -4,12 +4,12 @@
 /// Functions for operating on Move packages from within Move:
 /// - Creating proof-of-publish objects from one-time witnesses
 /// - Administering package upgrades through upgrade policies.
-module sui::package {
-    use sui::object::{Self, ID, UID};
-    use sui::tx_context::{TxContext, sender};
+module aiy::package {
+    use aiy::object::{Self, ID, UID};
+    use aiy::tx_context::{TxContext, sender};
     use std::ascii::String;
     use std::type_name;
-    use sui::types;
+    use aiy::types;
 
     /// Tried to create a `Publisher` using a type that isn't a
     /// one-time witness.
@@ -60,7 +60,7 @@ module sui::package {
     ///
     /// An `UpgradeCap` can only issue one ticket at a time, to prevent races
     /// between concurrent updates or a change in its upgrade policy after
-    /// issuing a ticket, so the ticket is a "Hot Potato" to preserve forward
+    /// isaiyng a ticket, so the ticket is a "Hot Potato" to preserve forward
     /// progress.
     struct UpgradeTicket {
         /// (Immutable) ID of the `UpgradeCap` this originated from.
@@ -107,7 +107,7 @@ module sui::package {
     /// Since this function can only be called in the module initializer,
     /// the sender is the publisher.
     public fun claim_and_keep<OTW: drop>(otw: OTW, ctx: &mut TxContext) {
-        sui::transfer::public_transfer(claim(otw, ctx), sender(ctx))
+        aiy::transfer::public_transfer(claim(otw, ctx), sender(ctx))
     }
 
     /// Destroy a Publisher object effectively removing all privileges
@@ -304,7 +304,7 @@ module sui::package {
         // hashing the existing package and cap ID.
         let data = object::id_to_bytes(&cap);
         std::vector::append(&mut data, object::id_to_bytes(&package));
-        let package = object::id_from_bytes(sui::hash::blake2b256(&data));
+        let package = object::id_from_bytes(aiy::hash::blake2b256(&data));
 
         UpgradeReceipt {
             cap, package

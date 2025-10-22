@@ -6,7 +6,7 @@ use std::{sync::Arc, time::SystemTime};
 use consensus_config::{AuthorityIndex, Committee, Parameters};
 use consensus_config::{NetworkKeyPair, ProtocolKeyPair};
 use consensus_types::block::BlockTimestampMs;
-use sui_protocol_config::ProtocolConfig;
+use aiy_protocol_config::ProtocolConfig;
 use tempfile::TempDir;
 use tokio::time::Instant;
 

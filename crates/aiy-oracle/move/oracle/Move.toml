@@ -1,0 +1,11 @@
+[package]
+name = "aiy-oracle"
+version = "0.0.1"
+edition = "2024.beta"
+
+[dependencies]
+Aiy = { git = "https://github.com/ab2bc/sui.git", subdir = "crates/aiy-framework/packages/aiy-framework", rev = "9d0fba4a490e1cf80101bbd4019c7bb1ccfce99b" }
+
+[addresses]
+oracle = "0x0"
+aiy = "0x2"

@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-//const why_sui = require("../content/sidebars/why_sui.js");
+//const why_aiy = require("../content/sidebars/why_aiy.js");
 import guides from "../content/sidebars/guides.js";
 import concepts from "../content/sidebars/concepts.js";
 import standards from "../content/sidebars/standards.js";

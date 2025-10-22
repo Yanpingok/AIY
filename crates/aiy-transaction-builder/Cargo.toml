@@ -1,0 +1,21 @@
+[package]
+name = "aiy-transaction-builder"
+version = "0.0.0"
+authors = ["Mysten Labs <build@mystenlabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[dependencies]
+anyhow.workspace = true
+async-trait.workspace = true
+futures.workspace = true
+bcs.workspace = true
+
+move-binary-format.workspace = true
+aiy-json-rpc-types.workspace = true
+aiy-types.workspace = true
+aiy-json.workspace = true
+aiy-protocol-config.workspace = true
+
+move-core-types.workspace = true

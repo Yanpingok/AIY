@@ -72,12 +72,12 @@ export const options: Record<string, SupportOption> = {
             {
                 value: 'package',
                 description:
-                    'Group imports by package, eg `use sui::{balance::Balance, coin::Coin}',
+                    'Group imports by package, eg `use aiy::{balance::Balance, coin::Coin}',
             },
             {
                 value: 'module',
                 description:
-                    'Group imports by module eg\n`use sui::balance::Balance;\nuse sui::coin::Coin`',
+                    'Group imports by module eg\n`use aiy::balance::Balance;\nuse aiy::coin::Coin`',
             },
         ],
     },

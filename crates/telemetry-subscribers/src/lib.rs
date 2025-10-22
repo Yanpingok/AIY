@@ -377,7 +377,7 @@ impl TelemetryConfig {
         let mut file_output = CachedOpenFile::new::<&str>(None).unwrap();
         let mut provider = None;
         let sampler = SamplingFilter::new(config.sample_rate);
-        let service_name = env::var("OTEL_SERVICE_NAME").unwrap_or("sui-node".to_owned());
+        let service_name = env::var("OTEL_SERVICE_NAME").unwrap_or("aiy-node".to_owned());
 
         if config.enable_otlp_tracing {
             let trace_file = env::var("TRACE_FILE").ok();
@@ -533,7 +533,7 @@ impl ShouldSample for SamplingFilter {
     }
 }
 
-/// Globally set a tracing subscriber suitable for testing environments
+/// Globally set a tracing subscriber aiytable for testing environments
 pub fn init_for_testing() {
     static LOGGER: Lazy<()> = Lazy::new(|| {
         let subscriber = ::tracing_subscriber::FmtSubscriber::builder()

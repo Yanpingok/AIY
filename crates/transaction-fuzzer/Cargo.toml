@@ -19,11 +19,11 @@ tokio = { workspace = true, features = ["full"] }
 tracing.workspace = true
 
 once_cell.workspace = true
-sui-core.workspace = true
-sui-protocol-config.workspace = true
-sui-types = { workspace = true, features = ["fuzzing"] }
-sui-move-build.workspace = true
+aiy-core.workspace = true
+aiy-protocol-config.workspace = true
+aiy-types = { workspace = true, features = ["fuzzing"] }
+aiy-move-build.workspace = true
 
 
 [dev-dependencies]
-sui-protocol-config.workspace = true
+aiy-protocol-config.workspace = true

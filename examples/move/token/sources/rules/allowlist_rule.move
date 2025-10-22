@@ -5,8 +5,8 @@
 /// perform an Action.
 module examples::allowlist_rule;
 
-use sui::bag::{Self, Bag};
-use sui::token::{Self, TokenPolicy, TokenPolicyCap, ActionRequest};
+use aiy::bag::{Self, Bag};
+use aiy::token::{Self, TokenPolicy, TokenPolicyCap, ActionRequest};
 
 /// The `sender` or `recipient` is not on the allowlist.
 const EUserNotAllowed: u64 = 0;

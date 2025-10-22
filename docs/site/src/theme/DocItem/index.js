@@ -12,7 +12,7 @@ export default function DocItemWrapper(props) {
   const metadata = doc.metadata ?? {};
 
   const { pathname } = useLocation();
-  const isGraphQlBeta = pathname?.includes("/sui-graphql/alpha/reference");
+  const isGraphQlBeta = pathname?.includes("/aiy-graphql/alpha/reference");
   const title = frontMatter?.title || metadata?.title || "GraphQL";
 
   return (

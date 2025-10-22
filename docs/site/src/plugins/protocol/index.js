@@ -17,7 +17,7 @@ const SPEC_MD = fs.readFileSync(PROTOCOL_PATH, "utf-8");
 
 const fullnodeProtocolPlugin = (context, options) => {
   return {
-    name: "sui-fullnode-protocol-plugin",
+    name: "aiy-fullnode-protocol-plugin",
     configureWebpack() {
       return {
         module: {

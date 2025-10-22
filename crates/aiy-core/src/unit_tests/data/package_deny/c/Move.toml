@@ -1,0 +1,13 @@
+[package]
+name = "C"
+version = "0.0.1"
+edition = "2024.beta"
+
+[dependencies]
+Aiy = { local = "../../../../../../aiy-framework/packages/aiy-framework" }
+
+[addresses]
+c = "_"
+
+[dev-addresses]
+c = "0x0"

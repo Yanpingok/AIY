@@ -32,7 +32,7 @@ tracing.workspace = true
 typed-store-error.workspace = true
 typed-store-derive = { path = "../typed-store-derive" }
 typed-store-workspace-hack = { path = "../typed-store-workspace-hack" }
-sui-macros.workspace = true
+aiy-macros.workspace = true
 rand.workspace = true
 async-trait.workspace = true
 itertools.workspace = true
@@ -51,7 +51,7 @@ rstest.workspace = true
 rand.workspace = true
 uint.workspace = true
 
-# Most packages should depend on sui-simulator instead of directly on msim, but for typed-store
+# Most packages should depend on aiy-simulator instead of directly on msim, but for typed-store
 # that creates a circular dependency.
 [target.'cfg(msim)'.dependencies]
 msim.workspace = true

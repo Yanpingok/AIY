@@ -12,13 +12,13 @@ use executor::Executor;
 use proptest::collection::vec;
 use proptest::test_runner::TestRunner;
 use std::fmt::Debug;
-use sui_protocol_config::ProtocolConfig;
-use sui_types::base_types::{ObjectID, SuiAddress};
-use sui_types::crypto::get_key_pair;
-use sui_types::crypto::AccountKeyPair;
-use sui_types::digests::TransactionDigest;
-use sui_types::object::{MoveObject, Object, Owner, OBJECT_START_VERSION};
-use sui_types::{gas_coin::TOTAL_SUPPLY_MIST, transaction::GasData};
+use aiy_protocol_config::ProtocolConfig;
+use aiy_types::base_types::{ObjectID, AiyAddress};
+use aiy_types::crypto::get_key_pair;
+use aiy_types::crypto::AccountKeyPair;
+use aiy_types::digests::TransactionDigest;
+use aiy_types::object::{MoveObject, Object, Owner, OBJECT_START_VERSION};
+use aiy_types::{gas_coin::TOTAL_SUPPLY_MIST, transaction::GasData};
 
 use proptest::prelude::*;
 use rand::{rngs::StdRng, SeedableRng};
@@ -38,7 +38,7 @@ fn generate_random_gas_data(
     gas_coin_owners: Vec<Owner>, // arbitrarily generated owners, can be shared or immutable or obj-owned too
     owned_by_sender: bool,       // whether to set owned gas coins to be owned by the sender
 ) -> GasDataWithObjects {
-    let (sender, sender_key): (SuiAddress, AccountKeyPair) = get_key_pair();
+    let (sender, sender_key): (AiyAddress, AccountKeyPair) = get_key_pair();
     let mut rng = StdRng::from_seed(seed);
     let mut gas_objects = vec![];
     let mut object_refs = vec![];

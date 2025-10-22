@@ -25,7 +25,7 @@ pub use serde_json::json;
 #[inline(always)]
 pub fn crash_on_debug() -> bool {
     static CRASH_ON_DEBUG: Lazy<bool> = Lazy::new(|| {
-        in_test_configuration() || std::env::var("SUI_ENABLE_DEBUG_ASSERTIONS").is_ok()
+        in_test_configuration() || std::env::var("AIY_ENABLE_DEBUG_ASSERTIONS").is_ok()
     });
 
     *CRASH_ON_DEBUG

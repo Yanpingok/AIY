@@ -4,7 +4,7 @@
 
 
 # check dependencies are available.
-for i in jq curl sui; do
+for i in jq curl aiy; do
   if ! command -V ${i} 2>/dev/null; then
     echo "${i} is not installed"
     exit 1
@@ -14,18 +14,18 @@ done
 # Put the dependant package, as the depending will be published too via --with-unpublished-dependencies
 MOVE_PACKAGE_PATH=./move
 
-sui client switch --env testnet
+aiy client switch --env testnet
 
 NETWORK="https://rpc.testnet.sui.io:443"
 FAUCET="https://faucet.testnet.sui.io/gas"
     
-sui client switch --env testnet
+aiy client switch --env testnet
 
-ADMIN_ADDRESS=$(sui client active-address)
+ADMIN_ADDRESS=$(aiy client active-address)
 
 echo "- Publisher Address is: ${ADMIN_ADDRESS}"
 
-publish_res=$(sui client publish --json ${MOVE_PACKAGE_PATH})
+publish_res=$(aiy client publish --json ${MOVE_PACKAGE_PATH})
 
 echo ${publish_res} >.publish.res.json
 
@@ -49,7 +49,7 @@ if [ $# -eq 0 ]; then
 fi
 
 cat >ts-client/.env<<-API_ENV
-SUI_FULLNODE_URL=$NETWORK
+AIY_FULLNODE_URL=$NETWORK
 PACKAGE_ID=$PACKAGE_ID
 ADMIN_ADDRESS=$ADMIN_ADDRESS
 DENY_CAP_ID=$DENY_CAP_ID
@@ -59,7 +59,7 @@ COIN_NAME=REGULATED_COIN
 API_ENV
 
 cat >rust-client/.env<<-API_ENV
-SUI_FULLNODE_URL=$NETWORK
+AIY_FULLNODE_URL=$NETWORK
 PACKAGE_ID=$PACKAGE_ID
 MODULE_NAME=regulated_coin
 RUST_LOG=rust_client=DEBUG

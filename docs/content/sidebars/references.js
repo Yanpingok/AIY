@@ -16,8 +16,8 @@ function dirExists(rel) {
   return fs.existsSync(path.join(CONTENT_ROOT, rel));
 }
 
-const alphaDir = 'references/sui-api/sui-graphql/alpha/reference';
-const betaDir  = 'references/sui-api/sui-graphql/beta/reference';
+const alphaDir = 'references/aiy-api/aiy-graphql/alpha/reference';
+const betaDir  = 'references/aiy-api/aiy-graphql/beta/reference';
 
 const graphqlAlpha = {
   type: 'category',
@@ -44,11 +44,11 @@ const references = [
 	},
 	{
 		type: 'category',
-		label: 'Sui RPC',
+		label: 'Aiy RPC',
 		collapsed: false,
 		link: {
 			type: 'doc',
-			id: 'references/sui-api',
+			id: 'references/aiy-api',
 		},
 		items: [
 			{
@@ -56,7 +56,7 @@ const references = [
 				label: 'GraphQL',
 				link: {
 					type: 'doc',
-					id: 'references/sui-graphql',
+					id: 'references/aiy-graphql',
 				},
 				items: [
 					graphqlBeta,
@@ -66,15 +66,15 @@ const references = [
 			{
 				type: 'link',
 				label: 'JSON-RPC',
-				href: '/sui-api-ref',
+				href: '/aiy-api-ref',
 			},
 			'references/fullnode-protocol',
-			'references/sui-api/rpc-best-practices',
+			'references/aiy-api/rpc-best-practices',
 		],
 	},
 	{
 		type: 'category',
-		label: 'Sui CLI',
+		label: 'Aiy CLI',
 		collapsed: false,
 		link: {
 			type: 'doc',
@@ -93,7 +93,7 @@ const references = [
 	},
 	{
 		type: 'category',
-		label: 'Sui IDE Support',
+		label: 'Aiy IDE Support',
 		collapsed: false,
 		items: [
 			'references/ide/move',
@@ -102,11 +102,11 @@ const references = [
 	},
 	{
 		type: 'category',
-		label: 'Sui SDKs',
+		label: 'Aiy SDKs',
 		collapsed: false,
 		link: {
 			type: 'doc',
-			id: 'references/sui-sdks',
+			id: 'references/aiy-sdks',
 		},
 		items: [
 			{
@@ -133,7 +133,7 @@ const references = [
 		collapsed: false,
 		link: {
 			type: 'doc',
-			id: 'references/sui-move',
+			id: 'references/aiy-move',
 		},
 		items: [
 			{
@@ -157,8 +157,8 @@ const references = [
 			},
 		],
 	},
-	'references/awesome-sui',
-	'references/sui-glossary',
+	'references/awesome-aiy',
+	'references/aiy-glossary',
 	{
 		type: 'category',
 		label: 'Contribute',
@@ -167,14 +167,14 @@ const references = [
 			id: 'references/contribute/contribution-process',
 		},
 		items: [
-			'references/contribute/sui-environment',
-			'references/contribute/contribute-to-sui-repos',
+			'references/contribute/aiy-environment',
+			'references/contribute/contribute-to-aiy-repos',
 			{
 				type: 'link',
 				label: 'Submit a SIP',
 				href: 'https://sips.sui.io',
 			},
-			'references/contribute/localize-sui-docs',
+			'references/contribute/localize-aiy-docs',
 			'references/contribute/code-of-conduct',
 			'references/contribute/style-guide',
 			'references/contribute/mdx-components',

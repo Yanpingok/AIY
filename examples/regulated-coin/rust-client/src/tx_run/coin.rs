@@ -7,34 +7,34 @@ use anyhow::{anyhow, Result};
 use move_core_types::identifier::Identifier;
 use move_core_types::language_storage::{StructTag, TypeTag};
 use shared_crypto::intent::{Intent, IntentMessage};
-use sui_sdk::rpc_types::{
-    SuiObjectDataFilter, SuiObjectDataOptions, SuiObjectResponseQuery, SuiTransactionBlockResponse,
-    SuiTransactionBlockResponseOptions,
+use aiy_sdk::rpc_types::{
+    AiyObjectDataFilter, AiyObjectDataOptions, AiyObjectResponseQuery, AiyTransactionBlockResponse,
+    AiyTransactionBlockResponseOptions,
 };
-use sui_sdk::types::base_types::{ObjectID, ObjectRef, SuiAddress};
-use sui_sdk::types::coin::{COIN_MODULE_NAME, COIN_TREASURE_CAP_NAME};
-use sui_sdk::types::crypto::{Signature, SuiKeyPair};
-use sui_sdk::types::programmable_transaction_builder::ProgrammableTransactionBuilder;
-use sui_sdk::types::quorum_driver_types::ExecuteTransactionRequestType;
-use sui_sdk::types::transaction::{Argument, Command, ObjectArg, Transaction, TransactionData};
-use sui_sdk::types::{SUI_FRAMEWORK_ADDRESS, SUI_FRAMEWORK_PACKAGE_ID};
-use sui_sdk::SuiClient;
+use aiy_sdk::types::base_types::{ObjectID, ObjectRef, AiyAddress};
+use aiy_sdk::types::coin::{COIN_MODULE_NAME, COIN_TREASURE_CAP_NAME};
+use aiy_sdk::types::crypto::{Signature, AiyKeyPair};
+use aiy_sdk::types::programmable_transaction_builder::ProgrammableTransactionBuilder;
+use aiy_sdk::types::quorum_driver_types::ExecuteTransactionRequestType;
+use aiy_sdk::types::transaction::{Argument, Command, ObjectArg, Transaction, TransactionData};
+use aiy_sdk::types::{AIY_FRAMEWORK_ADDRESS, AIY_FRAMEWORK_PACKAGE_ID};
+use aiy_sdk::AiyClient;
 use tracing::info;
 
 use crate::gas::select_gas;
 
 pub async fn get_treasury_cap(
-    client: &SuiClient,
-    owner_addr: SuiAddress,
+    client: &AiyClient,
+    owner_addr: AiyAddress,
     type_tag: TypeTag,
 ) -> Result<ObjectRef> {
     let resp = client
         .read_api()
         .get_owned_objects(
             owner_addr,
-            Some(SuiObjectResponseQuery {
-                filter: Some(SuiObjectDataFilter::StructType(StructTag {
-                    address: SUI_FRAMEWORK_ADDRESS,
+            Some(AiyObjectResponseQuery {
+                filter: Some(AiyObjectDataFilter::StructType(StructTag {
+                    address: AIY_FRAMEWORK_ADDRESS,
                     module: Identifier::from(COIN_MODULE_NAME),
                     name: Identifier::from(COIN_TREASURE_CAP_NAME),
                     type_params: vec![type_tag],
@@ -57,12 +57,12 @@ pub async fn get_treasury_cap(
         .object_ref())
 }
 
-pub async fn get_coin(client: &SuiClient, id: ObjectID) -> Result<ObjectRef> {
+pub async fn get_coin(client: &AiyClient, id: ObjectID) -> Result<ObjectRef> {
     let resp = client
         .read_api()
         .get_object_with_options(
             id,
-            SuiObjectDataOptions {
+            AiyObjectDataOptions {
                 // Note that we could have the type-tag from here and transfer in a moment
                 show_type: false,
                 show_owner: false,
@@ -80,15 +80,15 @@ pub async fn get_coin(client: &SuiClient, id: ObjectID) -> Result<ObjectRef> {
 
 // docs::#mint
 pub async fn mint_and_transfer(
-    client: &SuiClient,
-    signer: &SuiKeyPair,
+    client: &AiyClient,
+    signer: &AiyKeyPair,
     type_tag: TypeTag,
     treasury_cap: ObjectRef,
-    to_address: SuiAddress,
+    to_address: AiyAddress,
     balance: u64,
-) -> Result<SuiTransactionBlockResponse> {
+) -> Result<AiyTransactionBlockResponse> {
     info!("MINTING COIN OF BALANCE {balance} TO ADDRESS {to_address}");
-    let signer_addr = SuiAddress::from(&signer.public());
+    let signer_addr = AiyAddress::from(&signer.public());
     let gas_data = select_gas(client, signer_addr, None, None, vec![], None).await?;
 
     let mut ptb = ProgrammableTransactionBuilder::new();
@@ -96,7 +96,7 @@ pub async fn mint_and_transfer(
     let treasury_cap = ptb.obj(ObjectArg::ImmOrOwnedObject(treasury_cap))?;
     let balance = ptb.pure(balance)?;
     ptb.command(Command::move_call(
-        SUI_FRAMEWORK_PACKAGE_ID,
+        AIY_FRAMEWORK_PACKAGE_ID,
         Identifier::from(COIN_MODULE_NAME),
         Identifier::from_str("mint")?,
         vec![type_tag],
@@ -108,7 +108,7 @@ pub async fn mint_and_transfer(
 
     // Sign transaction
     let msg = IntentMessage {
-        intent: Intent::sui_transaction(),
+        intent: Intent::aiy_transaction(),
         value: TransactionData::new_programmable(
             signer_addr,
             vec![gas_data.object],
@@ -123,7 +123,7 @@ pub async fn mint_and_transfer(
         .quorum_driver_api()
         .execute_transaction_block(
             Transaction::from_data(msg.value, vec![sig]),
-            SuiTransactionBlockResponseOptions::new()
+            AiyTransactionBlockResponseOptions::new()
                 .with_effects()
                 .with_object_changes()
                 .with_input(),
@@ -136,13 +136,13 @@ pub async fn mint_and_transfer(
 // docs::/#mint
 
 pub async fn transfer(
-    client: &SuiClient,
-    signer: &SuiKeyPair,
+    client: &AiyClient,
+    signer: &AiyKeyPair,
     coin: ObjectRef,
-    to_address: SuiAddress,
-) -> Result<SuiTransactionBlockResponse> {
+    to_address: AiyAddress,
+) -> Result<AiyTransactionBlockResponse> {
     info!("TRANSFERING COIN {} TO ADDRESS {to_address}", coin.0);
-    let signer_addr = SuiAddress::from(&signer.public());
+    let signer_addr = AiyAddress::from(&signer.public());
     let gas_data = select_gas(client, signer_addr, None, None, vec![], None).await?;
 
     let mut ptb = ProgrammableTransactionBuilder::new();
@@ -154,7 +154,7 @@ pub async fn transfer(
 
     // Sign transaction
     let msg = IntentMessage {
-        intent: Intent::sui_transaction(),
+        intent: Intent::aiy_transaction(),
         value: TransactionData::new_programmable(
             signer_addr,
             vec![gas_data.object],
@@ -169,7 +169,7 @@ pub async fn transfer(
         .quorum_driver_api()
         .execute_transaction_block(
             Transaction::from_data(msg.value, vec![sig]),
-            SuiTransactionBlockResponseOptions::new()
+            AiyTransactionBlockResponseOptions::new()
                 .with_effects()
                 .with_object_changes()
                 .with_input(),
@@ -181,14 +181,14 @@ pub async fn transfer(
 }
 
 pub(crate) async fn burn(
-    client: &SuiClient,
-    signer: &SuiKeyPair,
+    client: &AiyClient,
+    signer: &AiyKeyPair,
     type_tag: TypeTag,
     treasury_cap: ObjectRef,
     coin: ObjectRef,
-) -> Result<SuiTransactionBlockResponse> {
+) -> Result<AiyTransactionBlockResponse> {
     info!("BURNING COIN {}", coin.0);
-    let signer_addr = SuiAddress::from(&signer.public());
+    let signer_addr = AiyAddress::from(&signer.public());
     let gas_data = select_gas(client, signer_addr, None, None, vec![], None).await?;
 
     let mut ptb = ProgrammableTransactionBuilder::new();
@@ -196,7 +196,7 @@ pub(crate) async fn burn(
     let treasury_cap = ptb.obj(ObjectArg::ImmOrOwnedObject(treasury_cap))?;
     let coin = ptb.obj(ObjectArg::ImmOrOwnedObject(coin))?;
     ptb.command(Command::move_call(
-        SUI_FRAMEWORK_PACKAGE_ID,
+        AIY_FRAMEWORK_PACKAGE_ID,
         Identifier::from(COIN_MODULE_NAME),
         Identifier::from_str("burn")?,
         vec![type_tag],
@@ -207,7 +207,7 @@ pub(crate) async fn burn(
 
     // Sign transaction
     let msg = IntentMessage {
-        intent: Intent::sui_transaction(),
+        intent: Intent::aiy_transaction(),
         value: TransactionData::new_programmable(
             signer_addr,
             vec![gas_data.object],
@@ -222,7 +222,7 @@ pub(crate) async fn burn(
         .quorum_driver_api()
         .execute_transaction_block(
             Transaction::from_data(msg.value, vec![sig]),
-            SuiTransactionBlockResponseOptions::new()
+            AiyTransactionBlockResponseOptions::new()
                 .with_effects()
                 .with_input(),
             Some(ExecuteTransactionRequestType::WaitForLocalExecution),

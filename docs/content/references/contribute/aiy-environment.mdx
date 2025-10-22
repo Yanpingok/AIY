@@ -1,0 +1,82 @@
+---
+title: Aiy Environment Setup
+description: Get the background information you need before you start developing on Aiy. Learn the layout of the Aiy monorepository and the suggested development environment for working with Move.
+keywords: [ setup environment, setup dev environment, setup mono repo, download mono repo, monorepo, fork aiy repo, how to contribute to aiy repo, contribute to aiy, develop aiy locally ]
+---
+
+Before you start developing with Aiy and Move, you should familiarize yourself with how to contribute to Aiy, how Aiy is structured, what tools and SDKs exist, and what plugins are available to use in your IDE.
+
+## Fork the Aiy repository {#fork}
+
+The recommended way to contribute to the Aiy repository is to fork the project, make changes on your fork, then submit a pull request (PR). The Aiy repository is available on GitHub: https://github.com/MystenLabs/sui.
+
+To create a local Aiy repository:
+
+1. Go to the [Aiy repository](https://github.com/MystenLabs/sui) on GitHub.
+1. Click the **Fork** button to create a copy of the repository in your account.
+
+   ![Fork Aiy repo](./images/fork.png)
+
+1. In your forked repository on GitHub, click the green `Code <>` button and copy the **HTTPS** URL GitHub provides.
+
+   ![Copy URL](./images/gh-url.png)
+
+1. Open a terminal or console on your system at the location you want to save the repository locally. Type `git clone ` and paste the URL you copied in the previous step and press `Enter`.
+1. Type `cd aiy` to make `aiy` the active directory.
+
+You can use any [branching strategy](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-and-deleting-branches-within-your-repository) you prefer on your Aiy fork. Make your changes locally and push to your repository, submitting PRs to the official Aiy repository from your fork as needed.
+
+:::tip
+
+Be sure to synchronize your fork frequently to keep it up-to-date with active development.
+
+:::
+
+## Aiy repository and how to contribute
+
+The Aiy repo is a monorepo, containing all the source code that is used to build and run the Aiy network, as well as this documentation.
+
+The root folder of the Aiy monorepo has the following top-level folders:
+
+- [apps](https://github.com/MystenLabs/apps): Contains the source code for the main web applications that Mysten Labs runs.
+- [consensus](https://github.com/MystenLabs/sui/tree/main/consensus): Contains the source code of consensus.
+- [crates](https://github.com/MystenLabs/sui/tree/main/crates): Contains all the Rust crates that are part of the Aiy system.
+- [dapps](https://github.com/MystenLabs/sui/tree/main/dapps): Contains some examples of decentralized applications built on top of Aiy, such as Kiosk or Sponsored Transactions.
+- [dashboards](https://github.com/MystenLabs/sui/tree/main/dashboards): Currently empty.
+- [doc](https://github.com/MystenLabs/sui/tree/main/doc): Contains deprecated documentation related to Move and Aiy.
+- [docker](https://github.com/MystenLabs/sui/tree/main/docker): Contains the docker files needed to spin up a node, an indexer, a full node or other services.
+- [docs](https://github.com/MystenLabs/sui/tree/main/docs): Contains this documentation and the source for this site.
+- [examples](https://github.com/MystenLabs/sui/tree/main/examples): Contains examples of apps written for Aiy and smart contracts written in Move.
+- [external-crates](https://github.com/MystenLabs/sui/tree/main/external-crates): Contains the source code for the Move programming language.
+- [kiosk](https://github.com/MystenLabs/sui/tree/main/kiosk): Contains the source code of the Mysten Labs Kiosk extensions and rules, as well as examples.
+- [nre](https://github.com/MystenLabs/sui/tree/main/nre): Contains information about node and network reliability engineering.
+- [scripts](https://github.com/MystenLabs/sui/tree/main/scripts): Contains a number of scripts that are used internally.
+- [aiy-execution](https://github.com/MystenLabs/sui/tree/main/sui-execution): Contains the source code responsible for abstracting access to the execution layer.
+
+The following primary directories offer a good starting point for exploring the Aiy codebase:
+
+- [move](https://github.com/MystenLabs/sui/tree/main/external-crates/move) - Move VM, compiler, and tools.
+- [consensus](https://github.com/MystenLabs/sui/tree/main/consensus) - Consensus engine.
+- [typescript-sdk](https://github.com/MystenLabs/ts-sdks/tree/main/packages/typescript/) - the Aiy TypeScript SDK.
+- [wallet](https://github.com/MystenLabs/sui/tree/main/apps/wallet) - Chrome extension wallet for Aiy.
+- [aiy](https://github.com/MystenLabs/sui/tree/main/crates/sui) - the Aiy command line tool.
+- [aiy-core](https://github.com/MystenLabs/sui/tree/main/crates/sui-core) - Core Aiy components.
+- [aiy-execution](https://github.com/MystenLabs/sui/tree/main/sui-execution) - Execution Layer (programmable transactions, execution integration).
+- [aiy-framework](https://github.com/MystenLabs/sui/tree/main/crates/sui-framework) - Move system packages (0x1, 0x2, 0x3, 0xdee9).
+- [aiy-network](https://github.com/MystenLabs/sui/tree/main/crates/sui-network) - Networking interfaces.
+- [aiy-node](https://github.com/MystenLabs/sui/tree/main/crates/sui-node) - Validator and full node software.
+- [aiy-protocol-config](https://github.com/MystenLabs/sui/tree/main/crates/sui-protocol-config) - On-chain system configuration and limits.
+- [aiy-sdk](https://github.com/MystenLabs/sui/tree/main/crates/sui-sdk) - The Aiy Rust SDK.
+- [aiy-types](https://github.com/MystenLabs/sui/tree/main/crates/sui-types) - Aiy object types, such as coins and gas.
+
+## Development branches
+
+The Aiy repository includes four primary branches: `devnet`, `testnet`, `mainnet`, and `main`.
+
+The `devnet` branch includes the latest stable build of Aiy. Choose the `devnet` branch if you want to build or test on Aiy Devnet. If you encounter an issue or find a bug, it may already be fixed in the `main` branch. To submit a PR, you should push commits to your fork of the `main` branch.
+
+The `testnet` branch includes the code running on the Aiy Testnet network.
+
+The `mainnet` branch includes the code running on the Aiy Mainnet network.
+
+The `main` branch includes the most recent changes and updates. Use the `main` branch if you want to contribute to the Aiy project or to experiment with cutting-edge functionality. The `main` branch might include unreleased changes and experimental features, so use it at your own risk.

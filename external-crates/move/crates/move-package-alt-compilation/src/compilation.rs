@@ -30,7 +30,7 @@ use move_compiler::{
         PackageConfig, PackagePaths, SaveFlag, SaveHook, files::MappedFiles,
         known_attributes::ModeAttribute,
     },
-    sui_mode,
+    aiy_mode,
 };
 use move_core_types::account_address::AccountAddress;
 use move_docgen::DocgenFlags;
@@ -216,17 +216,17 @@ pub fn build_for_driver<W: Write, T, F: MoveFlavor>(
     )?;
 
     let lint_level = build_config.lint_flag.get();
-    let sui_mode = build_config.default_flavor == Some(Flavor::Sui);
+    let aiy_mode = build_config.default_flavor == Some(Flavor::Aiy);
     let flags = compiler_flags(build_config);
 
     let mut compiler = Compiler::from_package_paths(vfs_root, package_paths, vec![])
         .unwrap()
         .set_flags(flags);
-    if sui_mode {
-        let (filter_attr_name, filters) = sui_mode::linters::known_filters();
+    if aiy_mode {
+        let (filter_attr_name, filters) = aiy_mode::linters::known_filters();
         compiler = compiler
             .add_custom_known_filters(filter_attr_name, filters)
-            .add_visitors(sui_mode::linters::linter_visitors(lint_level))
+            .add_visitors(aiy_mode::linters::linter_visitors(lint_level))
     }
     let (filter_attr_name, filters) = linters::known_filters();
     compiler = compiler
@@ -389,7 +389,7 @@ pub fn make_deps_for_compiler<W: Write, F: MoveFlavor>(
                 .edition()
                 .or(build_config.default_edition)
                 .unwrap_or(Edition::LEGACY), // TODO require edition
-            flavor: Flavor::from_str(pkg.flavor().unwrap_or("sui"))?,
+            flavor: Flavor::from_str(pkg.flavor().unwrap_or("aiy"))?,
             warning_filter: WarningFiltersBuilder::new_for_source(),
         };
 

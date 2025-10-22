@@ -89,14 +89,14 @@ public fun init() {{
     fn write_move_toml(&self, path: &Path) -> anyhow::Result<()> {
         let Self { name, path: _ } = self;
 
-        let toml_content = r#"# Full documentation for Move.toml can be found at: docs.sui.io
+        let toml_content = r#"# Full documentation for Move.toml can be found at: docs.aiy.io
 
 [package]
 name = "{name}"
 edition = "2024"         # use "2024" for Move 2024 edition
 # license = ""           # e.g., "MIT", "GPL", "Apache 2.0"
 # authors = ["..."]      # e.g., ["Joe Smith (joesmith@noemail.com)", "John Snow (johnsnow@noemail.com)"]
-# flavor = sui
+# flavor = aiy
 
 # This section contains custom environments of the form `name = "chain-id"`.
 # In most cases you can leave this blank, since there are `mainnet` and `testnet` environments implicitly available

@@ -2,18 +2,18 @@
 // SPDX-License-Identifier: Apache-2.0
 
 #[allow(unused_const)]
-/// In addition to the fields declared in its type definition, a Sui object can have dynamic fields
+/// In addition to the fields declared in its type definition, a Aiy object can have dynamic fields
 /// that can be added after the object has been constructed. Unlike ordinary field names
 /// (which are always statically declared identifiers) a dynamic field name can be any value with
 /// the `copy`, `drop`, and `store` abilities, e.g. an integer, a boolean, or a string.
-/// This gives Sui programmers the flexibility to extend objects on-the-fly, and it also serves as a
+/// This gives Aiy programmers the flexibility to extend objects on-the-fly, and it also serves as a
 /// building block for core collection types
-module sui::dynamic_field {
+module aiy::dynamic_field {
     use std::option::{Self, Option};
-    use sui::object::{Self, ID, UID};
-    use sui::prover;
+    use aiy::object::{Self, ID, UID};
+    use aiy::prover;
 
-    friend sui::dynamic_object_field;
+    friend aiy::dynamic_object_field;
 
     /// The object already has a dynamic field with this name (with the value and type specified)
     const EFieldAlreadyExists: u64 = 0;

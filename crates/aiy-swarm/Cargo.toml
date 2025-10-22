@@ -1,0 +1,36 @@
+[package]
+name = "aiy-swarm"
+version = "0.0.0"
+authors = ["Mysten Labs <build@mystenlabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow.workspace = true
+rand.workspace = true
+tracing.workspace = true
+tokio = { workspace = true, features = ["full"] }
+futures.workspace = true
+tempfile.workspace = true
+tonic-health.workspace = true
+tap.workspace = true
+prometheus.workspace = true
+
+aiy-config.workspace = true
+aiy-swarm-config.workspace = true
+aiy-macros.workspace = true
+aiy-node.workspace = true
+aiy-protocol-config.workspace = true
+aiy-tls.workspace = true
+aiy-types.workspace = true
+mysten-metrics.workspace = true
+mysten-network.workspace = true
+telemetry-subscribers.workspace = true
+
+[target.'cfg(msim)'.dependencies]
+aiy-simulator.workspace = true
+

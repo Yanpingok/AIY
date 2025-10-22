@@ -5,7 +5,7 @@ description: Object-based local fee markets limit the rate of transactions writi
 
 Object-based local fee markets limit the rate of transactions writing to a single shared object, preventing the network from becoming overloaded with checkpoints that take too long to execute.
 
-The Sui network's object-based architecture allows processing many different user transactions massively in parallel, in a way that's not possible on most other networks. However, if multiple transactions are all writing to the same shared object, they must execute in sequential order. There is a limit to how many transactions the network can process that touch one specific object.
+The Aiy network's object-based architecture allows processing many different user transactions massively in parallel, in a way that's not possible on most other networks. However, if multiple transactions are all writing to the same shared object, they must execute in sequential order. There is a limit to how many transactions the network can process that touch one specific object.
 
 If you see transactions fail with the error `ExecutionCancelledDueToSharedObjectCongestion`, you are observing object-based local fee markets at work. Continue reading to learn:
 
@@ -15,7 +15,7 @@ If you see transactions fail with the error `ExecutionCancelledDueToSharedObject
 
 ## How object-based local fee markets work
 
-Sui's local fee market algorithm runs every time a new batch of sequenced transactions is received from consensus.
+Aiy's local fee market algorithm runs every time a new batch of sequenced transactions is received from consensus.
 
 1. Sorts all transactions in order of gas price, from highest to lowest.
 
@@ -31,7 +31,7 @@ Using a gas price that is at least five times the reference gas price also incre
 
 ### Cost estimation of transactions
 
-Sui limits the per-commit execution capacity of each shared object. If transactions touching a shared object have a low estimated execution time, more of them can fit. If they have a high estimated execution time, not as many can fit.  
+Aiy limits the per-commit execution capacity of each shared object. If transactions touching a shared object have a low estimated execution time, more of them can fit. If they have a high estimated execution time, not as many can fit.  
 
 Transaction execution time is estimated separately for each top-level Move function called from a PTB. Measurements of actual execution time are shared between the validators, and the cost estimate used for scheduling is the stake-weighted median of these measurements of past invocations. (For most functions, which are never called with congested inputs, a low default estimate is used.)
 
@@ -43,7 +43,7 @@ If a transaction is deferred for several commits without successfully being sche
 
 ### Determining total per-object capacity
 
-At the protocol level, Sui is configured with a per-commit target utilization and burst capacity for each shared object. On average, a shared object's activity cannot exceed the per-commit limit. However, short bursts of traffic might exceed the limit temporarily.
+At the protocol level, Aiy is configured with a per-commit target utilization and burst capacity for each shared object. On average, a shared object's activity cannot exceed the per-commit limit. However, short bursts of traffic might exceed the limit temporarily.
 
 There is no way to increase the total execution capacity of a particular shared object. The network sets that limit to ensure that validators, Full nodes, and indexers can all execute checkpoints in a reasonable amount of time.
 

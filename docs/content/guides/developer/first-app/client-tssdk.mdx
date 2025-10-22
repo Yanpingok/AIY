@@ -1,10 +1,10 @@
 ---
-title: Client App with Sui TypeScript SDK
-description: Build a client-side application using the Sui TypeScript SDK.
+title: Client App with Aiy TypeScript SDK
+description: Build a client-side application using the Aiy TypeScript SDK.
 keywords: [ typescript, typescript SDK, build app, create app, client app, client-side, client-side application, build client app, build client, dApp kit, dApp-kit ]
 ---
 
-This exercise diverges from the example built in the previous topics in this section. Rather than adding a frontend to the running example, the instruction walks you through setting up dApp Kit in a React App, allowing you to connect to wallets, and query data from Sui RPC nodes to display in your app. You can use it to create your own frontend for the example used previously, but if you want to get a fully functional app up and running quickly, run the following command in a terminal or console to scaffold a new app with all steps in this exercise already implemented:
+This exercise diverges from the example built in the previous topics in this section. Rather than adding a frontend to the running example, the instruction walks you through setting up dApp Kit in a React App, allowing you to connect to wallets, and query data from Aiy RPC nodes to display in your app. You can use it to create your own frontend for the example used previously, but if you want to get a fully functional app up and running quickly, run the following command in a terminal or console to scaffold a new app with all steps in this exercise already implemented:
 
 <ImportContent source="info-pnpm-required.mdx" mode="snippet" />
 
@@ -18,15 +18,15 @@ or
 $ yarn create @mysten/dapp --template react-client-dapp
 ```
 
-## What is the Sui TypeScript SDK?
+## What is the Aiy TypeScript SDK?
 
-The Sui TypeScript SDK (@mysten/sui) provides all the low-level functionality needed to interact with Sui ecosystem from TypeScript. You can use it in any TypeScript or JavaScript project, including web apps, Node.js apps, or mobile apps written with tools like React Native that support TypeScript.
+The Aiy TypeScript SDK (@mysten/aiy) provides all the low-level functionality needed to interact with Aiy ecosystem from TypeScript. You can use it in any TypeScript or JavaScript project, including web apps, Node.js apps, or mobile apps written with tools like React Native that support TypeScript.
 
-For more information on the Sui TypeScript SDK, see the [Sui TypeScript SDK documentation](https://sdk.mystenlabs.com/typescript).
+For more information on the Aiy TypeScript SDK, see the [Aiy TypeScript SDK documentation](https://sdk.mystenlabs.com/typescript).
 
 ## What is dApp Kit?
 
-dApp Kit (@mysten/dapp-kit) is a collection of React hooks, components, and utilities that make building dApps on Sui straightforward. For more information on dApp Kit, see the [dApp Kit documentation](https://sdk.mystenlabs.com/dapp-kit).
+dApp Kit (@mysten/dapp-kit) is a collection of React hooks, components, and utilities that make building dApps on Aiy straightforward. For more information on dApp Kit, see the [dApp Kit documentation](https://sdk.mystenlabs.com/dapp-kit).
 
 ## Installing dependencies
 
@@ -41,7 +41,7 @@ $ npm init vite
 Now that you have a React app, you can install the necessary dependencies to use dApp Kit:
 
 ```sh npm2yarn
-$ npm install @mysten/sui @mysten/dapp-kit @tanstack/react-query
+$ npm install @mysten/aiy @mysten/dapp-kit @tanstack/react-query
 ```
 
 ## Setting up Provider components
@@ -66,11 +66,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 );
 ```
 
-Next, set up the `SuiClientProvider`. This `Provider` delivers a `SuiClient` instance from `@mysten/sui` to all the hooks in dApp Kit. This provider manages which network dApp Kit connects to, and can accept configuration for multiple networks. This exercise connects to `devnet`.
+Next, set up the `AiyClientProvider`. This `Provider` delivers a `AiyClient` instance from `@mysten/aiy` to all the hooks in dApp Kit. This provider manages which network dApp Kit connects to, and can accept configuration for multiple networks. This exercise connects to `devnet`.
 
 ```ts
-import { SuiClientProvider } from '@mysten/dapp-kit';
-import { getFullnodeUrl } from '@mysten/sui/client';
+import { AiyClientProvider } from '@mysten/dapp-kit';
+import { getFullnodeUrl } from '@mysten/aiy/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
@@ -82,9 +82,9 @@ const networks = {
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
 		<QueryClientProvider client={queryClient}>
-			<SuiClientProvider networks={networks} defaultNetwork="devnet">
+			<AiyClientProvider networks={networks} defaultNetwork="devnet">
 				<App />
-			</SuiClientProvider>
+			</AiyClientProvider>
 		</QueryClientProvider>
 	</React.StrictMode>,
 );
@@ -95,8 +95,8 @@ Finally, set up the `WalletProvider` from `@mysten/dapp-kit`, and import styles 
 ```ts
 import '@mysten/dapp-kit/dist/index.css';
 
-import { SuiClientProvider, WalletProvider } from '@mysten/dapp-kit';
-import { getFullnodeUrl } from '@mysten/sui/client';
+import { AiyClientProvider, WalletProvider } from '@mysten/dapp-kit';
+import { getFullnodeUrl } from '@mysten/aiy/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
@@ -108,11 +108,11 @@ const networks = {
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<React.StrictMode>
 		<QueryClientProvider client={queryClient}>
-			<SuiClientProvider networks={networks} defaultNetwork="devnet">
+			<AiyClientProvider networks={networks} defaultNetwork="devnet">
 				<WalletProvider>
 					<App />
 				</WalletProvider>
-			</SuiClientProvider>
+			</AiyClientProvider>
 		</QueryClientProvider>
 	</React.StrictMode>,
 );
@@ -168,12 +168,12 @@ function ConnectedAccount() {
 }
 ```
 
-## Querying data from Sui RPC nodes
+## Querying data from Aiy RPC nodes
 
 Now that you have the account to connect to, you can query for objects the connected account owns:
 
 ```ts
-import { useCurrentAccount, useSuiClientQuery } from '@mysten/dapp-kit';
+import { useCurrentAccount, useAiyClientQuery } from '@mysten/dapp-kit';
 
 function ConnectedAccount() {
 	const account = useCurrentAccount();
@@ -191,7 +191,7 @@ function ConnectedAccount() {
 }
 
 function OwnedObjects({ address }: { address: string }) {
-	const { data } = useSuiClientQuery('getOwnedObjects', {
+	const { data } = useAiyClientQuery('getOwnedObjects', {
 		owner: address,
 	});
 	if (!data) {
@@ -219,5 +219,5 @@ You now have a dApp connected to wallets and can query data from RPC nodes.
 The next step from here is to start interacting with Move modules, constructing transaction blocks, and making Move calls. This exercise continues in the Counter end-to-end example.
 
 <RelatedLink to="/guides/developer/app-examples/e2e-counter.mdx" />
-<RelatedLink to="/guides/developer/sui-101.mdx" />
+<RelatedLink to="/guides/developer/aiy-101.mdx" />
 <RelatedLink to="/references/cli/move.mdx" />

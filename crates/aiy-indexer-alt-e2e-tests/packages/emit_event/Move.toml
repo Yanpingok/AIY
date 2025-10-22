@@ -1,0 +1,9 @@
+[package]
+name = "emit_event"
+edition = "2024.beta"
+
+[dependencies]
+Aiy = { local = "../../../aiy-framework/packages/aiy-framework" }
+
+[addresses]
+emit_event = "0x0"

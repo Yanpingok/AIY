@@ -9,7 +9,7 @@
 /// description, and icon URL.
 module examples::fixed_supply;
 
-use sui::coin_registry;
+use aiy::coin_registry;
 
 // Total supply of the `FIXED_SUPPLY` coin is 1B (with 6 decimals).
 const TOTAL_SUPPLY: u64 = 1000000000_000000;

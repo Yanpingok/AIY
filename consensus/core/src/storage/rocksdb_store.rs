@@ -10,7 +10,7 @@ use std::{
 use bytes::Bytes;
 use consensus_config::AuthorityIndex;
 use consensus_types::block::{BlockDigest, BlockRef, Round, TransactionIndex};
-use sui_macros::fail_point;
+use aiy_macros::fail_point;
 use typed_store::{
     metrics::SamplingInterval,
     rocks::{default_db_options, DBMap, DBMapTableConfigMap, MetricConf},

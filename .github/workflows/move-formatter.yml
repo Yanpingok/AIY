@@ -1,4 +1,4 @@
-# Checks formatting in all examples and system packages (TBD for Sui System and Bridge)
+# Checks formatting in all examples and system packages (TBD for Aiy System and Bridge)
 # Uses a fixed NPM version to separate prettier-move release changes from system package
 # changes.
 #
@@ -22,10 +22,10 @@ jobs:
       matrix:
         working-directory:
           - examples # run on all examples
-          - crates/sui-framework/packages/sui-framework # sui framework
-          - crates/sui-framework/packages/move-stdlib # move stdlib
-          - crates/sui-framework/packages/sui-system # sui system
-          - crates/sui-framework/packages/bridge # bridge
+          - crates/aiy-framework/packages/aiy-framework # aiy framework
+          - crates/aiy-framework/packages/move-stdlib # move stdlib
+          - crates/aiy-framework/packages/aiy-system # aiy system
+          - crates/aiy-framework/packages/bridge # bridge
     defaults:
       run:
         working-directory: ${{ matrix.working-directory }}

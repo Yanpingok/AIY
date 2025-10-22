@@ -1,0 +1,232 @@
+// Copyright (c) Mysten Labs, Inc.
+// SPDX-License-Identifier: Apache-2.0
+
+use std::sync::Arc;
+
+use move_binary_format::CompiledModule;
+use move_trace_format::format::MoveTraceBuilder;
+use move_vm_config::verifier::{MeterConfig, VerifierConfig};
+use aiy_protocol_config::ProtocolConfig;
+use aiy_types::execution::ExecutionTiming;
+use aiy_types::execution_params::ExecutionOrEarlyError;
+use aiy_types::transaction::GasData;
+use aiy_types::{
+    base_types::{AiyAddress, TxContext},
+    committee::EpochId,
+    digests::TransactionDigest,
+    effects::TransactionEffects,
+    error::{ExecutionError, AiyError, AiyResult},
+    execution::{ExecutionResult, TypeLayoutStore},
+    gas::AiyGasStatus,
+    inner_temporary_store::InnerTemporaryStore,
+    layout_resolver::LayoutResolver,
+    metrics::{BytecodeVerifierMetrics, LimitsMetrics},
+    transaction::{CheckedInputObjects, ProgrammableTransaction, TransactionKind},
+};
+
+use move_bytecode_verifier_meter::Meter;
+use move_vm_runtime_v0::move_vm::MoveVM;
+use aiy_adapter_v0::adapter::{new_move_vm, run_metered_move_bytecode_verifier};
+use aiy_adapter_v0::execution_engine::{
+    execute_genesis_state_update, execute_transaction_to_effects,
+};
+use aiy_adapter_v0::execution_mode;
+use aiy_adapter_v0::type_layout_resolver::TypeLayoutResolver;
+use aiy_move_natives_v0::all_natives;
+use aiy_types::storage::BackingStore;
+use aiy_verifier_v0::meter::AiyVerifierMeter;
+
+use crate::executor;
+use crate::verifier;
+
+pub(crate) struct Executor(Arc<MoveVM>);
+
+pub(crate) struct Verifier<'m> {
+    config: VerifierConfig,
+    metrics: &'m Arc<BytecodeVerifierMetrics>,
+}
+
+impl Executor {
+    pub(crate) fn new(protocol_config: &ProtocolConfig, silent: bool) -> Result<Self, AiyError> {
+        Ok(Executor(Arc::new(new_move_vm(
+            all_natives(silent),
+            protocol_config,
+        )?)))
+    }
+}
+
+impl<'m> Verifier<'m> {
+    pub(crate) fn new(config: VerifierConfig, metrics: &'m Arc<BytecodeVerifierMetrics>) -> Self {
+        Verifier { config, metrics }
+    }
+}
+
+impl executor::Executor for Executor {
+    fn execute_transaction_to_effects(
+        &self,
+        store: &dyn BackingStore,
+        protocol_config: &ProtocolConfig,
+        metrics: Arc<LimitsMetrics>,
+        enable_expensive_checks: bool,
+        execution_params: ExecutionOrEarlyError,
+        epoch_id: &EpochId,
+        epoch_timestamp_ms: u64,
+        input_objects: CheckedInputObjects,
+        gas: GasData,
+        gas_status: AiyGasStatus,
+        transaction_kind: TransactionKind,
+        transaction_signer: AiyAddress,
+        transaction_digest: TransactionDigest,
+        _trace_builder_opt: &mut Option<MoveTraceBuilder>,
+    ) -> (
+        InnerTemporaryStore,
+        AiyGasStatus,
+        TransactionEffects,
+        Vec<ExecutionTiming>,
+        Result<(), ExecutionError>,
+    ) {
+        let gas_coins = gas.payment;
+        let (inner_temp_store, gas_status, effects, result) =
+            execute_transaction_to_effects::<execution_mode::Normal>(
+                store,
+                input_objects,
+                gas_coins,
+                gas_status,
+                transaction_kind,
+                transaction_signer,
+                transaction_digest,
+                &self.0,
+                epoch_id,
+                epoch_timestamp_ms,
+                protocol_config,
+                metrics,
+                enable_expensive_checks,
+                execution_params,
+            );
+        // note: old versions do not report timings.
+        (inner_temp_store, gas_status, effects, vec![], result)
+    }
+
+    fn dev_inspect_transaction(
+        &self,
+        store: &dyn BackingStore,
+        protocol_config: &ProtocolConfig,
+        metrics: Arc<LimitsMetrics>,
+        enable_expensive_checks: bool,
+        execution_params: ExecutionOrEarlyError,
+        epoch_id: &EpochId,
+        epoch_timestamp_ms: u64,
+        input_objects: CheckedInputObjects,
+        gas: GasData,
+        gas_status: AiyGasStatus,
+        transaction_kind: TransactionKind,
+        transaction_signer: AiyAddress,
+        transaction_digest: TransactionDigest,
+        skip_all_checks: bool,
+    ) -> (
+        InnerTemporaryStore,
+        AiyGasStatus,
+        TransactionEffects,
+        Result<Vec<ExecutionResult>, ExecutionError>,
+    ) {
+        let gas_coins = gas.payment;
+        if skip_all_checks {
+            execute_transaction_to_effects::<execution_mode::DevInspect<true>>(
+                store,
+                input_objects,
+                gas_coins,
+                gas_status,
+                transaction_kind,
+                transaction_signer,
+                transaction_digest,
+                &self.0,
+                epoch_id,
+                epoch_timestamp_ms,
+                protocol_config,
+                metrics,
+                enable_expensive_checks,
+                execution_params,
+            )
+        } else {
+            execute_transaction_to_effects::<execution_mode::DevInspect<false>>(
+                store,
+                input_objects,
+                gas_coins,
+                gas_status,
+                transaction_kind,
+                transaction_signer,
+                transaction_digest,
+                &self.0,
+                epoch_id,
+                epoch_timestamp_ms,
+                protocol_config,
+                metrics,
+                enable_expensive_checks,
+                execution_params,
+            )
+        }
+    }
+
+    fn update_genesis_state(
+        &self,
+        store: &dyn BackingStore,
+        protocol_config: &ProtocolConfig,
+        metrics: Arc<LimitsMetrics>,
+        epoch_id: EpochId,
+        epoch_timestamp_ms: u64,
+        transaction_digest: &TransactionDigest,
+        input_objects: CheckedInputObjects,
+        pt: ProgrammableTransaction,
+    ) -> Result<InnerTemporaryStore, ExecutionError> {
+        let tx_context = &mut TxContext::new_from_components(
+            &AiyAddress::default(),
+            transaction_digest,
+            &epoch_id,
+            epoch_timestamp_ms,
+            // genesis transaction: RGP: 1, budget: 1M, sponsor: None
+            // Those values are unused anyway in execution versions before 3 (or latest)
+            1,
+            1,
+            1_000_000,
+            None,
+            protocol_config,
+        );
+        execute_genesis_state_update(
+            store,
+            protocol_config,
+            metrics,
+            &self.0,
+            tx_context,
+            input_objects,
+            pt,
+        )
+    }
+
+    fn type_layout_resolver<'r, 'vm: 'r, 'store: 'r>(
+        &'vm self,
+        store: Box<dyn TypeLayoutStore + 'store>,
+    ) -> Box<dyn LayoutResolver + 'r> {
+        Box::new(TypeLayoutResolver::new(&self.0, store))
+    }
+}
+
+impl verifier::Verifier for Verifier<'_> {
+    fn meter(&self, config: MeterConfig) -> Box<dyn Meter> {
+        Box::new(AiyVerifierMeter::new(config))
+    }
+
+    fn meter_compiled_modules(
+        &mut self,
+        protocol_config: &ProtocolConfig,
+        modules: &[CompiledModule],
+        meter: &mut dyn Meter,
+    ) -> AiyResult<()> {
+        run_metered_move_bytecode_verifier(
+            modules,
+            protocol_config,
+            &self.config,
+            meter,
+            self.metrics,
+        )
+    }
+}

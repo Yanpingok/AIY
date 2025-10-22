@@ -21,7 +21,7 @@ use crate::{
         attributes::expand_attributes,
         byte_string, hex_string,
         name_validation::{
-            IMPLICIT_STD_MEMBERS, IMPLICIT_STD_MODULES, IMPLICIT_SUI_MEMBERS, IMPLICIT_SUI_MODULES,
+            IMPLICIT_STD_MEMBERS, IMPLICIT_STD_MODULES, IMPLICIT_AIY_MEMBERS, IMPLICIT_AIY_MODULES,
             ModuleMemberKind, NameCase, check_restricted_name_all_cases, check_valid_address_name,
             check_valid_function_parameter_name, check_valid_local_name,
             check_valid_module_member_alias, check_valid_module_member_name,
@@ -557,7 +557,7 @@ fn default_aliases(context: &mut Context) -> AliasMapBuilder {
     let loc = Loc::invalid();
     let std_address =
         maybe_make_well_known_address(context, loc, stdlib_definitions::STDLIB_ADDRESS_NAME);
-    let sui_address = maybe_make_well_known_address(context, loc, symbol!("sui"));
+    let aiy_address = maybe_make_well_known_address(context, loc, symbol!("aiy"));
     let mut modules: Vec<(Address, Symbol)> = vec![];
     let mut members: Vec<(Address, Symbol, Symbol, ModuleMemberKind)> = vec![];
     // if std is defined, add implicit std aliases
@@ -575,21 +575,21 @@ fn default_aliases(context: &mut Context) -> AliasMapBuilder {
                 .map(|(m, mem, k)| (std_address, m, mem, k)),
         );
     }
-    // if sui is defined and the current package is in Sui mode, add implicit sui aliases
-    if sui_address.is_some() && context.env().package_config(current_package).flavor == Flavor::Sui
+    // if aiy is defined and the current package is in Aiy mode, add implicit aiy aliases
+    if aiy_address.is_some() && context.env().package_config(current_package).flavor == Flavor::Aiy
     {
-        let sui_address = sui_address.unwrap();
+        let aiy_address = aiy_address.unwrap();
         modules.extend(
-            IMPLICIT_SUI_MODULES
+            IMPLICIT_AIY_MODULES
                 .iter()
                 .copied()
-                .map(|m| (sui_address, m)),
+                .map(|m| (aiy_address, m)),
         );
         members.extend(
-            IMPLICIT_SUI_MEMBERS
+            IMPLICIT_AIY_MEMBERS
                 .iter()
                 .copied()
-                .map(|(m, mem, k)| (sui_address, m, mem, k)),
+                .map(|(m, mem, k)| (aiy_address, m, mem, k)),
         );
     }
     for (addr, module) in modules {

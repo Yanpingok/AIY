@@ -1,17 +1,17 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import {SuiClient} from "@mysten/sui/client";
+import {AiyClient} from "@mysten/aiy/client";
 import {
     ADMIN_SECRET_KEY, COIN_TYPE,
     DENY_CAP_ID,
-    SUI_DENY_LIST_OBJECT_ID,
-    SUI_NETWORK,
+    AIY_DENY_LIST_OBJECT_ID,
+    AIY_NETWORK,
     TREASURY_CAP_ID,
 } from "./config";
-import {Transaction} from '@mysten/sui/transactions';
+import {Transaction} from '@mysten/aiy/transactions';
 import {program} from "commander";
-import {Ed25519Keypair} from "@mysten/sui/keypairs/ed25519";
+import {Ed25519Keypair} from "@mysten/aiy/keypairs/ed25519";
 
 
 const run = async () => {
@@ -34,7 +34,7 @@ const run = async () => {
             txb.moveCall({
                 target: `0x2::coin::deny_list_v2_add`,
                 arguments: [
-                    txb.object(SUI_DENY_LIST_OBJECT_ID),
+                    txb.object(AIY_DENY_LIST_OBJECT_ID),
                     txb.object(DENY_CAP_ID),
                     txb.pure.address(options.address),
                 ],
@@ -61,7 +61,7 @@ const run = async () => {
             txb.moveCall({
                 target: `0x2::coin::deny_list_v2_remove`,
                 arguments: [
-                    txb.object(SUI_DENY_LIST_OBJECT_ID),
+                    txb.object(AIY_DENY_LIST_OBJECT_ID),
                     txb.object(DENY_CAP_ID),
                     txb.pure.address(options.address),
                 ],
@@ -143,8 +143,8 @@ run();
 
 async function executeTx(txb: Transaction) {
 
-    console.log("Connecting to Sui network: ", SUI_NETWORK);
-    const suiClient = new SuiClient({url: SUI_NETWORK});
+    console.log("Connecting to Aiy network: ", AIY_NETWORK);
+    const aiyClient = new AiyClient({url: AIY_NETWORK});
 
     if(!ADMIN_SECRET_KEY) throw new Error("ADMIN_SECRET_KEY environment variable is not set.");
 
@@ -154,7 +154,7 @@ async function executeTx(txb: Transaction) {
 
     txb.setGasBudget(1000000000);
 
-    suiClient.signAndExecuteTransaction({
+    aiyClient.signAndExecuteTransaction({
         signer: adminKeypair,
         transaction: txb,
         requestType: 'WaitForLocalExecution',

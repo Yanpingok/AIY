@@ -303,7 +303,7 @@ pub fn get_compiled_pkg(
     let build_config = move_package::BuildConfig {
         test_mode: true,
         install_dir: Some(tempdir().unwrap().path().to_path_buf()),
-        default_flavor: Some(Flavor::Sui),
+        default_flavor: Some(Flavor::Aiy),
         lint_flag: lint.into(),
         force_lock_file: cached_deps_exist,
         skip_fetch_latest_git_deps: cached_deps_exist,

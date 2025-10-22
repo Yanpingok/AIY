@@ -18,7 +18,7 @@ import RelatedLink from "@site/src/components/RelatedLink";
 import ImportContent from "@site/src/components/ImportContent";
 
 export default function MDXContent({ children }) {
-  const suiComponents = {
+  const aiyComponents = {
     ...MDXComponents,
     Card,
     Cards,
@@ -35,5 +35,5 @@ export default function MDXContent({ children }) {
     RelatedLink,
     ImportContent,
   };
-  return <MDXProvider components={suiComponents}>{children}</MDXProvider>;
+  return <MDXProvider components={aiyComponents}>{children}</MDXProvider>;
 }

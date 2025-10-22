@@ -1,0 +1,42 @@
+# syntax=docker/dockerfile:1.6
+#
+# AIY image: build repo's 'sui-node' and publish it as 'aiy-node' in the runtime.
+# - Works around bin_version!() by creating a tiny git repo.
+# - Includes libclang/llvm for RocksDB bindings.
+# - Simple, reliable multi-stage build (no cache mounts on /src/target).
+
+FROM rust:1.78-slim AS builder
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential cmake pkg-config git curl \
+    clang llvm llvm-dev libclang-dev libssl-dev ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /src
+COPY . .
+
+# Satisfy bin_version!() which expects a git revision.
+RUN git init && git config user.email build@local && git config user.name build \
+ && git add -A && git commit -m "build context"
+
+# Build the upstream binary (sui-node), then ship it as aiy-node.
+RUN set -eux; \
+    export LIBCLANG_PATH="$(llvm-config --libdir)"; \
+    echo "Using LIBCLANG_PATH=$LIBCLANG_PATH"; \
+    cargo fetch --locked || cargo fetch; echo "Patching aiy-sdk-types for stable Rust (.is_multiple_of(8) -> %8==0)"; find /usr/local/cargo/git/checkouts -type f -path "*/aiy-sdk-types*/src/crypto/zklogin.rs" -print -exec sed -i -E "s/\\.len\\(\\)\\.is_multiple_of\\(\\s*8\\s*\\)/.len() % 8 == 0/g" {} + ; cargo build --release --bin aiy-node; \
+    install -Dm0755 target/release/aiy-node /out/aiy-node
+
+FROM debian:bookworm-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates tzdata libssl3 libgcc-s1 libstdc++6 \
+ && rm -rf /var/lib/apt/lists/* \
+ && adduser --disabled-password --gecos '' --home /nonexistent --no-create-home runner \
+ && mkdir -p /data /config /genesis
+
+COPY --from=builder /out/aiy-node /usr/local/bin/aiy-node
+
+EXPOSE 21000 23000
+EXPOSE 25000/udp 25001/udp 25002/udp 25003/udp 25004/udp
+
+ENTRYPOINT ["aiy-node"]

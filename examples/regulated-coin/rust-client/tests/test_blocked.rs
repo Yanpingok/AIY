@@ -8,11 +8,11 @@ use move_core_types::account_address::AccountAddress;
 use move_core_types::identifier::Identifier;
 use move_core_types::language_storage::{StructTag, TypeTag};
 use rust_client::tx_run::{execute_command, AppCommand, AppConfig};
-use sui_config::{sui_config_dir, SUI_CLIENT_CONFIG, SUI_KEYSTORE_FILENAME};
-use sui_keys::keystore::{AccountKeystore, FileBasedKeystore};
-use sui_sdk::rpc_types::{ObjectChange, SuiTransactionBlockResponse};
-use sui_sdk::types::base_types::{ObjectID, ObjectRef, SuiAddress};
-use sui_sdk::wallet_context::WalletContext;
+use aiy_config::{aiy_config_dir, AIY_CLIENT_CONFIG, AIY_KEYSTORE_FILENAME};
+use aiy_keys::keystore::{AccountKeystore, FileBasedKeystore};
+use aiy_sdk::rpc_types::{ObjectChange, AiyTransactionBlockResponse};
+use aiy_sdk::types::base_types::{ObjectID, ObjectRef, AiyAddress};
+use aiy_sdk::wallet_context::WalletContext;
 
 // Change from here
 const PACKAGE_ID: &'static str =
@@ -20,24 +20,24 @@ const PACKAGE_ID: &'static str =
 const MODULE: &'static str = "regulated_coin";
 // To here
 
-fn cmd_sui_client_switch(new_addr: SuiAddress) -> Result<()> {
+fn cmd_aiy_client_switch(new_addr: AiyAddress) -> Result<()> {
     println!("SWITCHING TO ADDRESS: {new_addr}");
-    let sui_client_switch = format!("sui client switch --address {new_addr}");
+    let aiy_client_switch = format!("aiy client switch --address {new_addr}");
     let _ = std::process::Command::new("sh")
         .arg("-c")
-        .arg(sui_client_switch)
+        .arg(aiy_client_switch)
         .output()?;
     Ok(())
 }
 
-fn get_other_address(different_from: SuiAddress) -> Result<SuiAddress> {
+fn get_other_address(different_from: AiyAddress) -> Result<AiyAddress> {
     let keystore =
-        FileBasedKeystore::load_or_create(&sui_config_dir()?.join(SUI_KEYSTORE_FILENAME))?;
+        FileBasedKeystore::load_or_create(&aiy_config_dir()?.join(AIY_KEYSTORE_FILENAME))?;
     Ok(keystore
         .keys()
         .into_iter()
-        .find(|pub_key| SuiAddress::from(pub_key) != different_from)
-        .map(|pub_key| SuiAddress::from(&pub_key))
+        .find(|pub_key| AiyAddress::from(pub_key) != different_from)
+        .map(|pub_key| AiyAddress::from(&pub_key))
         .ok_or(anyhow!("No other address found"))?)
 }
 
@@ -51,7 +51,7 @@ async fn get_config() -> Result<AppConfig> {
         type_params: vec![],
     }));
     let wallet_context =
-        WalletContext::new(&sui_config_dir()?.join(SUI_CLIENT_CONFIG), None, None).await?;
+        WalletContext::new(&aiy_config_dir()?.join(AIY_CLIENT_CONFIG), None, None).await?;
 
     Ok(AppConfig {
         client: wallet_context.get_client().await?,
@@ -83,19 +83,19 @@ async fn test_is_blocked() -> Result<()> {
         .map(|created| created.object_ref())
         .ok_or(anyhow!("No coin created"))?;
 
-    cmd_sui_client_switch(deny_addr)?;
+    cmd_aiy_client_switch(deny_addr)?;
     // Wrap in function to ensure client will switch to initial
     async fn run_as_deny_addr(
         coin_id: ObjectID,
-        transfer_to: SuiAddress,
-    ) -> Result<SuiTransactionBlockResponse> {
+        transfer_to: AiyAddress,
+    ) -> Result<AiyTransactionBlockResponse> {
         let config = get_config().await?;
         let command = AppCommand::Transfer(coin_id, transfer_to);
         execute_command(command, config).await
     }
     let resp2 = run_as_deny_addr(coin.0, admin_addr).await; // Notice we do not use '?' so that
-                                                            // cmd_sui_client_switch runs again
-    cmd_sui_client_switch(admin_addr)?;
+                                                            // cmd_aiy_client_switch runs again
+    cmd_aiy_client_switch(admin_addr)?;
     assert!(resp2.is_err());
     assert!(get_config().await?.wallet_context.active_address()? == admin_addr);
 

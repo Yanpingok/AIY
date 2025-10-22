@@ -1,0 +1,11 @@
+[package]
+name = "slow"
+version = "0.0.1"
+edition = "2024.beta"
+
+[dependencies]
+Aiy = { local = "../../../../../aiy-framework/packages/aiy-framework" }
+
+[addresses]
+slow =  "0x0"
+aiy =  "0000000000000000000000000000000000000000000000000000000000000002"

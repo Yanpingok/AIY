@@ -10,28 +10,28 @@
 /// companion to existing open-loop (`Coin`) systems.
 ///
 /// ```
-/// Module:      sui::balance       sui::coin             sui::token
+/// Module:      aiy::balance       aiy::coin             aiy::token
 /// Main type:   Balance<T>         Coin<T>               Token<T>
 /// Capability:  Supply<T>  <---->  TreasuryCap<T> <----> TreasuryCap<T>
 /// Abilities:   store              key + store           key
 /// ```
 ///
 /// The Token system allows for fine-grained control over the actions performed
-/// on the token. And hence it is highly suitable for applications that require
+/// on the token. And hence it is highly aiytable for applications that require
 /// control over the currency which a simple open-loop system can't provide.
-module sui::token {
+module aiy::token {
     use std::vector;
     use std::string::{Self, String};
     use std::option::{Self, Option};
     use std::type_name::{Self, TypeName};
-    use sui::tx_context::{Self, TxContext};
-    use sui::coin::{Self, Coin, TreasuryCap};
-    use sui::balance::{Self, Balance};
-    use sui::object::{Self, ID, UID};
-    use sui::vec_map::{Self, VecMap};
-    use sui::vec_set::{Self, VecSet};
-    use sui::dynamic_field as df;
-    use sui::transfer;
+    use aiy::tx_context::{Self, TxContext};
+    use aiy::coin::{Self, Coin, TreasuryCap};
+    use aiy::balance::{Self, Balance};
+    use aiy::object::{Self, ID, UID};
+    use aiy::vec_map::{Self, VecMap};
+    use aiy::vec_set::{Self, VecSet};
+    use aiy::dynamic_field as df;
+    use aiy::transfer;
 
     /// The action is not allowed (defined) in the policy.
     const EUnknownAction: u64 = 0;

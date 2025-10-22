@@ -52,7 +52,7 @@ pub struct TransactionCertifier {
     certifier_state: Arc<RwLock<CertifierState>>,
     // The state of the DAG.
     dag_state: Arc<RwLock<DagState>>,
-    // An unbounded channel to output certified blocks to Sui consensus block handler.
+    // An unbounded channel to output certified blocks to Aiy consensus block handler.
     certified_blocks_sender: UnboundedSender<CertifiedBlocksOutput>,
 }
 

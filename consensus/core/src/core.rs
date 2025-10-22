@@ -18,7 +18,7 @@ use itertools::Itertools as _;
 use mysten_metrics::monitored_mpsc::UnboundedReceiver;
 use mysten_metrics::monitored_scope;
 use parking_lot::RwLock;
-use sui_macros::fail_point;
+use aiy_macros::fail_point;
 use tokio::{
     sync::{broadcast, watch},
     time::Instant,
@@ -1215,7 +1215,7 @@ impl Core {
                         earlier_ancestor
                     }
                     None => {
-                        // No suitable earlier block found
+                        // No aiytable earlier block found
                         continue;
                     }
                 }
@@ -1488,7 +1488,7 @@ mod test {
     use consensus_types::block::TransactionIndex;
     use futures::{stream::FuturesUnordered, StreamExt};
     use mysten_metrics::monitored_mpsc;
-    use sui_protocol_config::ProtocolConfig;
+    use aiy_protocol_config::ProtocolConfig;
     use tokio::time::sleep;
 
     use super::*;

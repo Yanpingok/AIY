@@ -4,8 +4,8 @@
 module examples::testnet_nft;
 
 use std::string;
-use sui::event;
-use sui::url::{Self, Url};
+use aiy::event;
+use aiy::url::{Self, Url};
 
 /// An example NFT that can be minted by anybody
 public struct TestnetNFT has key, store {

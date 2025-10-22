@@ -6,9 +6,9 @@ import "@mysten/dapp-kit/dist/index.css";
 import "@radix-ui/themes/styles.css";
 import "./styles/base.css";
 
-import { getFullnodeUrl } from "@mysten/sui/client";
+import { getFullnodeUrl } from "@mysten/aiy/client";
 import {
-  SuiClientProvider,
+  AiyClientProvider,
   WalletProvider,
   createNetworkConfig,
 } from "@mysten/dapp-kit";
@@ -31,11 +31,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <Theme appearance="light">
       <QueryClientProvider client={queryClient}>
-        <SuiClientProvider networks={networkConfig} defaultNetwork="testnet">
+        <AiyClientProvider networks={networkConfig} defaultNetwork="testnet">
           <WalletProvider autoConnect>
             <RouterProvider router={router} />
           </WalletProvider>
-        </SuiClientProvider>
+        </AiyClientProvider>
       </QueryClientProvider>
     </Theme>
   </React.StrictMode>,

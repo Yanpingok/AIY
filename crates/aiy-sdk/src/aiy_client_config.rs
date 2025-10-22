@@ -1,0 +1,173 @@
+// Copyright (c) Mysten Labs, Inc.
+// SPDX-License-Identifier: Apache-2.0
+
+use std::fmt::{Display, Formatter, Write};
+
+use anyhow::anyhow;
+use serde::{Deserialize, Serialize};
+use serde_with::serde_as;
+
+use crate::{AiyClient, AiyClientBuilder, AIY_DEVNET_URL, AIY_LOCAL_NETWORK_URL, AIY_TESTNET_URL};
+use aiy_config::Config;
+use aiy_keys::keystore::{AccountKeystore, Keystore};
+use aiy_types::base_types::*;
+
+#[serde_as]
+#[derive(Serialize, Deserialize)]
+pub struct AiyClientConfig {
+    /// The keystore that holds the user's private keys, typically filebased keystore
+    pub keystore: Keystore,
+    /// Optional external keystore for managing keys that are not stored in the main keystore.
+    pub external_keys: Option<Keystore>,
+    /// List of environments that the client can connect to.
+    pub envs: Vec<AiyEnv>,
+    /// The alias of the currently active environment.
+    pub active_env: Option<String>,
+    /// The address that is currently active in the keystore.
+    pub active_address: Option<AiyAddress>,
+}
+
+impl AiyClientConfig {
+    pub fn new(keystore: Keystore) -> Self {
+        AiyClientConfig {
+            keystore,
+            external_keys: None,
+            envs: vec![],
+            active_env: None,
+            active_address: None,
+        }
+    }
+
+    pub fn get_env(&self, alias: &Option<String>) -> Option<&AiyEnv> {
+        if let Some(alias) = alias {
+            self.envs.iter().find(|env| &env.alias == alias)
+        } else {
+            self.envs.first()
+        }
+    }
+
+    pub fn get_active_env(&self) -> Result<&AiyEnv, anyhow::Error> {
+        self.get_env(&self.active_env).ok_or_else(|| {
+            anyhow!(
+                "Environment configuration not found for env [{}]",
+                self.active_env.as_deref().unwrap_or("None")
+            )
+        })
+    }
+
+    pub fn add_env(&mut self, env: AiyEnv) {
+        if !self
+            .envs
+            .iter()
+            .any(|other_env| other_env.alias == env.alias)
+        {
+            self.envs.push(env)
+        }
+    }
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AiyEnv {
+    pub alias: String,
+    pub rpc: String,
+    pub ws: Option<String>,
+    /// Basic HTTP access authentication in the format of username:password, if needed.
+    pub basic_auth: Option<String>,
+}
+
+impl AiyEnv {
+    pub async fn create_rpc_client(
+        &self,
+        request_timeout: Option<std::time::Duration>,
+        max_concurrent_requests: Option<u64>,
+    ) -> Result<AiyClient, anyhow::Error> {
+        let mut builder = AiyClientBuilder::default();
+        if let Some(request_timeout) = request_timeout {
+            builder = builder.request_timeout(request_timeout);
+        }
+        if let Some(ws_url) = &self.ws {
+            builder = builder.ws_url(ws_url);
+        }
+        if let Some(basic_auth) = &self.basic_auth {
+            let fields: Vec<_> = basic_auth.split(':').collect();
+            if fields.len() != 2 {
+                return Err(anyhow!(
+                    "Basic auth should be in the format `username:password`"
+                ));
+            }
+            builder = builder.basic_auth(fields[0], fields[1]);
+        }
+
+        if let Some(max_concurrent_requests) = max_concurrent_requests {
+            builder = builder.max_concurrent_requests(max_concurrent_requests as usize);
+        }
+        Ok(builder.build(&self.rpc).await?)
+    }
+
+    pub fn devnet() -> Self {
+        Self {
+            alias: "devnet".to_string(),
+            rpc: AIY_DEVNET_URL.into(),
+            ws: None,
+            basic_auth: None,
+        }
+    }
+    pub fn testnet() -> Self {
+        Self {
+            alias: "testnet".to_string(),
+            rpc: AIY_TESTNET_URL.into(),
+            ws: None,
+            basic_auth: None,
+        }
+    }
+
+    pub fn localnet() -> Self {
+        Self {
+            alias: "local".to_string(),
+            rpc: AIY_LOCAL_NETWORK_URL.into(),
+            ws: None,
+            basic_auth: None,
+        }
+    }
+}
+
+impl Display for AiyEnv {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        let mut writer = String::new();
+        writeln!(writer, "Active environment : {}", self.alias)?;
+        write!(writer, "RPC URL: {}", self.rpc)?;
+        if let Some(ws) = &self.ws {
+            writeln!(writer)?;
+            write!(writer, "Websocket URL: {ws}")?;
+        }
+        if let Some(basic_auth) = &self.basic_auth {
+            writeln!(writer)?;
+            write!(writer, "Basic Auth: {}", basic_auth)?;
+        }
+        write!(f, "{}", writer)
+    }
+}
+
+impl Config for AiyClientConfig {}
+
+impl Display for AiyClientConfig {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        let mut writer = String::new();
+
+        writeln!(
+            writer,
+            "Managed addresses : {}",
+            self.keystore.addresses().len()
+        )?;
+        write!(writer, "Active address: ")?;
+        match self.active_address {
+            Some(r) => writeln!(writer, "{}", r)?,
+            None => writeln!(writer, "None")?,
+        };
+        writeln!(writer, "{}", self.keystore)?;
+        if let Ok(env) = self.get_active_env() {
+            write!(writer, "{}", env)?;
+        }
+        write!(f, "{}", writer)
+    }
+}

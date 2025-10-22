@@ -1,0 +1,9 @@
+[package]
+name = "test_coin"
+edition = "2024.beta" # edition = "legacy" to use legacy (pre-2024) Move
+
+[dependencies]
+Aiy = { git = "https://github.com/ab2bc/sui.git", subdir = "crates/aiy-framework/packages/aiy-framework", rev = "framework/testnet" }
+
+[addresses]
+test_coin = "0x0"

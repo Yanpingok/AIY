@@ -1,9 +1,9 @@
-# Sui Objects
+# Aiy Objects
 
-For Sui, `key` is used to signify an _object_. Objects the only way to store data in Sui--allowing
+For Aiy, `key` is used to signify an _object_. Objects the only way to store data in Aiy--allowing
 the data to persist between transactions.
 
-For more details, see the Sui documentation on
+For more details, see the Aiy documentation on
 
 - [The Object Model](https://docs.sui.io/concepts/object-model)
 - [Move Rules for Objects](https://docs.sui.io/concepts/sui-move-concepts#global-unique)
@@ -12,15 +12,15 @@ For more details, see the Sui documentation on
 ## Object Rules
 
 An object is a [`struct`](../structs.md) with the [`key`](../abilities.md#key) ability. The first
-field of the struct must be `id: sui::object::UID`. This 32-byte field (a strongly typed wrapper
+field of the struct must be `id: aiy::object::UID`. This 32-byte field (a strongly typed wrapper
 around an [`address`](../primitive-types/address.md)) is then used to uniquely identify the object.
 
-Note that since `sui::object::UID` has only the `store` ability (it does not have `copy` or `drop`),
+Note that since `aiy::object::UID` has only the `store` ability (it does not have `copy` or `drop`),
 no object has `copy` or `drop`.
 
 ## Transfer Rules
 
-Objects can be have their ownership changed and transferred in the `sui::transfer` module. Many
+Objects can be have their ownership changed and transferred in the `aiy::transfer` module. Many
 functions in the module have "public" and "private" variant, where the "private" variant can only be
 called inside of the module that defines the object's type. The "public" variants can be called only
 if the object has `store`.
@@ -30,14 +30,14 @@ For example if we had two objects `A` and `B` defined in the module `my_module`:
 ```
 module a::my_module {
     public struct A has key {
-        id: sui::object::UID,
+        id: aiy::object::UID,
     }
     public struct B has key, store {
-        id: sui::object::UID,
+        id: aiy::object::UID,
     }
 }
 ```
 
-`A` can only be transferred using the `sui::transfer::transfer` inside of `a::my_module`, while `B`
-can be transferred anywhere using `sui::transfer::public_transfer`. These rules are enforced by a
-custom type system (bytecode verifier) rule in Sui.
+`A` can only be transferred using the `aiy::transfer::transfer` inside of `a::my_module`, while `B`
+can be transferred anywhere using `aiy::transfer::public_transfer`. These rules are enforced by a
+custom type system (bytecode verifier) rule in Aiy.

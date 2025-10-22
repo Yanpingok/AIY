@@ -4,10 +4,10 @@
 #[test_only]
 module vesting::backloaded_tests;
 
-use sui::clock;
-use sui::coin;
-use sui::sui::SUI;
-use sui::test_scenario as ts;
+use aiy::clock;
+use aiy::coin;
+use aiy::aiy::AIY;
+use aiy::test_scenario as ts;
 use vesting::backloaded::{Self, new_wallet, Wallet};
 
 public struct Token has key, store { id: UID }
@@ -27,7 +27,7 @@ fun test_setup(
     back_percentage: u8,
 ): ts::Scenario {
     let mut ts = ts::begin(CONTROLLER_ADDR);
-    let coins = coin::mint_for_testing<SUI>(FULLY_VESTED_AMOUNT, ts.ctx());
+    let coins = coin::mint_for_testing<AIY>(FULLY_VESTED_AMOUNT, ts.ctx());
     let now = clock::create_for_testing(ts.ctx());
     let wallet = new_wallet(
         coins,
@@ -62,7 +62,7 @@ fun test_backloaded_vesting() {
     let mut ts = test_setup(START_FRONT, START_BACK, VESTING_DURATION, BACK_PERCENTAGE);
     ts.next_tx(OWNER_ADDR);
     let mut now = clock::create_for_testing(ts.ctx());
-    let mut wallet = ts.take_from_sender<Wallet<SUI>>();
+    let mut wallet = ts.take_from_sender<Wallet<AIY>>();
 
     // check zero vested
     now.set_for_testing(START_FRONT);
@@ -118,7 +118,7 @@ fun test_backloaded_claimable() {
     let mut ts = test_setup(START_FRONT, START_FRONT + 100, 200, BACK_PERCENTAGE);
     ts.next_tx(OWNER_ADDR);
     let mut now = clock::create_for_testing(ts.ctx());
-    let mut wallet = ts.take_from_sender<Wallet<SUI>>();
+    let mut wallet = ts.take_from_sender<Wallet<AIY>>();
     let first_duration_claimable = FULLY_VESTED_AMOUNT * (100 - BACK_PERCENTAGE as u64) / 100;
     let last_duration_claimable = FULLY_VESTED_AMOUNT * (BACK_PERCENTAGE as u64) / 100;
 
@@ -136,7 +136,7 @@ fun test_backloaded_claimable() {
     now.increment_for_testing(100);
     assert!(wallet.claimable(&now) == FULLY_VESTED_AMOUNT - coin.value());
 
-    sui::test_utils::destroy(coin);
+    aiy::test_utils::destroy(coin);
     ts.return_to_sender(wallet);
     now.destroy_for_testing();
     let _end = ts::end(ts);

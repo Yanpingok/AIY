@@ -1,0 +1,522 @@
+// Copyright (c) Mysten Labs, Inc.
+// SPDX-License-Identifier: Apache-2.0
+
+//! This module contains the transactional test runner instantiation for the Aiy adapter
+
+pub mod args;
+pub mod cursor;
+pub mod offchain_state;
+pub mod programmable_transaction_test_parser;
+mod simulator_persisted_store;
+pub mod test_adapter;
+
+use move_command_line_common::testing::InstaOptions;
+pub use move_transactional_test_runner::framework::{
+    create_adapter, run_tasks_with_adapter, run_test_impl,
+};
+use rand::rngs::StdRng;
+use simulacrum::AdvanceEpochConfig;
+use simulacrum::Simulacrum;
+use simulacrum::SimulatorStore;
+use simulator_persisted_store::PersistedStore;
+use std::path::Path;
+use std::sync::Arc;
+use aiy_core::authority::authority_per_epoch_store::CertLockGuard;
+use aiy_core::authority::authority_test_utils::send_and_confirm_transaction_with_execution_error;
+use aiy_core::authority::shared_object_version_manager::AssignedVersions;
+use aiy_core::authority::AuthorityState;
+use aiy_json_rpc::authority_state::StateRead;
+use aiy_json_rpc_types::EventFilter;
+use aiy_json_rpc_types::{DevInspectResults, DryRunTransactionBlockResponse};
+use aiy_storage::key_value_store::TransactionKeyValueStore;
+use aiy_types::base_types::ObjectID;
+use aiy_types::base_types::AiyAddress;
+use aiy_types::base_types::VersionNumber;
+use aiy_types::committee::EpochId;
+use aiy_types::digests::TransactionDigest;
+use aiy_types::effects::TransactionEffects;
+use aiy_types::effects::TransactionEvents;
+use aiy_types::error::ExecutionError;
+use aiy_types::error::AiyError;
+use aiy_types::error::AiyResult;
+use aiy_types::event::Event;
+use aiy_types::executable_transaction::{ExecutableTransaction, VerifiedExecutableTransaction};
+use aiy_types::messages_checkpoint::CheckpointContentsDigest;
+use aiy_types::messages_checkpoint::VerifiedCheckpoint;
+use aiy_types::object::Object;
+use aiy_types::storage::ObjectStore;
+use aiy_types::storage::ReadStore;
+use aiy_types::aiy_system_state::epoch_start_aiy_system_state::EpochStartSystemStateTrait;
+use aiy_types::aiy_system_state::AiySystemStateTrait;
+use aiy_types::transaction::Transaction;
+use aiy_types::transaction::TransactionKind;
+use aiy_types::transaction::{InputObjects, TransactionData};
+use test_adapter::{AiyTestAdapter, PRE_COMPILED};
+
+use crate::test_adapter::ENABLE_PTB_V2;
+
+#[cfg_attr(not(msim), tokio::main)]
+#[cfg_attr(msim, msim::main)]
+pub async fn run_test(path: &Path) -> Result<(), Box<dyn std::error::Error>> {
+    ENABLE_PTB_V2.set(false).unwrap();
+    let (_guard, _filter_handle) = telemetry_subscribers::TelemetryConfig::new()
+        .with_env()
+        .init();
+    run_test_impl::<AiyTestAdapter>(path, Some(std::sync::Arc::new(PRE_COMPILED.clone())), None)
+        .await?;
+    Ok(())
+}
+
+#[cfg_attr(not(msim), tokio::main)]
+#[cfg_attr(msim, msim::main)]
+pub async fn run_ptb_v2_test(path: &Path) -> Result<(), Box<dyn std::error::Error>> {
+    ENABLE_PTB_V2.set(true).unwrap();
+    let (_guard, _filter_handle) = telemetry_subscribers::TelemetryConfig::new()
+        .with_env()
+        .init();
+    let mut options = InstaOptions::new();
+    options.suffix("v2");
+    run_test_impl::<AiyTestAdapter>(
+        path,
+        Some(std::sync::Arc::new(PRE_COMPILED.clone())),
+        Some(options),
+    )
+    .await?;
+    Ok(())
+}
+
+pub struct ValidatorWithFullnode {
+    pub validator: Arc<AuthorityState>,
+    pub fullnode: Arc<AuthorityState>,
+    pub kv_store: Arc<TransactionKeyValueStore>,
+}
+
+#[allow(unused_variables)]
+/// TODO: better name?
+#[async_trait::async_trait]
+pub trait TransactionalAdapter: Send + Sync + ReadStore {
+    async fn execute_txn(
+        &mut self,
+        transaction: Transaction,
+    ) -> anyhow::Result<(TransactionEffects, Option<ExecutionError>)>;
+
+    async fn read_input_objects(
+        &self,
+        transaction: Transaction,
+        assigned_versions: AssignedVersions,
+    ) -> AiyResult<InputObjects>;
+
+    fn prepare_txn(
+        &self,
+        transaction: Transaction,
+        input_objects: InputObjects,
+    ) -> anyhow::Result<(TransactionEffects, Option<ExecutionError>)>;
+
+    async fn create_checkpoint(&mut self) -> anyhow::Result<VerifiedCheckpoint>;
+
+    async fn advance_clock(
+        &mut self,
+        duration: std::time::Duration,
+    ) -> anyhow::Result<TransactionEffects>;
+
+    async fn advance_epoch(&mut self, config: AdvanceEpochConfig) -> anyhow::Result<()>;
+
+    async fn request_gas(
+        &mut self,
+        address: AiyAddress,
+        amount: u64,
+    ) -> anyhow::Result<TransactionEffects>;
+
+    async fn dry_run_transaction_block(
+        &self,
+        transaction_block: TransactionData,
+        transaction_digest: TransactionDigest,
+    ) -> AiyResult<DryRunTransactionBlockResponse>;
+
+    async fn dev_inspect_transaction_block(
+        &self,
+        sender: AiyAddress,
+        transaction_kind: TransactionKind,
+        gas_price: Option<u64>,
+    ) -> AiyResult<DevInspectResults>;
+
+    async fn query_tx_events_asc(
+        &self,
+        tx_digest: &TransactionDigest,
+        limit: usize,
+    ) -> AiyResult<Vec<Event>>;
+
+    async fn get_active_validator_addresses(&self) -> AiyResult<Vec<AiyAddress>>;
+
+    fn get_object(&self, object_id: &ObjectID) -> Option<Object>;
+}
+
+#[async_trait::async_trait]
+impl TransactionalAdapter for ValidatorWithFullnode {
+    async fn execute_txn(
+        &mut self,
+        transaction: Transaction,
+    ) -> anyhow::Result<(TransactionEffects, Option<ExecutionError>)> {
+        let is_consensus_tx = transaction.is_consensus_tx();
+        let (_, effects, execution_error) = send_and_confirm_transaction_with_execution_error(
+            &self.validator,
+            Some(&self.fullnode),
+            transaction,
+            is_consensus_tx,
+            false,
+        )
+        .await?;
+        Ok((effects.into_data(), execution_error))
+    }
+
+    async fn read_input_objects(
+        &self,
+        transaction: Transaction,
+        assigned_versions: AssignedVersions,
+    ) -> AiyResult<InputObjects> {
+        let tx = VerifiedExecutableTransaction::new_unchecked(
+            ExecutableTransaction::new_from_data_and_sig(
+                transaction.data().clone(),
+                aiy_types::executable_transaction::CertificateProof::Checkpoint(0, 0),
+            ),
+        );
+
+        let epoch_store = self.validator.load_epoch_store_one_call_per_task().clone();
+        self.validator.read_objects_for_execution(
+            &CertLockGuard::dummy_for_tests(),
+            &tx,
+            assigned_versions,
+            &epoch_store,
+        )
+    }
+
+    fn prepare_txn(
+        &self,
+        transaction: Transaction,
+        input_objects: InputObjects,
+    ) -> anyhow::Result<(TransactionEffects, Option<ExecutionError>)> {
+        let tx = VerifiedExecutableTransaction::new_unchecked(
+            ExecutableTransaction::new_from_data_and_sig(
+                transaction.data().clone(),
+                aiy_types::executable_transaction::CertificateProof::Checkpoint(0, 0),
+            ),
+        );
+
+        let epoch_store = self.validator.load_epoch_store_one_call_per_task().clone();
+        let (transaction_outputs, error) =
+            self.validator
+                .prepare_certificate_for_benchmark(&tx, input_objects, &epoch_store)?;
+        Ok((transaction_outputs.effects, error))
+    }
+
+    async fn dry_run_transaction_block(
+        &self,
+        transaction_block: TransactionData,
+        transaction_digest: TransactionDigest,
+    ) -> AiyResult<DryRunTransactionBlockResponse> {
+        self.fullnode
+            .dry_exec_transaction(transaction_block, transaction_digest)
+            .await
+            .map(|result| result.0)
+    }
+
+    async fn dev_inspect_transaction_block(
+        &self,
+        sender: AiyAddress,
+        transaction_kind: TransactionKind,
+        gas_price: Option<u64>,
+    ) -> AiyResult<DevInspectResults> {
+        self.fullnode
+            .dev_inspect_transaction_block(
+                sender,
+                transaction_kind,
+                gas_price,
+                None,
+                None,
+                None,
+                None,
+                None,
+            )
+            .await
+    }
+
+    async fn query_tx_events_asc(
+        &self,
+        tx_digest: &TransactionDigest,
+        limit: usize,
+    ) -> AiyResult<Vec<Event>> {
+        Ok(self
+            .validator
+            .query_events(
+                &self.kv_store,
+                EventFilter::Transaction(*tx_digest),
+                None,
+                limit,
+                false,
+            )
+            .await
+            .unwrap_or_default()
+            .into_iter()
+            .map(|aiy_event| aiy_event.into())
+            .collect())
+    }
+
+    async fn create_checkpoint(&mut self) -> anyhow::Result<VerifiedCheckpoint> {
+        unimplemented!("create_checkpoint not supported")
+    }
+
+    async fn advance_clock(
+        &mut self,
+        _duration: std::time::Duration,
+    ) -> anyhow::Result<TransactionEffects> {
+        unimplemented!("advance_clock not supported")
+    }
+
+    async fn advance_epoch(&mut self, _config: AdvanceEpochConfig) -> anyhow::Result<()> {
+        self.validator.reconfigure_for_testing().await;
+        self.fullnode.reconfigure_for_testing().await;
+        Ok(())
+    }
+
+    async fn request_gas(
+        &mut self,
+        _address: AiyAddress,
+        _amount: u64,
+    ) -> anyhow::Result<TransactionEffects> {
+        unimplemented!("request_gas not supported")
+    }
+
+    async fn get_active_validator_addresses(&self) -> AiyResult<Vec<AiyAddress>> {
+        Ok(self
+            .fullnode
+            .get_system_state()
+            .map_err(|e| {
+                AiyError::AiySystemStateReadError(format!(
+                    "Failed to get system state from fullnode: {}",
+                    e
+                ))
+            })?
+            .into_aiy_system_state_summary()
+            .active_validators
+            .iter()
+            .map(|x| x.aiy_address)
+            .collect::<Vec<_>>())
+    }
+
+    fn get_object(&self, object_id: &ObjectID) -> Option<Object> {
+        self.validator.get_object_store().get_object(object_id)
+    }
+}
+
+impl ReadStore for ValidatorWithFullnode {
+    fn get_committee(
+        &self,
+        _epoch: aiy_types::committee::EpochId,
+    ) -> Option<Arc<aiy_types::committee::Committee>> {
+        todo!()
+    }
+
+    fn get_latest_epoch_id(&self) -> aiy_types::storage::error::Result<EpochId> {
+        Ok(self.validator.epoch_store_for_testing().epoch())
+    }
+
+    fn get_latest_checkpoint(&self) -> aiy_types::storage::error::Result<VerifiedCheckpoint> {
+        let sequence_number = self
+            .validator
+            .get_latest_checkpoint_sequence_number()
+            .unwrap();
+        Ok(self
+            .get_checkpoint_by_sequence_number(sequence_number)
+            .unwrap())
+    }
+
+    fn get_highest_verified_checkpoint(
+        &self,
+    ) -> aiy_types::storage::error::Result<VerifiedCheckpoint> {
+        todo!()
+    }
+
+    fn get_highest_synced_checkpoint(
+        &self,
+    ) -> aiy_types::storage::error::Result<VerifiedCheckpoint> {
+        todo!()
+    }
+
+    fn get_lowest_available_checkpoint(
+        &self,
+    ) -> aiy_types::storage::error::Result<aiy_types::messages_checkpoint::CheckpointSequenceNumber>
+    {
+        todo!()
+    }
+
+    fn get_checkpoint_by_digest(
+        &self,
+        _digest: &aiy_types::messages_checkpoint::CheckpointDigest,
+    ) -> Option<VerifiedCheckpoint> {
+        todo!()
+    }
+
+    fn get_checkpoint_by_sequence_number(
+        &self,
+        sequence_number: aiy_types::messages_checkpoint::CheckpointSequenceNumber,
+    ) -> Option<VerifiedCheckpoint> {
+        self.validator
+            .get_checkpoint_store()
+            .get_checkpoint_by_sequence_number(sequence_number)
+            .expect("db error")
+    }
+
+    fn get_checkpoint_contents_by_digest(
+        &self,
+        digest: &CheckpointContentsDigest,
+    ) -> Option<aiy_types::messages_checkpoint::CheckpointContents> {
+        self.validator
+            .get_checkpoint_store()
+            .get_checkpoint_contents(digest)
+            .expect("db error")
+    }
+
+    fn get_checkpoint_contents_by_sequence_number(
+        &self,
+        _sequence_number: aiy_types::messages_checkpoint::CheckpointSequenceNumber,
+    ) -> Option<aiy_types::messages_checkpoint::CheckpointContents> {
+        todo!()
+    }
+
+    fn get_transaction(
+        &self,
+        tx_digest: &TransactionDigest,
+    ) -> Option<Arc<aiy_types::transaction::VerifiedTransaction>> {
+        self.validator
+            .get_transaction_cache_reader()
+            .get_transaction_block(tx_digest)
+    }
+
+    fn get_transaction_effects(&self, tx_digest: &TransactionDigest) -> Option<TransactionEffects> {
+        self.validator
+            .get_transaction_cache_reader()
+            .get_executed_effects(tx_digest)
+    }
+
+    fn get_events(&self, digest: &TransactionDigest) -> Option<TransactionEvents> {
+        self.validator
+            .get_transaction_cache_reader()
+            .get_events(digest)
+    }
+
+    fn get_full_checkpoint_contents(
+        &self,
+        _sequence_number: Option<aiy_types::messages_checkpoint::CheckpointSequenceNumber>,
+        _digest: &CheckpointContentsDigest,
+    ) -> Option<aiy_types::messages_checkpoint::FullCheckpointContents> {
+        todo!()
+    }
+
+    fn get_unchanged_loaded_runtime_objects(
+        &self,
+        _digest: &TransactionDigest,
+    ) -> Option<Vec<aiy_types::storage::ObjectKey>> {
+        None
+    }
+}
+
+impl ObjectStore for ValidatorWithFullnode {
+    fn get_object(&self, object_id: &ObjectID) -> Option<Object> {
+        self.validator.get_object_store().get_object(object_id)
+    }
+
+    fn get_object_by_key(&self, object_id: &ObjectID, version: VersionNumber) -> Option<Object> {
+        self.validator
+            .get_object_store()
+            .get_object_by_key(object_id, version)
+    }
+}
+
+#[async_trait::async_trait]
+impl TransactionalAdapter for Simulacrum<StdRng, PersistedStore> {
+    async fn execute_txn(
+        &mut self,
+        transaction: Transaction,
+    ) -> anyhow::Result<(TransactionEffects, Option<ExecutionError>)> {
+        Ok(self.execute_transaction(transaction)?)
+    }
+
+    async fn read_input_objects(
+        &self,
+        _transaction: Transaction,
+        _assigned_versions: AssignedVersions,
+    ) -> AiyResult<InputObjects> {
+        unimplemented!("read_input_objects not supported in simulator mode")
+    }
+
+    fn prepare_txn(
+        &self,
+        _transaction: Transaction,
+        _input_objects: InputObjects,
+    ) -> anyhow::Result<(TransactionEffects, Option<ExecutionError>)> {
+        unimplemented!("prepare_txn not supported in simulator mode")
+    }
+
+    async fn dev_inspect_transaction_block(
+        &self,
+        _sender: AiyAddress,
+        _transaction_kind: TransactionKind,
+        _gas_price: Option<u64>,
+    ) -> AiyResult<DevInspectResults> {
+        unimplemented!("dev_inspect_transaction_block not supported in simulator mode")
+    }
+
+    async fn dry_run_transaction_block(
+        &self,
+        _transaction_block: TransactionData,
+        _transaction_digest: TransactionDigest,
+    ) -> AiyResult<DryRunTransactionBlockResponse> {
+        unimplemented!("dry_run_transaction_block not supported in simulator mode")
+    }
+
+    async fn query_tx_events_asc(
+        &self,
+        tx_digest: &TransactionDigest,
+        _limit: usize,
+    ) -> AiyResult<Vec<Event>> {
+        Ok(self
+            .store()
+            .get_transaction_events(tx_digest)
+            .map(|x| x.data)
+            .unwrap_or_default())
+    }
+
+    async fn create_checkpoint(&mut self) -> anyhow::Result<VerifiedCheckpoint> {
+        Ok(self.create_checkpoint())
+    }
+
+    async fn advance_clock(
+        &mut self,
+        duration: std::time::Duration,
+    ) -> anyhow::Result<TransactionEffects> {
+        Ok(self.advance_clock(duration))
+    }
+
+    async fn advance_epoch(&mut self, config: AdvanceEpochConfig) -> anyhow::Result<()> {
+        self.advance_epoch(config);
+        Ok(())
+    }
+
+    async fn request_gas(
+        &mut self,
+        address: AiyAddress,
+        amount: u64,
+    ) -> anyhow::Result<TransactionEffects> {
+        self.request_gas(address, amount)
+    }
+
+    async fn get_active_validator_addresses(&self) -> AiyResult<Vec<AiyAddress>> {
+        // TODO: this is a hack to get the validator addresses. Currently using start state
+        //       but we should have a better way to get this information after reconfig
+        Ok(self.epoch_start_state().get_validator_addresses())
+    }
+
+    fn get_object(&self, object_id: &ObjectID) -> Option<Object> {
+        ObjectStore::get_object(&self.store(), object_id)
+    }
+}

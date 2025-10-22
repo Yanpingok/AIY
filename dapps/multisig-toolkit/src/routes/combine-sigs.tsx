@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { PublicKey } from '@mysten/sui/cryptography';
-import { MultiSigPublicKey } from '@mysten/sui/multisig';
-import { publicKeyFromSuiBytes } from '@mysten/sui/verify';
+import { PublicKey } from '@mysten/aiy/cryptography';
+import { MultiSigPublicKey } from '@mysten/aiy/multisig';
+import { publicKeyFromAiyBytes } from '@mysten/aiy/verify';
 import { useEffect, useState } from 'react';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -81,7 +81,7 @@ export default function MultiSigCombineSignatureGenerator() {
 			let pks: { publicKey: PublicKey; weight: number }[] = [];
 			let sigs: string[] = [];
 			data.pubKeys.forEach((item: any) => {
-				const pk = publicKeyFromSuiBytes(item.pubKey);
+				const pk = publicKeyFromAiyBytes(item.pubKey);
 				pks.push({ publicKey: pk, weight: Number(item.weight) });
 				if (item.signature) {
 					sigs.push(item.signature);
@@ -91,8 +91,8 @@ export default function MultiSigCombineSignatureGenerator() {
 				threshold: data.threshold,
 				publicKeys: pks,
 			});
-			const multisigSuiAddress = multiSigPublicKey.toSuiAddress();
-			setMSAddress(multisigSuiAddress);
+			const multisigAiyAddress = multiSigPublicKey.toAiyAddress();
+			setMSAddress(multisigAiyAddress);
 			const multisigCombinedSig = multiSigPublicKey.combinePartialSignatures(sigs);
 			setMSSignature(multisigCombinedSig);
 		} catch (e: any) {
@@ -107,11 +107,11 @@ export default function MultiSigCombineSignatureGenerator() {
 			</h2>
 
 			<form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
-				<p>The following demo allow you to create Sui MultiSig Combined Signatures.</p>
-				<p>Sui Pubkeys, weights, signatures for testing/playing with:</p>
+				<p>The following demo allow you to create Aiy MultiSig Combined Signatures.</p>
+				<p>Aiy Pubkeys, weights, signatures for testing/playing with:</p>
 				<div className="flex flex-col gap-2 bg-gray-600 p-4 rounded-md">
 					<div className="flex gap-0 border-b">
-						<div className="flex-1 font-bold border-r p-2">Sui Pubkeys</div>
+						<div className="flex-1 font-bold border-r p-2">Aiy Pubkeys</div>
 						<div className="flex-1 font-bold border-r p-2">Weights</div>
 						<div className="flex-1 font-bold p-2">Signatures</div>
 					</div>
@@ -225,7 +225,7 @@ export default function MultiSigCombineSignatureGenerator() {
 			{msAddress && (
 				<Card key={msAddress}>
 					<CardHeader>
-						<CardTitle>Sui MultiSig Address</CardTitle>
+						<CardTitle>Aiy MultiSig Address</CardTitle>
 						<CardDescription>
 							https://docs.sui.io/testnet/learn/cryptography/sui-multisig
 						</CardDescription>
@@ -240,7 +240,7 @@ export default function MultiSigCombineSignatureGenerator() {
 			{msSignature && (
 				<Card key={msSignature}>
 					<CardHeader>
-						<CardTitle>Sui MultiSig Combined Address</CardTitle>
+						<CardTitle>Aiy MultiSig Combined Address</CardTitle>
 						<CardDescription>
 							https://docs.sui.io/testnet/learn/cryptography/sui-multisig
 						</CardDescription>
@@ -257,7 +257,7 @@ export default function MultiSigCombineSignatureGenerator() {
 }
 
 /*
-sui keytool multi-sig-combine-partial-sig \
+aiy keytool multi-sig-combine-partial-sig \
 --pks \
 ACaY7TW0MnPu+fr/Z2qH5YRybHsj80qfwfqiuduT4czi \
 ABr818VXt+6PLPRoA7QnsHBfRpKJdWZPjt7ppiTl6Fkq \

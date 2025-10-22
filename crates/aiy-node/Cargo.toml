@@ -1,0 +1,72 @@
+[package]
+name = "aiy-node"
+version.workspace = true
+authors = ["Mysten Labs <build@mystenlabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[lints]
+workspace = true
+
+[dependencies]
+anemo.workspace = true
+anemo-tower.workspace = true
+antithesis_sdk.workspace = true
+arc-swap.workspace = true
+axum.workspace = true
+anyhow.workspace = true
+base64.workspace = true
+bcs.workspace = true
+clap.workspace = true
+consensus-core.workspace = true
+prometheus.workspace = true
+tokio = { workspace = true, features = ["full"] }
+tracing.workspace = true
+futures.workspace = true
+parking_lot.workspace = true
+tower.workspace = true
+tower-http.workspace = true
+http.workspace = true
+reqwest.workspace = true
+tap.workspace = true
+serde.workspace = true
+bin-version.workspace = true
+url.workspace = true
+humantime.workspace = true
+
+aiy-tls.workspace = true
+aiy-macros.workspace = true
+aiy-config.workspace = true
+aiy-core.workspace = true
+aiy-rpc-api.workspace = true
+aiy-storage.workspace = true
+aiy-name-service.workspace = true
+aiy-network.workspace = true
+aiy-json-rpc.workspace = true
+aiy-json-rpc-api.workspace = true
+aiy-protocol-config.workspace = true
+aiy-snapshot.workspace = true
+aiy-telemetry.workspace = true
+aiy-types.workspace = true
+mysten-metrics.workspace = true
+mysten-service.workspace = true
+mysten-common.workspace = true
+mysten-network.workspace = true
+typed-store.workspace = true
+telemetry-subscribers.workspace = true
+fastcrypto.workspace = true
+fastcrypto-zkp.workspace = true
+move-vm-config.workspace = true
+aiy-http.workspace = true
+aiy-metrics-push-client.workspace = true
+
+[target.'cfg(not(target_env = "msvc"))'.dependencies]
+tikv-jemallocator = { workspace = true, optional = true, features = ["profiling", "disable_initial_exec_tls"] }
+
+[target.'cfg(msim)'.dependencies]
+aiy-simulator.workspace = true
+
+[features]
+default = ["jemalloc"]
+jemalloc = ["tikv-jemallocator"]

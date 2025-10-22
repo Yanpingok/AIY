@@ -1,38 +1,38 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-/// Sui object identifiers
-module sui::object {
+/// Aiy object identifiers
+module aiy::object {
     use std::bcs;
-    use sui::address;
-    use sui::tx_context::{Self, TxContext};
+    use aiy::address;
+    use aiy::tx_context::{Self, TxContext};
 
-    friend sui::clock;
-    friend sui::dynamic_field;
-    friend sui::dynamic_object_field;
-    friend sui::transfer;
-    friend sui::authenticator_state;
-    friend sui::random;
+    friend aiy::clock;
+    friend aiy::dynamic_field;
+    friend aiy::dynamic_object_field;
+    friend aiy::transfer;
+    friend aiy::authenticator_state;
+    friend aiy::random;
 
     #[test_only]
-    friend sui::test_scenario;
+    friend aiy::test_scenario;
 
-    /// The hardcoded ID for the singleton Sui System State Object.
-    const SUI_SYSTEM_STATE_OBJECT_ID: address = @0x5;
+    /// The hardcoded ID for the singleton Aiy System State Object.
+    const AIY_SYSTEM_STATE_OBJECT_ID: address = @0x5;
 
     /// The hardcoded ID for the singleton Clock Object.
-    const SUI_CLOCK_OBJECT_ID: address = @0x6;
+    const AIY_CLOCK_OBJECT_ID: address = @0x6;
 
     /// The hardcoded ID for the singleton AuthenticatorState Object.
-    const SUI_AUTHENTICATOR_STATE_ID: address = @0x7;
+    const AIY_AUTHENTICATOR_STATE_ID: address = @0x7;
 
     /// The hardcoded ID for the singleton Random Object.
-    const SUI_RANDOM_ID: address = @0x8;
+    const AIY_RANDOM_ID: address = @0x8;
 
     /// Sender is not @0x0 the system address.
     const ENotSystemAddress: u64 = 0;
 
-    /// An object ID. This is used to reference Sui Objects.
+    /// An object ID. This is used to reference Aiy Objects.
     /// This is *not* guaranteed to be globally unique--anyone can create an `ID` from a `UID` or
     /// from an object, and ID's can be freely copied and dropped.
     /// Here, the values are not globally unique because there can be multiple values of type `ID`
@@ -46,7 +46,7 @@ module sui::object {
         bytes: address
     }
 
-    /// Globally unique IDs that define an object's ID in storage. Any Sui Object, that is a struct
+    /// Globally unique IDs that define an object's ID in storage. Any Aiy Object, that is a struct
     /// with the `key` ability, must have `id: UID` as its first field.
     /// These are globally unique in the sense that no two values of type `UID` are ever equal, in
     /// other words for any two values `id1: UID` and `id2: UID`, `id1` != `id2`.
@@ -81,12 +81,12 @@ module sui::object {
     // === uid ===
 
     #[allow(unused_function)]
-    /// Create the `UID` for the singleton `SuiSystemState` object.
-    /// This should only be called once from `sui_system`.
-    fun sui_system_state(ctx: &TxContext): UID {
+    /// Create the `UID` for the singleton `AiySystemState` object.
+    /// This should only be called once from `aiy_system`.
+    fun aiy_system_state(ctx: &TxContext): UID {
         assert!(tx_context::sender(ctx) == @0x0, ENotSystemAddress);
         UID {
-            id: ID { bytes: SUI_SYSTEM_STATE_OBJECT_ID },
+            id: ID { bytes: AIY_SYSTEM_STATE_OBJECT_ID },
         }
     }
 
@@ -94,7 +94,7 @@ module sui::object {
     /// This should only be called once from `clock`.
     public(friend) fun clock(): UID {
         UID {
-            id: ID { bytes: SUI_CLOCK_OBJECT_ID }
+            id: ID { bytes: AIY_CLOCK_OBJECT_ID }
         }
     }
 
@@ -102,7 +102,7 @@ module sui::object {
     /// This should only be called once from `authenticator_state`.
     public(friend) fun authenticator_state(): UID {
         UID {
-            id: ID { bytes: SUI_AUTHENTICATOR_STATE_ID }
+            id: ID { bytes: AIY_AUTHENTICATOR_STATE_ID }
         }
     }
 
@@ -110,7 +110,7 @@ module sui::object {
     /// This should only be called once from `random`.
     public(friend) fun randomness_state(): UID {
         UID {
-            id: ID { bytes: SUI_RANDOM_ID }
+            id: ID { bytes: AIY_RANDOM_ID }
         }
     }
 
@@ -136,7 +136,7 @@ module sui::object {
 
     // === any object ===
 
-    /// Create a new object. Returns the `UID` that must be stored in a Sui object.
+    /// Create a new object. Returns the `UID` that must be stored in a Aiy object.
     /// This is the only way to create `UID`s.
     public fun new(ctx: &mut TxContext): UID {
         UID {
@@ -145,10 +145,10 @@ module sui::object {
     }
 
     /// Delete the object and it's `UID`. This is the only way to eliminate a `UID`.
-    // This exists to inform Sui of object deletions. When an object
+    // This exists to inform Aiy of object deletions. When an object
     // gets unpacked, the programmer will have to do something with its
     // `UID`. The implementation of this function emits a deleted
-    // system event so Sui knows to process the object deletion
+    // system event so Aiy knows to process the object deletion
     public fun delete(id: UID) {
         let UID { id: ID { bytes } } = id;
         delete_impl(bytes)
@@ -175,7 +175,7 @@ module sui::object {
     }
 
     /// Get the `UID` for `obj`.
-    /// Safe because Sui has an extra bytecode verifier pass that forces every struct with
+    /// Safe because Aiy has an extra bytecode verifier pass that forces every struct with
     /// the `key` ability to have a distinguished `UID` field.
     /// Cannot be made public as the access to `UID` for a given object must be privileged, and
     /// restrictable in the object's module.

@@ -1,7 +1,7 @@
 ---
-name: Sui doc content issue or request
-about: Creates an issue for Sui documentation
-title: 'Sui doc content issue or request'
+name: Aiy doc content issue or request
+about: Creates an issue for Aiy documentation
+title: 'Aiy doc content issue or request'
 labels: doc-issue
 assignees: 'ronny-mysten'
 ---

@@ -8,7 +8,7 @@ use itertools::Itertools;
 use mysten_metrics::spawn_logged_monitored_task;
 use parking_lot::RwLock;
 use prometheus::Registry;
-use sui_protocol_config::{ConsensusNetwork, ProtocolConfig};
+use aiy_protocol_config::{ConsensusNetwork, ProtocolConfig};
 use tokio::task::JoinHandle;
 use tracing::{info, warn};
 
@@ -42,7 +42,7 @@ use crate::{
     CommitConsumerArgs,
 };
 
-/// ConsensusAuthority is used by Sui to manage the lifetime of AuthorityNode.
+/// ConsensusAuthority is used by Aiy to manage the lifetime of AuthorityNode.
 /// It hides the details of the implementation from the caller, MysticetiManager.
 #[allow(private_interfaces)]
 pub enum ConsensusAuthority {
@@ -486,7 +486,7 @@ mod tests {
     use mysten_metrics::RegistryService;
     use prometheus::Registry;
     use rstest::rstest;
-    use sui_protocol_config::ProtocolConfig;
+    use aiy_protocol_config::ProtocolConfig;
     use tempfile::TempDir;
     use tokio::time::{sleep, timeout};
     use typed_store::DBMetrics;

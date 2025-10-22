@@ -8,15 +8,15 @@ module locked_stake::locked_stake_tests;
 use locked_stake::epoch_time_lock;
 use locked_stake::locked_stake as ls;
 use std::unit_test::assert_eq;
-use sui::balance;
-use sui::coin;
-use sui::test_scenario;
-use sui::test_utils::destroy;
-use sui::vec_map;
-use sui_system::governance_test_utils::{advance_epoch, set_up_sui_system_state};
-use sui_system::sui_system::{Self, SuiSystemState};
+use aiy::balance;
+use aiy::coin;
+use aiy::test_scenario;
+use aiy::test_utils::destroy;
+use aiy::vec_map;
+use aiy_system::governance_test_utils::{advance_epoch, set_up_aiy_system_state};
+use aiy_system::aiy_system::{Self, AiySystemState};
 
-const MIST_PER_SUI: u64 = 1_000_000_000;
+const MIST_PER_AIY: u64 = 1_000_000_000;
 
 #[test]
 #[expected_failure(abort_code = epoch_time_lock::EEpochAlreadyPassed)]
@@ -24,7 +24,7 @@ fun test_incorrect_creation() {
     let mut scenario_val = test_scenario::begin(@0x0);
     let scenario = &mut scenario_val;
 
-    set_up_sui_system_state(vector[@0x1, @0x2, @0x3]);
+    set_up_aiy_system_state(vector[@0x1, @0x2, @0x3]);
 
     // Advance epoch twice so we are now at epoch 2.
     advance_epoch(scenario);
@@ -44,60 +44,60 @@ fun test_deposit_stake_unstake() {
     let mut scenario_val = test_scenario::begin(@0x0);
     let scenario = &mut scenario_val;
 
-    set_up_sui_system_state(vector[@0x1, @0x2, @0x3]);
+    set_up_aiy_system_state(vector[@0x1, @0x2, @0x3]);
 
     let mut ls = ls::new(10, test_scenario::ctx(scenario));
 
-    // Deposit 100 SUI.
-    ls::deposit_sui(&mut ls, balance::create_for_testing(100 * MIST_PER_SUI));
+    // Deposit 100 AIY.
+    ls::deposit_aiy(&mut ls, balance::create_for_testing(100 * MIST_PER_AIY));
 
-    assert_eq!(ls::sui_balance(&ls), 100 * MIST_PER_SUI);
+    assert_eq!(ls::aiy_balance(&ls), 100 * MIST_PER_AIY);
 
     test_scenario::next_tx(scenario, @0x1);
-    let mut system_state = test_scenario::take_shared<SuiSystemState>(scenario);
+    let mut system_state = test_scenario::take_shared<AiySystemState>(scenario);
 
-    // Stake 10 of the 100 SUI.
-    ls::stake(&mut ls, &mut system_state, 10 * MIST_PER_SUI, @0x1, test_scenario::ctx(scenario));
+    // Stake 10 of the 100 AIY.
+    ls::stake(&mut ls, &mut system_state, 10 * MIST_PER_AIY, @0x1, test_scenario::ctx(scenario));
     test_scenario::return_shared(system_state);
 
-    assert_eq!(ls::sui_balance(&ls), 90 * MIST_PER_SUI);
-    assert_eq!(vec_map::length(ls::staked_sui(&ls)), 1);
+    assert_eq!(ls::aiy_balance(&ls), 90 * MIST_PER_AIY);
+    assert_eq!(vec_map::length(ls::staked_aiy(&ls)), 1);
 
     test_scenario::next_tx(scenario, @0x1);
-    let mut system_state = test_scenario::take_shared<SuiSystemState>(scenario);
+    let mut system_state = test_scenario::take_shared<AiySystemState>(scenario);
     let ctx = test_scenario::ctx(scenario);
 
-    // Create a StakedSui object and add it to the LockedStake object.
-    let staked_sui = sui_system::request_add_stake_non_entry(
+    // Create a StakedAiy object and add it to the LockedStake object.
+    let staked_aiy = aiy_system::request_add_stake_non_entry(
         &mut system_state,
-        coin::mint_for_testing(20 * MIST_PER_SUI, ctx),
+        coin::mint_for_testing(20 * MIST_PER_AIY, ctx),
         @0x2,
         ctx,
     );
     test_scenario::return_shared(system_state);
 
-    ls::deposit_staked_sui(&mut ls, staked_sui);
-    assert_eq!(ls::sui_balance(&ls), 90 * MIST_PER_SUI);
-    assert_eq!(vec_map::length(ls::staked_sui(&ls)), 2);
+    ls::deposit_staked_aiy(&mut ls, staked_aiy);
+    assert_eq!(ls::aiy_balance(&ls), 90 * MIST_PER_AIY);
+    assert_eq!(vec_map::length(ls::staked_aiy(&ls)), 2);
     advance_epoch(scenario);
 
     test_scenario::next_tx(scenario, @0x1);
-    let (staked_sui_id, _) = vec_map::get_entry_by_idx(ls::staked_sui(&ls), 0);
-    let mut system_state = test_scenario::take_shared<SuiSystemState>(scenario);
+    let (staked_aiy_id, _) = vec_map::get_entry_by_idx(ls::staked_aiy(&ls), 0);
+    let mut system_state = test_scenario::take_shared<AiySystemState>(scenario);
 
     // Unstake both stake objects
-    ls::unstake(&mut ls, &mut system_state, *staked_sui_id, test_scenario::ctx(scenario));
+    ls::unstake(&mut ls, &mut system_state, *staked_aiy_id, test_scenario::ctx(scenario));
     test_scenario::return_shared(system_state);
-    assert_eq!(ls::sui_balance(&ls), 100 * MIST_PER_SUI);
-    assert_eq!(vec_map::length(ls::staked_sui(&ls)), 1);
+    assert_eq!(ls::aiy_balance(&ls), 100 * MIST_PER_AIY);
+    assert_eq!(vec_map::length(ls::staked_aiy(&ls)), 1);
 
     test_scenario::next_tx(scenario, @0x1);
-    let (staked_sui_id, _) = vec_map::get_entry_by_idx(ls::staked_sui(&ls), 0);
-    let mut system_state = test_scenario::take_shared<SuiSystemState>(scenario);
-    ls::unstake(&mut ls, &mut system_state, *staked_sui_id, test_scenario::ctx(scenario));
+    let (staked_aiy_id, _) = vec_map::get_entry_by_idx(ls::staked_aiy(&ls), 0);
+    let mut system_state = test_scenario::take_shared<AiySystemState>(scenario);
+    ls::unstake(&mut ls, &mut system_state, *staked_aiy_id, test_scenario::ctx(scenario));
     test_scenario::return_shared(system_state);
-    assert_eq!(ls::sui_balance(&ls), 120 * MIST_PER_SUI);
-    assert_eq!(vec_map::length(ls::staked_sui(&ls)), 0);
+    assert_eq!(ls::aiy_balance(&ls), 120 * MIST_PER_AIY);
+    assert_eq!(vec_map::length(ls::staked_aiy(&ls)), 0);
 
     destroy(ls);
     test_scenario::end(scenario_val);
@@ -108,17 +108,17 @@ fun test_unlock_correct_epoch() {
     let mut scenario_val = test_scenario::begin(@0x0);
     let scenario = &mut scenario_val;
 
-    set_up_sui_system_state(vector[@0x1, @0x2, @0x3]);
+    set_up_aiy_system_state(vector[@0x1, @0x2, @0x3]);
 
     let mut ls = ls::new(2, test_scenario::ctx(scenario));
 
-    ls::deposit_sui(&mut ls, balance::create_for_testing(100 * MIST_PER_SUI));
+    ls::deposit_aiy(&mut ls, balance::create_for_testing(100 * MIST_PER_AIY));
 
-    assert_eq!(ls::sui_balance(&ls), 100 * MIST_PER_SUI);
+    assert_eq!(ls::aiy_balance(&ls), 100 * MIST_PER_AIY);
 
     test_scenario::next_tx(scenario, @0x1);
-    let mut system_state = test_scenario::take_shared<SuiSystemState>(scenario);
-    ls::stake(&mut ls, &mut system_state, 10 * MIST_PER_SUI, @0x1, test_scenario::ctx(scenario));
+    let mut system_state = test_scenario::take_shared<AiySystemState>(scenario);
+    ls::stake(&mut ls, &mut system_state, 10 * MIST_PER_AIY, @0x1, test_scenario::ctx(scenario));
     test_scenario::return_shared(system_state);
 
     advance_epoch(scenario);
@@ -126,12 +126,12 @@ fun test_unlock_correct_epoch() {
     advance_epoch(scenario);
     advance_epoch(scenario);
 
-    let (staked_sui, sui_balance) = ls::unlock(ls, test_scenario::ctx(scenario));
-    assert_eq!(balance::value(&sui_balance), 90 * MIST_PER_SUI);
-    assert_eq!(vec_map::length(&staked_sui), 1);
+    let (staked_aiy, aiy_balance) = ls::unlock(ls, test_scenario::ctx(scenario));
+    assert_eq!(balance::value(&aiy_balance), 90 * MIST_PER_AIY);
+    assert_eq!(vec_map::length(&staked_aiy), 1);
 
-    destroy(staked_sui);
-    destroy(sui_balance);
+    destroy(staked_aiy);
+    destroy(aiy_balance);
     test_scenario::end(scenario_val);
 }
 
@@ -141,11 +141,11 @@ fun test_unlock_incorrect_epoch() {
     let mut scenario_val = test_scenario::begin(@0x0);
     let scenario = &mut scenario_val;
 
-    set_up_sui_system_state(vector[@0x1, @0x2, @0x3]);
+    set_up_aiy_system_state(vector[@0x1, @0x2, @0x3]);
 
     let ls = ls::new(2, test_scenario::ctx(scenario));
-    let (staked_sui, sui_balance) = ls::unlock(ls, test_scenario::ctx(scenario));
-    destroy(staked_sui);
-    destroy(sui_balance);
+    let (staked_aiy, aiy_balance) = ls::unlock(ls, test_scenario::ctx(scenario));
+    destroy(staked_aiy);
+    destroy(aiy_balance);
     test_scenario::end(scenario_val);
 }

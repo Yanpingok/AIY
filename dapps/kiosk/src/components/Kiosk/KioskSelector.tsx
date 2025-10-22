@@ -1,9 +1,9 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { Listbox, Transition } from '@headlessui/react';
+import { Listbox, Transition } from '@headlesaiy/react';
 import { KioskOwnerCap } from '@mysten/kiosk';
-import { formatAddress } from '@mysten/sui/utils';
+import { formatAddress } from '@mysten/aiy/utils';
 import classNames from 'clsx';
 import { Fragment } from 'react';
 

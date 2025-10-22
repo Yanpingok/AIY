@@ -1,0 +1,9 @@
+[package]
+name = "aiyns"
+edition = "2024.beta"
+
+[dependencies]
+Aiy = { local = "../../../aiy-framework/packages/aiy-framework" }
+
+[addresses]
+aiyns = "0x0"

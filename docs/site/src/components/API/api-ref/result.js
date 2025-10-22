@@ -21,7 +21,7 @@ const Property = (props) => {
     : "";
   return (
     <div
-      className={`grid grid-cols-6 ml-4 even:bg-sui-ghost-white dark:even:bg-sui-ghost-dark`}
+      className={`grid grid-cols-6 ml-4 even:bg-aiy-ghost-white dark:even:bg-aiy-ghost-dark`}
     >
       <div className="rounded-tl-lg rounded-bl-lg col-span-2 p-2 overflow-x-auto">
         <p className="overflow-x-auto mb-0">
@@ -231,30 +231,30 @@ const Result = (props) => {
   const hasDesc = refObj.desc;
 
   return (
-    <div className="ml-4 p-4 text-sui-gray-80 dark:text-sui-gray-50 border dark:border-sui-gray-75 rounded-lg bg-sui-ghost-white dark:bg-sui-ghost-dark">
+    <div className="ml-4 p-4 text-aiy-gray-80 dark:text-aiy-gray-50 border dark:border-aiy-gray-75 rounded-lg bg-aiy-ghost-white dark:bg-aiy-ghost-dark">
       <p className="font-bold">
         <PropType proptype={[result.name, result.schema]}></PropType>
       </p>
 
       {hasDesc && !hasRef && (
-        <p className="ml-4 p-2 text-sui-gray-100 dark:text-sui-gray-50 rounded-lg">
+        <p className="ml-4 p-2 text-aiy-gray-100 dark:text-aiy-gray-50 rounded-lg">
           <Markdown>{refObj.desc}</Markdown>
         </p>
       )}
       {hasRef && <Ref schema={ref}></Ref>}
       {hasRef && hasRefProps && (
         <div className="border-b pb-4">
-          <p className="font-bold mt-6 mb-2 ml-4 text-sui-gray-80 dark:text-sui-gray-50">
+          <p className="font-bold mt-6 mb-2 ml-4 text-aiy-gray-80 dark:text-aiy-gray-50">
             Properties
           </p>
           <div className={`grid grid-cols-6 ml-4 pb-2`}>
-            <div className="rounded-tl-lg rounded-bl-lg col-span-2 p-2 bg-sui-blue dark:bg-sui-blue-dark text-sui-gray-95 dark:text-sui-gray-50 font-bold">
+            <div className="rounded-tl-lg rounded-bl-lg col-span-2 p-2 bg-aiy-blue dark:bg-aiy-blue-dark text-aiy-gray-95 dark:text-aiy-gray-50 font-bold">
               Name&lt;Type&gt;
             </div>
-            <div className="p-2 bg-sui-blue dark:bg-sui-blue-dark text-sui-gray-95 dark:text-sui-gray-50 font-bold">
+            <div className="p-2 bg-aiy-blue dark:bg-aiy-blue-dark text-aiy-gray-95 dark:text-aiy-gray-50 font-bold">
               Required
             </div>
-            <div className="rounded-tr-lg rounded-br-lg col-span-3 p-2 bg-sui-blue dark:bg-sui-blue-dark text-sui-gray-95 dark:text-sui-gray-50 font-bold">
+            <div className="rounded-tr-lg rounded-br-lg col-span-3 p-2 bg-aiy-blue dark:bg-aiy-blue-dark text-aiy-gray-95 dark:text-aiy-gray-50 font-bold">
               Description
             </div>
           </div>

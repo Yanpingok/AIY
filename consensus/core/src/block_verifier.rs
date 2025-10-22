@@ -242,7 +242,7 @@ impl BlockVerifier for NoopBlockVerifier {
 mod test {
     use consensus_config::AuthorityIndex;
     use consensus_types::block::{BlockDigest, BlockRef, TransactionIndex};
-    use sui_protocol_config::ProtocolConfig;
+    use aiy_protocol_config::ProtocolConfig;
 
     use super::*;
     use crate::{

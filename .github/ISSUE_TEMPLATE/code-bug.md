@@ -1,7 +1,7 @@
 ---
-name: Sui Code Bug
-about: Create a new software bug for issues encountered running Sui
-title: 'Sui Code Bug or Feature Request'
+name: Aiy Code Bug
+about: Create a new software bug for issues encountered running Aiy
+title: 'Aiy Code Bug or Feature Request'
 labels: bug
 assignees: ''
 ---

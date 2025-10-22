@@ -1,11 +1,11 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-/// This module provides handy functionality for wallets and `sui::Coin` management.
-module sui::pay {
-    use sui::tx_context::{Self, TxContext};
-    use sui::coin::{Self, Coin};
-    use sui::transfer;
+/// This module provides handy functionality for wallets and `aiy::Coin` management.
+module aiy::pay {
+    use aiy::tx_context::{Self, TxContext};
+    use aiy::coin::{Self, Coin};
+    use aiy::transfer;
     use std::vector;
 
     /// For when empty vector is supplied into join function.

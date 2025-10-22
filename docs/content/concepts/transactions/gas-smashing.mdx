@@ -1,19 +1,19 @@
 ---
 title: Gas Smashing
-description: Sui optimizes coin management by combining multiple coins into a single object to pay for gas fees.
+description: Aiy optimizes coin management by combining multiple coins into a single object to pay for gas fees.
 keywords: [ gas smashing, smash gas, combine coins, combine coins into one object, create ptb for coins, create coin ptb, group coins together, group coins into ptb, create ptb with multiple coins, coin management, multiple coin management ]
 ---
 
-Every transaction on Sui has a gas fee that must be paid for successful execution. Gas smashing lets you pay this fee using multiple coins instead of a single one. This is useful when you have many smaller denomination coins or want to reduce the number of coins in your account. Gas smashing is most powerful when paired with the `GasCoin` programmable transaction block (PTB) argument.
+Every transaction on Aiy has a gas fee that must be paid for successful execution. Gas smashing lets you pay this fee using multiple coins instead of a single one. This is useful when you have many smaller denomination coins or want to reduce the number of coins in your account. Gas smashing is most powerful when paired with the `GasCoin` programmable transaction block (PTB) argument.
 
 ## Smashing gas
 
-Gas smashing happens automatically in a transaction if you provide multiple coins to pay for the gas fee. When Sui executes a transaction, Sui combines, or _smashes_, all of the coins you provide to pay for the gas into a single coin. The smashing occurs regardless of coin amounts or the gas budget provided with the transaction (as long as it is within the minimum and maximum gas budgets). Sui deducts the gas fee from the single coin regardless of the execution status of the transaction. In particular, this means that even if the transaction fails to execute for some reason (such as an execution error) the coins that you provided as gas coins remain smashed after the transaction's execution.
+Gas smashing happens automatically in a transaction if you provide multiple coins to pay for the gas fee. When Aiy executes a transaction, Aiy combines, or _smashes_, all of the coins you provide to pay for the gas into a single coin. The smashing occurs regardless of coin amounts or the gas budget provided with the transaction (as long as it is within the minimum and maximum gas budgets). Aiy deducts the gas fee from the single coin regardless of the execution status of the transaction. In particular, this means that even if the transaction fails to execute for some reason (such as an execution error) the coins that you provided as gas coins remain smashed after the transaction's execution.
 
 Key points:  
 - The transaction deducts gas from the smashed coin whether execution succeeds or fails.  
 - If execution fails, the gas coins remain combined after the transaction.  
-- The smashed coin can then be used in the same PTB for other operations, such as transferring the remaining SUI after gas is deducted.  
+- The smashed coin can then be used in the same PTB for other operations, such as transferring the remaining AIY after gas is deducted.  
 
 This design makes gas smashing a practical way to both manage coins and pay gas in the same transaction. For example, you can combine many small coins while simultaneously executing unrelated operations in one PTB.
 

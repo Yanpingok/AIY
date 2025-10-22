@@ -24,7 +24,7 @@ use crate::{
 
 pub(crate) const GENESIS_ROUND: Round = 0;
 
-/// Sui transaction in serialised bytes
+/// Aiy transaction in serialised bytes
 #[derive(Clone, Eq, PartialEq, Serialize, Deserialize, Default, Debug)]
 pub struct Transaction {
     data: Bytes,

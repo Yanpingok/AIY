@@ -1,15 +1,15 @@
 ---
 title: GraphQL and General-Purpose Indexer (Beta)
-description: The GraphQL RPC Beta service offers a structured way for your clients to interact with data on the Sui blockchain. It accesses data processed by a general-purpose indexer and can connect to an archival store for historical network state.
+description: The GraphQL RPC Beta service offers a structured way for your clients to interact with data on the Aiy blockchain. It accesses data processed by a general-purpose indexer and can connect to an archival store for historical network state.
 beta: devnet, testnet, mainnet
 keywords: [ indexer, archival store, graphql, custom indexer ]
 ---
 
-The GraphQL and `sui-indexer-alt` (Indexer) stack are part of the [Sui data access infrastructure](../guides/developer/getting-started/data-serving.mdx). The stack provides access to on-chain data through a high-performance GraphQL service backed by a scalable and general-purpose indexer. This stack is optimized for developers who need flexible queries, structured output, and historical access to data (with configurable retention) across the Sui network.
+The GraphQL and `aiy-indexer-alt` (Indexer) stack are part of the [Aiy data access infrastructure](../guides/developer/getting-started/data-serving.mdx). The stack provides access to on-chain data through a high-performance GraphQL service backed by a scalable and general-purpose indexer. This stack is optimized for developers who need flexible queries, structured output, and historical access to data (with configurable retention) across the Aiy network.
 
 GraphQL is ideal for applications that require rich query patterns over structured data, such as fetching owned objects, transaction history, specific onchain attributes, and more. The GraphQL service runs on top of a Postgres-compatible database that is updated by different Indexer pipelines in parallel.
 
-The general-purpose indexer includes configurable checkpoint-based pipelines that extract data from the Sui remote checkpoint store and full nodes. The pipelines write processed data to a database optimized for GraphQL query access.
+The general-purpose indexer includes configurable checkpoint-based pipelines that extract data from the Aiy remote checkpoint store and full nodes. The pipelines write processed data to a database optimized for GraphQL query access.
 Together, the GraphQL service and Indexer offer a modular and production-ready data stack for builders, wallet developers, explorers, and indexer/data providers.
 
 :::info
@@ -22,9 +22,9 @@ Together, the GraphQL service and Indexer offer a modular and production-ready d
 
 The key components of the stack include the following:
 
-- **General-purpose Indexer:** Ingests and transforms Sui checkpoint data using configurable and parallel pipelines, and writes it into a Postgres-compatible database. Can be configured to use the Sui remote checkpoint store and a full node as its sources.
+- **General-purpose Indexer:** Ingests and transforms Aiy checkpoint data using configurable and parallel pipelines, and writes it into a Postgres-compatible database. Can be configured to use the Aiy remote checkpoint store and a full node as its sources.
 - **Postgres-compatible database:** Stores indexed data for GraphQL queries. Tested using [GCP AlloyDB](https://cloud.google.com/products/alloydb), but you can run any Postgres-compatible database. You're encouraged to test alternative databases and share feedback on performance, cost, and operational characteristics.
-- **GraphQL service:** Serves structured queries over indexed data. Follows the [GraphQL specification](https://graphql.org/) and the supported schema is documented in the [GraphQL API reference](/references/sui-graphql). Also take a look at the [getting started guide](/guides/developer/getting-started/graphql-rpc).
+- **GraphQL service:** Serves structured queries over indexed data. Follows the [GraphQL specification](https://graphql.org/) and the supported schema is documented in the [GraphQL API reference](/references/aiy-graphql). Also take a look at the [getting started guide](/guides/developer/getting-started/graphql-rpc).
 - **Archival Service:** Enables point lookups for historical data from a key-value store. If unavailable, the GraphQL service falls back to the Postgres-compatible database for lookups, which might be limited by that database's retention policy. See [Archival Store and Service](./archival-store.mdx) for more information.
 - **Consistent Store:** Answers questions about the latest state of the network within the last hour (objects owned by addresses, objects by type, balances by address and type). Consistency is guaranteed by pinning queries to a specific (recent) checkpoint.
 - **Full node:** Enables transaction execution and simulation. Currently, JSON-RPC is used but there will be a switch to [gRPC](/concepts/grpc-overview) soon as the long-term full node API in the future.
@@ -73,11 +73,11 @@ Refer to [For RPC providers and Data operators](#for-rpc-providers-and-data-oper
 
 The GraphQL service exposes a query surface conforming to [GraphQL concepts](/concepts/graphql-rpc). It allows pagination, filtering, and consistent snapshot queries. The service also supports runtime configuration for schema, query cost limits, and logging.
 
-The GraphQL schema is defined in the [GraphQL reference](/references/sui-graphql). You can explore supported types and fields there, use the GraphiQL IDE to test queries, and read documentation on the up-to-date schema.
+The GraphQL schema is defined in the [GraphQL reference](/references/aiy-graphql). You can explore supported types and fields there, use the GraphiQL IDE to test queries, and read documentation on the up-to-date schema.
 
 The GraphQL service is deployed as a single binary implementing a stateless, horizontally scalable service. Queries are served with data from one or more of a Postgres-compatible database (filters over historical data), Archival Service (point lookups), Consistent Store (live data), or full node (execution and simulation), based on need. Access to these stores must be configured with the service on start-up, otherwise the service might fail to respond correctly to requests. More details on how to set-up, configure, and run the service is available in its [README](https://github.com/MystenLabs/sui/tree/main/crates/sui-indexer-alt-graphql).
 
-Requests to GraphQL are subject to various limits, to ensure resources are shared fairly between clients. Each limit is configurable, and the values configured for an instance can be queried through [`Query.serviceConfig`](/references/sui-api/sui-graphql/beta/reference/operations/queries/service-config). Requests that do not meet limits return with an error. The following limits are in effect:
+Requests to GraphQL are subject to various limits, to ensure resources are shared fairly between clients. Each limit is configurable, and the values configured for an instance can be queried through [`Query.serviceConfig`](/references/aiy-api/aiy-graphql/beta/reference/operations/queries/service-config). Requests that do not meet limits return with an error. The following limits are in effect:
 
 - **Request size:** Requests may not limit a certain size in bytes. The limit is spread across a transaction payload limit, which applies to all values and variable bindings that are parameters to transaction signing, execution, and simulation fields (default: 175KB), and a query payload limit which applies to all other parts of the query (default: 5KB).
 - **Request timeout:** Time spent on each request is bounded, with different bounds for execution (default: 74s) and regular reads (default: 40s).
@@ -94,7 +94,7 @@ General-purpose indexer fetches checkpoints data from either a remote object sto
 <summary>
 Full list of tables and their schemas
 </summary>
-<ImportContent source="crates/sui-indexer-alt-schema/src/schema.rs" mode="code" />
+<ImportContent source="crates/aiy-indexer-alt-schema/src/schema.rs" mode="code" />
 </details>
 
 Below are brief descriptions of the various categories of pipelines based on the type of data they handle:
@@ -382,20 +382,20 @@ For all production deployments, you are strongly encouraged to pair Postgres wit
 - The Archival Service serves as the backend for historical versions and checkpoint data, reducing pressure on your Postgres instance.
 - While not strictly required, it is strongly recommended that you use the Archival Service in any production setup that aims to support `high-retention` GraphQL or gRPC workloads.
 
-Current implementation supports [GCP Bigtable](https://cloud.google.com/bigtable) which is a highly scalable and performant data store. If you plan to operate your own archival store, refer to `sui-kvstore` and `sui-kv-rpc` for indexer setup and RPC service implementation respectively. For the indexer setup, make sure to use the [custom indexing framework](../guides/developer/advanced/custom-indexer). If you're interested in contributing support for other scalable data stores, reach out on GitHub by creating a new issue.
+Current implementation supports [GCP Bigtable](https://cloud.google.com/bigtable) which is a highly scalable and performant data store. If you plan to operate your own archival store, refer to `aiy-kvstore` and `aiy-kv-rpc` for indexer setup and RPC service implementation respectively. For the indexer setup, make sure to use the [custom indexing framework](../guides/developer/advanced/custom-indexer). If you're interested in contributing support for other scalable data stores, reach out on GitHub by creating a new issue.
 
 <details>
 <summary>
-`main.rs` in `sui-kvstore`
+`main.rs` in `aiy-kvstore`
 </summary>
-<ImportContent source="crates/sui-kvstore/src/main.rs" mode="code" />
+<ImportContent source="crates/aiy-kvstore/src/main.rs" mode="code" />
 </details>
 
 <details>
 <summary>
-`main.rs` in `sui-kv-rpc`
+`main.rs` in `aiy-kv-rpc`
 </summary>
-<ImportContent source="crates/sui-kv-rpc/src/main.rs" mode="code" />
+<ImportContent source="crates/aiy-kv-rpc/src/main.rs" mode="code" />
 </details>
 
 ### Deployment strategies and trade-offs
@@ -417,7 +417,7 @@ To improve performance and reliability, also consider these operational best pra
 - Use replication and staged deployments to ensure SLA during upgrades or failures.
 - Consider offering different tiers of service to meet different developer needs. For example:
     - A basic tier that serves recent data (30 days, for example) via GraphQL RPC or gRPC.
-    - A premium tier with full GraphQL / gRPC + Archival Service access, suited to apps that need historical lookups.
+    - A premium tier with full GraphQL / gRPC + Archival Service access, aiyted to apps that need historical lookups.
     - Optionally offer region-specific instances or throughput-based pricing to support diverse client footprints.
 
 ## Related links
@@ -427,7 +427,7 @@ To improve performance and reliability, also consider these operational best pra
 <RelatedLink to="/concepts/custom-indexer/pipeline-architecture" />
 <RelatedLink to="/concepts/archival-store" />
 <RelatedLink to="/guides/developer/advanced/custom-indexer" />
-<RelatedLink href="https://github.com/MystenLabs/sui/tree/main/crates/sui-indexer-alt" label="Sui Indexer Alt" desc="The `sui-indexer-alt` crate in the Sui repo." />
+<RelatedLink href="https://github.com/MystenLabs/sui/tree/main/crates/sui-indexer-alt" label="Aiy Indexer Alt" desc="The `aiy-indexer-alt` crate in the Aiy repo." />
 <RelatedLink href="https://github.com/MystenLabs/mvr/tree/main/crates/mvr-indexer" label="Move Registry" desc="The indexer that the Move Registry (MVR) implements." />
 <RelatedLink href="https://github.com/MystenLabs/deepbookv3/tree/main/crates/indexer" label="DeepBook Indexer" desc="The indexer that DeepBook implements." />
-<RelatedLink href="/references/sui-api/sui-graphql/beta/reference" label="GraphQL Beta schema" desc="Schema documentation for GraphQL Beta" />
+<RelatedLink href="/references/aiy-api/aiy-graphql/beta/reference" label="GraphQL Beta schema" desc="Schema documentation for GraphQL Beta" />

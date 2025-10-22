@@ -1,0 +1,10 @@
+---
+- hosts: "{{ host }}"
+  become: yes
+  roles:
+    - aiy-node
+  vars:
+    skip_iptables: false
+    skip_monitoring: false
+    reset_db: false
+    start_aiy: true

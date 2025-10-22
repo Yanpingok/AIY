@@ -57,7 +57,7 @@ const KNOWN_NAMES: &[&str] = &[
 const REQUIRED_FIELDS: &[&str] = &[PACKAGE_NAME];
 
 const LEGACY_SYSTEM_DEPS_NAMES: [&str; 5] =
-    ["Sui", "MoveStdlib", "Bridge", "DeepBook", "SuiSystem"];
+    ["Aiy", "MoveStdlib", "Bridge", "DeepBook", "AiySystem"];
 
 pub struct LegacyPackageMetadata {
     pub legacy_name: String,

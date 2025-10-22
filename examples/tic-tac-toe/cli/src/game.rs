@@ -5,7 +5,7 @@ use std::fmt;
 
 use fastcrypto::encoding::{Base64, Encoding};
 use serde::Deserialize;
-use sui_types::{
+use aiy_types::{
     base_types::{ObjectRef, SequenceNumber},
     digests::ObjectDigest,
     object::Owner,
@@ -26,14 +26,14 @@ pub(crate) enum GameKind {
     Owned(Owned),
 }
 
-/// Rust representation of a Move `shared::Game`, suitable for deserializing from their BCS
+/// Rust representation of a Move `shared::Game`, aiytable for deserializing from their BCS
 /// representation.
 #[derive(Deserialize)]
 pub(crate) struct Shared {
     pub board: Board,
 }
 
-/// Rust representation of a Move `owned::Game`, suitable for deserializing from their BCS
+/// Rust representation of a Move `owned::Game`, aiytable for deserializing from their BCS
 /// representation.
 #[derive(Deserialize)]
 pub(crate) struct Owned {

@@ -17,7 +17,7 @@ export function Card(props) {
     return;
   }, [href]);
 
-  const { descriptions } = usePluginData("sui-description-plugin");
+  const { descriptions } = usePluginData("aiy-description-plugin");
   let h = props.href;
   if (!h.match(/^\//)) {
     h = `/${h}`;

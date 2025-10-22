@@ -66,7 +66,7 @@ const CarouselThumbs: React.FC<CarouselThumbsProps> = ({
             style={{
               border:
                 currentIndex === index
-                  ? "4px solid var(--sui-blue-bright)"
+                  ? "4px solid var(--aiy-blue-bright)"
                   : "4px solid transparent",
             }}
           />

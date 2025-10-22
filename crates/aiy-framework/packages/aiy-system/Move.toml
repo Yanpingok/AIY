@@ -1,0 +1,12 @@
+[package]
+name = "AiySystem"
+version = "0.0.1"
+published-at = "0x3"
+edition = "2024.beta"
+
+[dependencies]
+MoveStdlib = { local = "../move-stdlib" }
+Aiy = { local = "../aiy-framework" }
+
+[addresses]
+aiy_system = "0x3"

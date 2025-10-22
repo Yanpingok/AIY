@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-import { useSignTransaction, useSuiClient } from "@mysten/dapp-kit";
-import { SuiTransactionBlockResponse } from "@mysten/sui/client";
-import { Transaction } from "@mysten/sui/transactions";
+import { useSignTransaction, useAiyClient } from "@mysten/dapp-kit";
+import { AiyTransactionBlockResponse } from "@mysten/aiy/client";
+import { Transaction } from "@mysten/aiy/transactions";
 import toast from "react-hot-toast";
 
 /**
@@ -12,12 +12,12 @@ import toast from "react-hot-toast";
  * That allows read-after-write consistency and is generally considered a best practice.
  */
 export function useTransactionExecution() {
-  const client = useSuiClient();
+  const client = useAiyClient();
   const { mutateAsync: signTransactionBlock } = useSignTransaction();
 
   const executeTransaction = async (
     txb: Transaction,
-  ): Promise<SuiTransactionBlockResponse | void> => {
+  ): Promise<AiyTransactionBlockResponse | void> => {
     try {
       const signature = await signTransactionBlock({
         transaction: txb,

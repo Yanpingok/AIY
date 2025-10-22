@@ -40,7 +40,7 @@ public fun unequip(warrior: &mut Warrior): Sword {
 
 // === Tests ===
 #[test_only]
-use sui::test_scenario as ts;
+use aiy::test_scenario as ts;
 
 #[test]
 fun test_equip_empty() {

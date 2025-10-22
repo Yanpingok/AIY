@@ -32,7 +32,7 @@ use move_compiler::{
         NamedAddressMap, NumericalAddress, PackageConfig, PackagePaths, SaveFlag, SaveHook,
         files::MappedFiles,
     },
-    sui_mode::{self},
+    aiy_mode::{self},
 };
 use move_disassembler::disassembler::Disassembler;
 use move_docgen::{Docgen, DocgenFlags, DocgenOptions};
@@ -545,16 +545,16 @@ impl CompiledPackage {
         paths.push(sources_package_paths.clone());
 
         let lint_level = resolution_graph.build_options.lint_flag.get();
-        let sui_mode = resolution_graph.build_options.default_flavor == Some(Flavor::Sui);
+        let aiy_mode = resolution_graph.build_options.default_flavor == Some(Flavor::Aiy);
 
         let mut compiler = Compiler::from_package_paths(vfs_root, paths, bytecode_deps)
             .unwrap()
             .set_flags(flags);
-        if sui_mode {
-            let (filter_attr_name, filters) = sui_mode::linters::known_filters();
+        if aiy_mode {
+            let (filter_attr_name, filters) = aiy_mode::linters::known_filters();
             compiler = compiler
                 .add_custom_known_filters(filter_attr_name, filters)
-                .add_visitors(sui_mode::linters::linter_visitors(lint_level))
+                .add_visitors(aiy_mode::linters::linter_visitors(lint_level))
         }
         let (filter_attr_name, filters) = linters::known_filters();
         compiler = compiler

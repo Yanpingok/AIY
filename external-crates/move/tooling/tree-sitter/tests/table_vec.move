@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 /// A basic scalable vector library implemented using `Table`.
-module sui::table_vec {
-    use sui::table::{Self, Table};
-    use sui::tx_context::TxContext;
+module aiy::table_vec {
+    use aiy::table::{Self, Table};
+    use aiy::tx_context::TxContext;
 
     struct TableVec<phantom Element: store> has store {
         /// The contents of the table vector.

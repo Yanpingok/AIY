@@ -11,23 +11,23 @@ import fs from "fs";
 
 const BRIDGE_PATH = path.join(
   __dirname,
-  "../../../../../crates/sui-framework/docs/bridge",
+  "../../../../../crates/aiy-framework/docs/bridge",
 );
 const FRAMEWORK_PATH = path.join(
   __dirname,
-  "../../../../../crates/sui-framework/docs/sui",
+  "../../../../../crates/aiy-framework/docs/aiy",
 );
 const STDLIB_PATH = path.join(
   __dirname,
-  "../../../../../crates/sui-framework/docs/std",
+  "../../../../../crates/aiy-framework/docs/std",
 );
 // const DEEPBOOK_PATH = path.join(
 //   __dirname,
-//   "../../../../../crates/sui-framework/docs/deepbook",
+//   "../../../../../crates/aiy-framework/docs/deepbook",
 // );
-const SUISYS_PATH = path.join(
+const AIYSYS_PATH = path.join(
   __dirname,
-  "../../../../../crates/sui-framework/docs/sui_system",
+  "../../../../../crates/aiy-framework/docs/aiy_system",
 );
 const DOCS_PATH = path.join(
   __dirname,
@@ -35,21 +35,21 @@ const DOCS_PATH = path.join(
 );
 
 // prefix helper for the first path segment only
-const prefixRootDir = (seg) => `sui_${seg}`;
+const prefixRootDir = (seg) => `aiy_${seg}`;
 
 // map of crate dir -> prefixed dir, used to rewrite hrefs in HTML
 const CRATE_PREFIX_MAP = {
-  bridge: "sui_bridge",
-  sui: "sui_sui",
-  std: "sui_std",
-  sui_system: "sui_sui_system",
+  bridge: "aiy_bridge",
+  aiy: "aiy_aiy",
+  std: "aiy_std",
+  aiy_system: "aiy_aiy_system",
 };
 
 const CRATE_PACKAGES_PATH = {
-  bridge: "sui/crates/sui-framework/packages/bridge",
-  sui: "sui/crates/sui-framework/packages/sui",
-  std: "sui/crates/sui-framework/packages/std",
-  sui_system: "sui/crates/sui-framework/packages/sui_system",
+  bridge: "aiy/crates/aiy-framework/packages/bridge",
+  aiy: "aiy/crates/aiy-framework/packages/aiy",
+  std: "aiy/crates/aiy-framework/packages/std",
+  aiy_system: "aiy/crates/aiy-framework/packages/aiy_system",
 };
 
 const SKIP_INDEX_AT = new Set([DOCS_PATH]);
@@ -67,7 +67,7 @@ function shouldSkipIndex(absDir) {
 const pjoin = path.posix.join;
 
 const toLowerTitleText = (s) =>
-  s.replace(/^sui_/, "").replace(/[-_]+/g, " ").toLowerCase();
+  s.replace(/^aiy_/, "").replace(/[-_]+/g, " ").toLowerCase();
 
 /* ----------------- HTML-safe anchor helpers ----------------- */
 
@@ -229,7 +229,7 @@ function injectToc(md) {
 
 const frameworkPlugin = (_context, _options) => {
   return {
-    name: "sui-framework-plugin",
+    name: "aiy-framework-plugin",
 
     async loadContent() {
       // framework folder is added to gitignore, so should only exist locally.
@@ -261,14 +261,14 @@ const frameworkPlugin = (_context, _options) => {
       const frameworkFiles = recurseFiles(FRAMEWORK_PATH);
       const stdlibFiles = recurseFiles(STDLIB_PATH);
       // const deepbookFiles = recurseFiles(DEEPBOOK_PATH);
-      const suisysFiles = recurseFiles(SUISYS_PATH);
+      const aiysysFiles = recurseFiles(AIYSYS_PATH);
 
       const allFiles = [
         bridgeFiles, 
         frameworkFiles,        
         stdlibFiles, 
         // deepbookFiles,
-        suisysFiles,
+        aiysysFiles,
       ];
 
       allFiles.forEach((theseFiles) => {
@@ -298,12 +298,12 @@ const frameworkPlugin = (_context, _options) => {
           // crate-relative link rewriting
           reMarkdown = reMarkdown
             .replace(
-              /href=(["'])(\.\.\/)(bridge|sui|std|sui_system)\/([^"']*)\1/g,
+              /href=(["'])(\.\.\/)(bridge|aiy|std|aiy_system)\/([^"']*)\1/g,
               (_m, q, up, seg, tail) => `href=${q}${up}${CRATE_PREFIX_MAP[seg]}/${tail}${q}`,
             )
             // also handle single quotes just in case
             .replace(
-              /href='(\.\.\/)(bridge|sui|std|sui_system)\//g,
+              /href='(\.\.\/)(bridge|aiy|std|aiy_system)\//g,
               (m, up, seg) => `href='${up}${CRATE_PREFIX_MAP[seg]}/"`.replace(/"$/, "'"),
             );
 
@@ -340,10 +340,10 @@ const frameworkPlugin = (_context, _options) => {
                 const indexDocId = pjoin("references/framework", ...relParts, "index");
 
                 const top = relParts[0] || parts[0] || "";
-                const topUnpref = top.replace(/^sui_/, "");
+                const topUnpref = top.replace(/^aiy_/, "");
 
-                // Category label: lowercased dirname without sui_ prefix
-                const unprefixed = part.replace(/^sui_/, "");
+                // Category label: lowercased dirname without aiy_ prefix
+                const unprefixed = part.replace(/^aiy_/, "");
                 const label = unprefixed.toLowerCase();
 
                 const category = {
@@ -375,12 +375,12 @@ const frameworkPlugin = (_context, _options) => {
         const slug = pjoin("/references/framework", ...relParts);
 
         const dirName = relParts.length ? relParts[relParts.length - 1] : "framework";
-        const titleText = `sui:${toLowerTitleText(dirName)}`;
+        const titleText = `aiy:${toLowerTitleText(dirName)}`;
 
         const entries = fs.readdirSync(absDir, { withFileTypes: true });
         const children = [];
         const topDir = relParts[0] || "";
-        const frameworkName = topDir.replace(/^sui_/, "");
+        const frameworkName = topDir.replace(/^aiy_/, "");
         const norm = (s) => s.replace(/\.mdx?$/i, "").toLowerCase().replace(/-/g, "_");
 
         for (const ent of entries) {
@@ -408,7 +408,7 @@ const frameworkPlugin = (_context, _options) => {
           "---",
           `title: "${titleText.replace(/"/g, '\\"')}"`,
           `slug: ${slug}`,
-          `description: "${(`Documentation for the modules in the ${CRATE_PACKAGES_PATH[topDir?.replace(/^sui_/, "")] ?? ""} crate. Select a module from the list to see its details.`).replace(/"/g, '\\"')}"`,
+          `description: "${(`Documentation for the modules in the ${CRATE_PACKAGES_PATH[topDir?.replace(/^aiy_/, "")] ?? ""} crate. Select a module from the list to see its details.`).replace(/"/g, '\\"')}"`,
           "---",
           "",
         ].join("\n");

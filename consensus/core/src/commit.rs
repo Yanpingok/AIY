@@ -369,8 +369,8 @@ pub struct CommittedSubDag {
     /// For safety, a previously locally decided commit may be recovered after restarting as
     /// non-local, if its finalization state was not persisted.
     pub decided_with_local_blocks: bool,
-    /// Optional scores that are provided as part of the consensus output to Sui
-    /// that can then be used by Sui for future submission to consensus.
+    /// Optional scores that are provided as part of the consensus output to Aiy
+    /// that can then be used by Aiy for future submission to consensus.
     pub reputation_scores_desc: Vec<(AuthorityIndex, u64)>,
 
     /// Set by CommitFinalizer.

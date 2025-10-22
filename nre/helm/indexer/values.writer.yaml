@@ -8,7 +8,7 @@ args: ["--db-url", "$(DB_URL)", "--rpc-client-url", "https://public-rpc.mainnet.
 replicaCount: 1
 
 podAnnotations:
-    app: sui-indexer-writer
+    app: aiy-indexer-writer
 
 env:
   RUST_BACKTRACE:

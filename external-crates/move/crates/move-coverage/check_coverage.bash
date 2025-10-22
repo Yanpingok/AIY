@@ -18,14 +18,14 @@ popd || exit 1
 # TODO: add coverage for transactional tests
 
 echo "---------------------------------------------------------------------------"
-echo "Running e2e testsuite..."
+echo "Running e2e testaiyte..."
 echo "---------------------------------------------------------------------------"
-pushd ../../e2e-testsuite || exit 1
+pushd ../../e2e-testaiyte || exit 1
 cargo test -- --skip account_universe --skip fuzz_scripts
 popd || exit 1
 
 echo "---------------------------------------------------------------------------"
-echo "Running Move testsuite..."
+echo "Running Move testaiyte..."
 echo "---------------------------------------------------------------------------"
 pushd ../../move-compiler/functional-tests/tests || exit 1
 cargo test

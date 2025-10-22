@@ -1,7 +1,7 @@
 ---
 title: zkLogin Integration Guide
-description: zkLogin can be integrated into applications deployed on Sui.
-keywords: [ zklogin, how to use zklogin, generate ephemeral key pair, fetch JWT, decode JWT, generate salt, generate user Sui address, fetch ZK proof, assemble zkLogin signature, oauth, openid ]
+description: zkLogin can be integrated into applications deployed on Aiy.
+keywords: [ zklogin, how to use zklogin, generate ephemeral key pair, fetch JWT, decode JWT, generate salt, generate user Aiy address, fetch ZK proof, assemble zkLogin signature, oauth, openid ]
 ---
 
 Here is the high-level flow the wallet or frontend application must implement to support zkLogin-enabled transactions:
@@ -9,7 +9,7 @@ Here is the high-level flow the wallet or frontend application must implement to
 1. The wallet creates an ephemeral key pair.
 1. The wallet prompts the user to complete an OAuth login flow with the nonce corresponding to the ephemeral public key.
 1. After receiving the JSON Web Token (JWT), the wallet obtains a zero-knowledge proof.
-1. The wallet obtains a unique user salt based on a JWT. Use the OAuth subject identifier and salt to compute the zkLogin Sui address.
+1. The wallet obtains a unique user salt based on a JWT. Use the OAuth subject identifier and salt to compute the zkLogin Aiy address.
 1. The wallet signs transactions with the ephemeral private key.
 1. The wallet submits the transaction with the ephemeral signature and the zero-knowledge proof.
 
@@ -20,29 +20,29 @@ Let's dive into the specific implementation details.
 To use the zkLogin TypeScript SDK in your project, run the following command in your project root:
 
 ```sh npm2yarn
-$ npm install @mysten/sui
+$ npm install @mysten/aiy
 ```
 
 If you want to use the latest experimental version:
 
 ```sh npm2yarn
-$ npm install @mysten/sui@experimental
+$ npm install @mysten/aiy@experimental
 ```
 
 ## Get JWT
 
-1. Generate an ephemeral key pair. Follow the same process as you would generating a key pair in a traditional wallet. See [Sui SDK](https://sdk.mystenlabs.com/typescript/cryptography/keypairs) for details.
+1. Generate an ephemeral key pair. Follow the same process as you would generating a key pair in a traditional wallet. See [Aiy SDK](https://sdk.mystenlabs.com/typescript/cryptography/keypairs) for details.
 
 1. Set the expiration time for the ephemeral key pair. The wallet decides whether the maximum epoch is the current epoch or later. The wallet also determines whether this is adjustable by the user.
 
 1. Assemble the OAuth URL with configured client ID, redirect URL, ephemeral public key and nonce: This is what the application sends the user to complete the login flow with a computed [nonce](#notations).
 
 ```typescript
-import { generateNonce, generateRandomness } from '@mysten/sui/zklogin';
+import { generateNonce, generateRandomness } from '@mysten/aiy/zklogin';
 
 const FULLNODE_URL = 'https://fullnode.devnet.sui.io'; // replace with the RPC URL you want to use
-const suiClient = new SuiClient({ url: FULLNODE_URL });
-const { epoch, epochDurationMs, epochStartTimestampMs } = await suiClient.getLatestSuiSystemState();
+const aiyClient = new AiyClient({ url: FULLNODE_URL });
+const { epoch, epochDurationMs, epochStartTimestampMs } = await aiyClient.getLatestAiySystemState();
 
 const maxEpoch = Number(epoch) + 2; // this means the ephemeral key will be active for 2 epochs from now.
 const ephemeralKeyPair = new Ed25519Keypair();
@@ -94,7 +94,7 @@ export interface JwtPayload {
 
 ## User salt management
 
-zkLogin uses the user salt to compute the zkLogin Sui address (see [definition](../../../concepts/cryptography/zklogin.mdx#address-definition)). The salt must be a 16-byte value or a integer smaller than `2n**128n`. There are several options for the application to maintain the user salt:
+zkLogin uses the user salt to compute the zkLogin Aiy address (see [definition](../../../concepts/cryptography/zklogin.mdx#address-definition)). The salt must be a 16-byte value or a integer smaller than `2n**128n`. There are several options for the application to maintain the user salt:
 
 1. Client side:
    - Option 1: Request user input for the salt during wallet access, transferring the responsibility to the user, who must then remember it.
@@ -113,14 +113,14 @@ $ curl -X POST https://salt.api.mystenlabs.com/get_salt -H 'Content-Type: applic
 Response: {"salt":"129390038577185583942388216820280642146"}
 ```
 
-User salt is used to disconnect the OAuth identifier (sub) from the on-chain Sui address to avoid linking Web2 credentials with Web3 credentials. While losing or misusing the salt could enable this link, it wouldn't compromise fund control or zkLogin asset authority. See more discussion [here](#security-and-privacy).
+User salt is used to disconnect the OAuth identifier (sub) from the on-chain Aiy address to avoid linking Web2 credentials with Web3 credentials. While losing or misusing the salt could enable this link, it wouldn't compromise fund control or zkLogin asset authority. See more discussion [here](#security-and-privacy).
 
-## Get the user's Sui address
+## Get the user's Aiy address
 
 Once the OAuth flow completes, the JWT can be found in the redirect URL. Along with the user salt, the zkLogin address can be derived as follows:
 
 ```typescript
-import { jwtToAddress } from '@mysten/sui/zklogin';
+import { jwtToAddress } from '@mysten/aiy/zklogin';
 
 const zkLoginUserAddress = jwtToAddress(jwt, userSalt);
 ```
@@ -132,7 +132,7 @@ The next step is to fetch the ZK proof. This is an attestation (proof) over the 
 First, generate the extended ephemeral public key to use as an input to the ZKP.
 
 ```typescript
-import { getExtendedEphemeralPublicKey } from '@mysten/sui/zklogin';
+import { getExtendedEphemeralPublicKey } from '@mysten/aiy/zklogin';
 
 const extendedEphemeralPublicKey = getExtendedEphemeralPublicKey(ephemeralKeyPair.getPublicKey());
 ```
@@ -232,7 +232,7 @@ const partialZkLoginSignature = proofResponse as PartialZkLoginSignature;
 
 1. Install [Git Large File Storage](https://git-lfs.com/) (an open source Git extension for large file versioning) before downloading the zkey.
 
-1. Download the [Groth16 proving key zkey file](https://docs.circom.io/getting-started/proving-circuits/). There are zkeys available for all Sui networks. See [the Ceremony section](#ceremony) for more details on how the main proving key is generated.
+1. Download the [Groth16 proving key zkey file](https://docs.circom.io/getting-started/proving-circuits/). There are zkeys available for all Aiy networks. See [the Ceremony section](#ceremony) for more details on how the main proving key is generated.
 
    - Main zkey (for Mainnet and Testnet)
      ```sh
@@ -301,7 +301,7 @@ First, sign the transaction bytes with the ephemeral private key using the key p
 ```typescript
 const ephemeralKeyPair = new Ed25519Keypair();
 
-const client = new SuiClient({ url: '<YOUR_RPC_URL>' });
+const client = new AiyClient({ url: '<YOUR_RPC_URL>' });
 
 const txb = new Transaction();
 
@@ -321,7 +321,7 @@ You can now serialize the zkLogin signature by combining the ZK proof (`inputs`)
 the `maxEpoch`, and the ephemeral signature (`userSignature`).
 
 ```typescript
-import { genAddressSeed, getZkLoginSignature } from '@mysten/sui/zklogin';
+import { genAddressSeed, getZkLoginSignature } from '@mysten/aiy/zklogin';
 
 const addressSeed = genAddressSeed(
 	BigInt(userSalt!),

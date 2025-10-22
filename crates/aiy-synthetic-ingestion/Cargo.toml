@@ -1,0 +1,23 @@
+[package]
+name = "aiy-synthetic-ingestion"
+version = "0.0.0"
+authors = ["Mysten Labs <build@mystenlabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[dependencies]
+anyhow.workspace = true
+async-trait.workspace = true
+clap.workspace = true
+simulacrum.workspace = true
+aiy-test-transaction-builder.workspace = true
+aiy-types.workspace = true
+telemetry-subscribers.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+aiy-storage.workspace = true
+
+[dev-dependencies]
+aiy-storage.workspace = true
+tempfile.workspace = true

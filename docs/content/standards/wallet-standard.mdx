@@ -5,7 +5,7 @@ keywords: [ mysten/wallet-standard, wallet standards, Wallet Standard, browser e
 pagination_prev: null
 ---
 
-Browser extension wallets built for Sui use the [Wallet Standard](https://github.com/wallet-standard/wallet-standard/). This is a cross-chain standard that defines how dApps can automatically discover and interact with wallets.
+Browser extension wallets built for Aiy use the [Wallet Standard](https://github.com/wallet-standard/wallet-standard/). This is a cross-chain standard that defines how dApps can automatically discover and interact with wallets.
 
 If you are building a wallet, the helper library `@mysten/wallet-standard` provides types and utilities to help get started.
 
@@ -19,7 +19,7 @@ Create a class that represents your wallet. Use the `Wallet` interface from
 `@mysten/wallet-standard` to help ensure your class adheres to the standard.
 
 ```tsx
-import { SUI_DEVNET_CHAIN, Wallet } from '@mysten/wallet-standard';
+import { AIY_DEVNET_CHAIN, Wallet } from '@mysten/wallet-standard';
 
 class YourWallet implements Wallet {
 	get version() {
@@ -35,9 +35,9 @@ class YourWallet implements Wallet {
 		return 'some-icon-data-url';
 	}
 
-	// Return the Sui chains that your wallet supports.
+	// Return the Aiy chains that your wallet supports.
 	get chains() {
-		return [SUI_DEVNET_CHAIN];
+		return [AIY_DEVNET_CHAIN];
 	}
 }
 ```
@@ -56,18 +56,18 @@ Features are standard methods consumers can use to interact with a wallet. Walle
 Libraries built on top of the Wallet Standard (like dApp Kit) require transaction signing capabilities. Implement both current and legacy methods for maximum compatibility:
 
 Current methods:
-- `sui:signTransaction` - Use to prompt the user to sign a transaction and return the serialized
+- `aiy:signTransaction` - Use to prompt the user to sign a transaction and return the serialized
   transaction and signature back to the dApp. This method does not submit the transaction for
   execution.
-- `sui:signAndExecuteTransaction` - Use to prompt the user to sign a transaction, then submit it
+- `aiy:signAndExecuteTransaction` - Use to prompt the user to sign a transaction, then submit it
   for execution to the blockchain.
 
 Legacy methods:
-- `sui:signTransactionBlock` - The legacy version of `sui:signTransaction`. Many existing dApps still rely on this method.
-- `sui:signAndExecuteTransactionBlock` - The legacy version of `sui:signAndExecuteTransaction`. Many existing dApps still rely on this method.
+- `aiy:signTransactionBlock` - The legacy version of `aiy:signTransaction`. Many existing dApps still rely on this method.
+- `aiy:signAndExecuteTransactionBlock` - The legacy version of `aiy:signAndExecuteTransaction`. Many existing dApps still rely on this method.
 
 **Personal message signing**
-- `sui:signPersonalMessage` - Use to prompt the user to sign a personal message and return the
+- `aiy:signPersonalMessage` - Use to prompt the user to sign a personal message and return the
   message signature back to the dApp. This is essential for user verification flows used by many dApps.
 
 Implement these features in your wallet class under the `features` property:
@@ -78,21 +78,21 @@ import {
   StandardConnectMethod,
   StandardEventsFeature,
   StandardEventsOnMethod,
-  SuiFeatures,
-  SuiSignPersonalMessageMethod,
-  SuiSignTransactionMethod,
-  SuiSignAndExecuteTransactionMethod,
+  AiyFeatures,
+  AiySignPersonalMessageMethod,
+  AiySignTransactionMethod,
+  AiySignAndExecuteTransactionMethod,
   StandardConnect,
   StandardEvents,
-  SuiSignPersonalMessage,
-  SuiSignTransaction,
-  SuiSignAndExecuteTransaction
+  AiySignPersonalMessage,
+  AiySignTransaction,
+  AiySignAndExecuteTransaction
 } from "@mysten/wallet-standard";
 
 class YourWallet implements Wallet {
 	/* ... existing code from above ... */
 
-  get features(): ConnectFeature & EventsFeature & SuiFeatures {
+  get features(): ConnectFeature & EventsFeature & AiyFeatures {
     return {
       [StandardConnect]: {
         version: "1.0.0",
@@ -102,15 +102,15 @@ class YourWallet implements Wallet {
         version: "1.0.0",
         on: this.#on,
       },
-			[SuiSignPersonalMessage]: {
+			[AiySignPersonalMessage]: {
         version: "1.1.0",
 				signPersonalMessage: this.#signPersonalMessage,
 			},
-      [SuiSignTransaction]: {
+      [AiySignTransaction]: {
         version: "2.0.0",
         signTransaction: this.#signTransaction,
       },
-      [SuiSignAndExecuteTransaction]: {
+      [AiySignAndExecuteTransaction]: {
         version: "2.0.0",
         signAndExecuteTransaction: this.#signAndExecuteTransaction,
       },
@@ -125,15 +125,15 @@ class YourWallet implements Wallet {
     // Your wallet's connect implementation
   };
 
-	#signPersonalMessage: SuiSignPersonalMessageMethod = () => {
+	#signPersonalMessage: AiySignPersonalMessageMethod = () => {
     // Your wallet's signPersonalMessage implementation
   };
 
-  #signTransaction: SuiSignTransactionMethod = () => {
+  #signTransaction: AiySignTransactionMethod = () => {
     // Your wallet's signTransaction implementation
   };
 
-  #signAndExecuteTransaction: SuiSignAndExecuteTransactionMethod = () => {
+  #signAndExecuteTransaction: AiySignAndExecuteTransactionMethod = () => {
     // Your wallet's signAndExecuteTransaction implementation
   };
 }
@@ -158,17 +158,17 @@ class YourWallet implements Wallet {
 		return someWalletAccounts.map(
 			(walletAccount) =>
 				new ReadonlyWalletAccount({
-					address: walletAccount.suiAddress,
+					address: walletAccount.aiyAddress,
 					publicKey: walletAccount.pubkey,
-					// The Sui chains that this account supports. This can be a subset of the wallet's supported chains.
+					// The Aiy chains that this account supports. This can be a subset of the wallet's supported chains.
           // These chains must exist on the wallet as well.
-					chains: [SUI_DEVNET_CHAIN],
+					chains: [AIY_DEVNET_CHAIN],
 					// The features that this account supports. This can be a subset of the wallet's supported features.
 					// These features must exist on the wallet as well.
 					features: [
-						SuiSignPersonalMessage,
-            SuiSignTransaction,
-						SuiSignAndExecuteTransaction,
+						AiySignPersonalMessage,
+            AiySignTransaction,
+						AiySignAndExecuteTransaction,
 					],
 				}),
 		);
@@ -250,10 +250,10 @@ wallet.features['standard:disconnect'].disconnect();
 
 Once the user has authorized accounts from a wallet, your app has the necessary information to execute transactions, such as address and method.
 
-Construct the transaction separately with the `@mysten/sui` library and then sign it with the private key of the user. Use the `sui:signTransaction` feature to achieve this:
+Construct the transaction separately with the `@mysten/aiy` library and then sign it with the private key of the user. Use the `aiy:signTransaction` feature to achieve this:
 
 ```tsx
-wallet.features['sui:signTransaction'].signTransaction({
+wallet.features['aiy:signTransaction'].signTransaction({
   transaction: <Transaction>,
   account: <WalletAccount>
 })
@@ -261,10 +261,10 @@ wallet.features['sui:signTransaction'].signTransaction({
 
 Similar to account authorization, this process opens a pop-up dialog for the user to either accept or decline the transaction. Upon accepting, the function returns an object in the form `{bytes: String, signature: Uint8Array}`. The `bytes` value is the `b64` encoding of the transaction and the `signature` value is the transaction signature.
 
-To execute the transaction, use `SuiClient` from `@mysten/sui`:
+To execute the transaction, use `AiyClient` from `@mysten/aiy`:
 
 ```tsx
-const client: SuiClient
+const client: AiyClient
 client.executeTransactionBlock({
     transactionBlock: bytes,
     signature: signature,
@@ -274,7 +274,7 @@ client.executeTransactionBlock({
 
 ### Transactions - abbreviated approach
 
-Many wallets abstract the above flow into one feature: `sui:signAndExecuteTransaction`. The required arguments for this feature are the raw transaction and the options with the desired information to be included in the response:
+Many wallets abstract the above flow into one feature: `aiy:signAndExecuteTransaction`. The required arguments for this feature are the raw transaction and the options with the desired information to be included in the response:
 
 - `showEffects`: Include the transaction effects.
 - `showEvents`: Include the transaction events.

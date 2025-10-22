@@ -1,0 +1,9 @@
+[package]
+name = "registry_coin"
+edition = "2024.beta"
+
+[dependencies]
+Aiy = { local = "../../../../../aiy-framework/packages/aiy-framework" }
+
+[addresses]
+registry_coin = "0x0"

@@ -1,10 +1,10 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { SuiObjectRef } from '@mysten/sui/client';
-import { getFaucetHost, requestSuiFromFaucetV1 } from '@mysten/sui/faucet';
-import { Ed25519Keypair } from '@mysten/sui/keypairs/ed25519';
-import { Transaction } from '@mysten/sui/transactions';
+import { AiyObjectRef } from '@mysten/aiy/client';
+import { getFaucetHost, requestAiyFromFaucetV1 } from '@mysten/aiy/faucet';
+import { Ed25519Keypair } from '@mysten/aiy/keypairs/ed25519';
+import { Transaction } from '@mysten/aiy/transactions';
 
 import { client } from './rpc';
 
@@ -12,12 +12,12 @@ import { client } from './rpc';
 export async function sponsorTransaction(sender: string, transactionKindBytes: Uint8Array) {
 	// Rather than do gas pool management, we just spin out a new keypair to sponsor the transaction with:
 	const keypair = new Ed25519Keypair();
-	const address = keypair.getPublicKey().toSuiAddress();
+	const address = keypair.getPublicKey().toAiyAddress();
 	console.log(`Sponsor address: ${address}`);
 
-	await requestSuiFromFaucetV1({ recipient: address, host: getFaucetHost('testnet') });
+	await requestAiyFromFaucetV1({ recipient: address, host: getFaucetHost('testnet') });
 
-	let payment: SuiObjectRef[] = [];
+	let payment: AiyObjectRef[] = [];
 	let retires = 50;
 	while (retires !== 0) {
 		const coins = await client.getCoins({ owner: address, limit: 1 });

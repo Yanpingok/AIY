@@ -42,9 +42,9 @@ const jump = (
 );
 
 const pageItemStyle =
-  "px-3 py-[9px] border border-solid border-sui-gray-50 hover:border-sui-blue-dark cursor-pointer rounded-md text-sm text-sui-steel-dark dark:text-sui-blue dark:hover:border-sui-blue";
+  "px-3 py-[9px] border border-solid border-aiy-gray-50 hover:border-aiy-blue-dark cursor-pointer rounded-md text-sm text-aiy-steel-dark dark:text-aiy-blue dark:hover:border-aiy-blue";
 const disabledItemStyle =
-  "px-3 py-[9px] opacity-50 cursor-not-allowed border border-solid border-sui-gray-50 rounded-md";
+  "px-3 py-[9px] opacity-50 cursor-not-allowed border border-solid border-aiy-gray-50 rounded-md";
 
 function CustomPagination() {
   const { currentRefinement, nbPages, refine, pages } = usePagination();
@@ -85,7 +85,7 @@ function CustomPagination() {
             onClick={() => refine(page)}
             className={`${pageItemStyle} ${
               isActive
-                ? "bg-sui-blue-light/40 dark:bg-sui-blue-light text-sui-blue-dark"
+                ? "bg-aiy-blue-light/40 dark:bg-aiy-blue-light text-aiy-blue-dark"
                 : ""
             }`}
           >

@@ -1,0 +1,37 @@
+[package]
+name = "aiy-indexer-alt-restorer"
+version = "0.1.0"
+authors = ["Mysten Labs <build@mystenlabs.com>"]
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[dependencies]
+anyhow = { version = "1.0.71", features = ["backtrace"] }
+async-trait = "0.1.68"
+clap = { version = "4.3.0", features = ["derive", "env"] }
+futures = "0.3.28"
+tracing = "0.1.37"
+url.workspace = true
+
+diesel = { workspace = true, features = ["chrono"] }
+diesel-async = { workspace = true, features = ["bb8", "postgres", "async-connection-wrapper"] }
+indicatif.workspace = true
+object_store.workspace = true
+prometheus.workspace = true
+aiy-config.workspace = true
+aiy-core.workspace = true
+aiy-data-ingestion-core.workspace = true
+aiy-field-count.workspace = true
+aiy-indexer-alt-schema.workspace = true
+aiy-indexer-alt-framework.workspace = true
+aiy-pg-db.workspace = true
+aiy-snapshot.workspace = true
+aiy-storage.workspace = true
+aiy-types.workspace = true
+tokio = { workspace = true, features = ["full"] }
+telemetry-subscribers.workspace = true
+
+[[bin]]
+name = "aiy-indexer-alt-restorer"
+path = "src/main.rs"

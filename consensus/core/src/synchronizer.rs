@@ -19,7 +19,7 @@ use mysten_metrics::{
 };
 use parking_lot::{Mutex, RwLock};
 use rand::{prelude::SliceRandom as _, rngs::ThreadRng};
-use sui_macros::fail_point_async;
+use aiy_macros::fail_point_async;
 use tap::TapFallible;
 use tokio::{
     runtime::Handle,

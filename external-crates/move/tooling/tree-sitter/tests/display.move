@@ -10,13 +10,13 @@
 /// substitution and filling-in the pieces using the data from the object T.
 ///
 /// More entry functions might be added in the future depending on the use cases.
-module sui::display {
-    use sui::package::{from_package, Publisher};
-    use sui::tx_context::{sender, TxContext};
-    use sui::vec_map::{Self, VecMap};
-    use sui::object::{Self, ID, UID};
-    use sui::transfer;
-    use sui::event;
+module aiy::display {
+    use aiy::package::{from_package, Publisher};
+    use aiy::tx_context::{sender, TxContext};
+    use aiy::vec_map::{Self, VecMap};
+    use aiy::object::{Self, ID, UID};
+    use aiy::transfer;
+    use aiy::event;
     use std::vector;
     use std::string::String;
 
@@ -61,7 +61,7 @@ module sui::display {
     /// Type signature of the event corresponds to the type while id serves for
     /// the discovery.
     ///
-    /// Since Sui RPC supports querying events by type, finding a Display for the T
+    /// Since Aiy RPC supports querying events by type, finding a Display for the T
     /// would be as simple as looking for the first event with `Display<T>`.
     struct DisplayCreated<phantom T: key> has copy, drop {
         id: ID
@@ -194,13 +194,13 @@ module sui::display {
 }
 
 #[test_only]
-module sui::display_tests {
-    use sui::object::UID;
-    use sui::test_scenario as test;
-    use sui::transfer;
+module aiy::display_tests {
+    use aiy::object::UID;
+    use aiy::test_scenario as test;
+    use aiy::transfer;
     use std::string::{utf8, String};
-    use sui::package;
-    use sui::display;
+    use aiy::package;
+    use aiy::display;
 
     #[allow(unused_field)]
     /// An example object.

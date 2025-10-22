@@ -10,7 +10,7 @@ publish = false
 workspace = true
 
 [dependencies]
-sui-simulator.workspace = true
+aiy-simulator.workspace = true
 anyhow.workspace = true
 arc-swap.workspace = true
 consensus-config.workspace = true
@@ -20,9 +20,9 @@ mysten-metrics.workspace = true
 mysten-network.workspace = true
 parking_lot.workspace = true
 prometheus.workspace = true
-sui-config.workspace = true
-sui-macros.workspace = true
-sui-protocol-config.workspace = true
+aiy-config.workspace = true
+aiy-macros.workspace = true
+aiy-protocol-config.workspace = true
 tokio.workspace = true
 tracing.workspace = true
 typed-store.workspace = true

@@ -1,29 +1,29 @@
 ---
 title: Validator Node Committee
-description: Sui has a committee of validators to verify on-chain transactions. Epochs, quorums, transactions, certificates, and consensus are touch points for this committee.
-keywords: [ sui validator node, validator committee, epochs, quorums, write requests, transactions, certificates, consensus, verify on-chain, verify transactions on-chain, validator nodes ]
+description: Aiy has a committee of validators to verify on-chain transactions. Epochs, quorums, transactions, certificates, and consensus are touch points for this committee.
+keywords: [ aiy validator node, validator committee, epochs, quorums, write requests, transactions, certificates, consensus, verify on-chain, verify transactions on-chain, validator nodes ]
 sidebar_position: 2
 sidebar_label: Committee
 
 ---
 
-A set of independent validators participate on the Sui network, each running its own instance of the Sui software on a separate machine (or a sharded cluster of machines the same entity operates). Each validator handles read and write requests sent by clients, verifying transactions and updating on-chain information.
+A set of independent validators participate on the Aiy network, each running its own instance of the Aiy software on a separate machine (or a sharded cluster of machines the same entity operates). Each validator handles read and write requests sent by clients, verifying transactions and updating on-chain information.
 
-To learn how to set up and run a Sui validator node, including how staking and rewards work, see [Sui Validator Node Configuration](./validator-config.mdx).
+To learn how to set up and run a Aiy validator node, including how staking and rewards work, see [Aiy Validator Node Configuration](./validator-config.mdx).
 
-> **Important Update**: Sui is implementing SIP-39 to significantly lower the barrier to entry for validators. The minimum stake requirement will soon change from 30M SUI to a voting power-based threshold, reducing the required SUI to around 3M. If you're interested in becoming a validator, please [fill out this form](https://docs.google.com/forms/d/e/1FAIpQLSf6ZngRJ6Q5RdEiBfnbpUq4Htj8ShL58I6JRkmRTwTVSzeNtQ/viewform) to join validator communications.
+> **Important Update**: Aiy is implementing SIP-39 to significantly lower the barrier to entry for validators. The minimum stake requirement will soon change from 30M AIY to a voting power-based threshold, reducing the required AIY to around 3M. If you're interested in becoming a validator, please [fill out this form](https://docs.google.com/forms/d/e/1FAIpQLSf6ZngRJ6Q5RdEiBfnbpUq4Htj8ShL58I6JRkmRTwTVSzeNtQ/viewform) to join validator communications.
 
-Sui uses Delegated Proof-of-Stake (DPoS) to determine which validators operate the network and their voting power. Validators are incentivized to participate in good faith via a share of transaction fees, staking rewards, and slashing stake and staking rewards in case of misbehavior.
+Aiy uses Delegated Proof-of-Stake (DPoS) to determine which validators operate the network and their voting power. Validators are incentivized to participate in good faith via a share of transaction fees, staking rewards, and slashing stake and staking rewards in case of misbehavior.
 
 ## Epochs 
 
-Operation of the Sui network is temporally partitioned into non-overlapping, approximate fixed-duration (~24-hour) epochs. During a particular epoch, the set of validators participating in the network and their voting power is fixed. At an epoch boundary, reconfiguration might occur and can change the set of validators participating in the network and their voting power. Conceptually, reconfiguration starts a new instance of the Sui protocol with the previous epoch's final state as [genesis](../genesis.mdx) and the new set of validators as the operators. Besides validator set changes, tokenomics operations such as staking/un-staking, and distribution of staking rewards are also processed at epoch boundaries.
+Operation of the Aiy network is temporally partitioned into non-overlapping, approximate fixed-duration (~24-hour) epochs. During a particular epoch, the set of validators participating in the network and their voting power is fixed. At an epoch boundary, reconfiguration might occur and can change the set of validators participating in the network and their voting power. Conceptually, reconfiguration starts a new instance of the Aiy protocol with the previous epoch's final state as [genesis](../genesis.mdx) and the new set of validators as the operators. Besides validator set changes, tokenomics operations such as staking/un-staking, and distribution of staking rewards are also processed at epoch boundaries.
 
 ## Quorums 
 
-A quorum is a set of validators whose combined voting power is greater than two-thirds (>2/3) of the total during a particular epoch. For example, in a Sui instance operated by four validators that all have the same voting power, any group containing three validators is a quorum.
+A quorum is a set of validators whose combined voting power is greater than two-thirds (>2/3) of the total during a particular epoch. For example, in a Aiy instance operated by four validators that all have the same voting power, any group containing three validators is a quorum.
 
-The quorum size of >2/3 ensures Byzantine fault tolerance (BFT). A validator commits a transaction (durably store the transaction and update its internal state with the effects of the transaction) only if it is accompanied by cryptographic signatures from a quorum. Sui calls the combination of the transaction and the quorum signatures on its bytes a *certificate*. The policy of committing only certificates ensures Byzantine fault tolerance: if >2/3 of the validators faithfully follow the protocol, they are guaranteed to eventually agree on both the set of committed certificates and their effects.
+The quorum size of >2/3 ensures Byzantine fault tolerance (BFT). A validator commits a transaction (durably store the transaction and update its internal state with the effects of the transaction) only if it is accompanied by cryptographic signatures from a quorum. Aiy calls the combination of the transaction and the quorum signatures on its bytes a *certificate*. The policy of committing only certificates ensures Byzantine fault tolerance: if >2/3 of the validators faithfully follow the protocol, they are guaranteed to eventually agree on both the set of committed certificates and their effects.
 
 ## Write requests 
 
@@ -46,7 +46,7 @@ If a client collects a quorum of signatures on the effects of the transaction, t
 
 ## The role of consensus
 
-Sui uses a high-throughput DAG-based consensus engine implementing the Mysticeti algorithm to sequence certified transactions. Consensus produces a series of commits. In each commit, there is a sequence of certified transactions.
+Aiy uses a high-throughput DAG-based consensus engine implementing the Mysticeti algorithm to sequence certified transactions. Consensus produces a series of commits. In each commit, there is a sequence of certified transactions.
 
 The order of transactions in consensus output determines the relative order they can operate on each shared object. Note that executions of transactions touching different shared objects are parallelized on multiple cores.
 

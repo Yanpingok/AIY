@@ -1,12 +1,12 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { useSuiClientContext, useSuiClientQuery, UseSuiClientQueryOptions } from "@mysten/dapp-kit";
-import { GetObjectParams, SuiObjectResponse } from "@mysten/sui/client";
+import { useAiyClientContext, useAiyClientQuery, UseAiyClientQueryOptions } from "@mysten/dapp-kit";
+import { GetObjectParams, AiyObjectResponse } from "@mysten/aiy/client";
 import { useQueryClient, UseQueryResult } from "@tanstack/react-query";
 
-export type UseObjectQueryOptions = UseSuiClientQueryOptions<"getObject", SuiObjectResponse>;
-export type UseObjectQueryResponse = UseQueryResult<SuiObjectResponse, Error>;
+export type UseObjectQueryOptions = UseAiyClientQueryOptions<"getObject", AiyObjectResponse>;
+export type UseObjectQueryResponse = UseQueryResult<AiyObjectResponse, Error>;
 export type InvalidateUseObjectQuery = () => void;
 
 /**
@@ -17,9 +17,9 @@ export function useObjectQuery(
     params: GetObjectParams,
     options?: UseObjectQueryOptions,
 ): [UseObjectQueryResponse, InvalidateUseObjectQuery] {
-    const ctx = useSuiClientContext();
+    const ctx = useAiyClientContext();
     const client = useQueryClient();
-    const response = useSuiClientQuery("getObject", params, options);
+    const response = useAiyClientQuery("getObject", params, options);
 
     const invalidate = async () => {
         await client.invalidateQueries({

@@ -2,7 +2,7 @@
 version = 4
 
 [unpublished.dependencies.pinned]
-# pinned transitive dependencies from most recent `sui move upgrade-deps`
+# pinned transitive dependencies from most recent `aiy move upgrade-deps`
 # note: local deps are pinned as locals - the latest are always used
 # see Pinning section
 foo = { local = "../foo", rev = "f0bbf0a" }
@@ -37,7 +37,7 @@ build-config = "..."
 
 [published.testnet.dependencies]
 std = { git = "", rev = "7a8d873f5a190aede5876fd0ccca79ac1e8bd2b0" }
-sui = { git = "", rev = "7a8d873f5a190aede5876fd0ccca79ac1e8bd2b0" }
+aiy = { git = "", rev = "7a8d873f5a190aede5876fd0ccca79ac1e8bd2b0" }
 
 [unpublished.dep-overrides.mainnet.pinned]
 foo = { git = "", rev = "7a8d873f5a190aede5876fd0ccca79ac1e8bd2b0" } # pinned versions of the dep-overrides

@@ -25,7 +25,7 @@ use crate::{
         unique_map::UniqueMap,
         *,
     },
-    sui_mode::ID_FIELD_NAME,
+    aiy_mode::ID_FIELD_NAME,
     typing::ast as T,
 };
 
@@ -3057,7 +3057,7 @@ fn gen_unused_warnings(
         // cannot be analyzed in this pass
         return;
     }
-    let is_sui_mode = context.env.package_config(context.current_package).flavor == Flavor::Sui;
+    let is_aiy_mode = context.env.package_config(context.current_package).flavor == Flavor::Aiy;
 
     for (_, sname, sdef) in structs {
         context.push_warning_filter_scope(sdef.warning_filter);
@@ -3066,8 +3066,8 @@ fn gen_unused_warnings(
 
         if let H::StructFields::Defined(fields) = &sdef.fields {
             for (f, _) in fields {
-                // skip for Sui ID fields
-                if is_sui_mode && has_key && f.value() == ID_FIELD_NAME {
+                // skip for Aiy ID fields
+                if is_aiy_mode && has_key && f.value() == ID_FIELD_NAME {
                     continue;
                 }
                 if !context

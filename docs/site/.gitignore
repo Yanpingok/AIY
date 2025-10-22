@@ -27,6 +27,6 @@ package-lock.json
 .vercel
 .env*.local
 
-# Generated awesome-sui files
-static/awesome-sui/
-src/static/awesome-sui/
+# Generated awesome-aiy files
+static/awesome-aiy/
+src/static/awesome-aiy/

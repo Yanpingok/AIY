@@ -1,0 +1,127 @@
+name: Build & Publish AQY Validator
+
+on:
+  push:
+    branches:
+      - main
+      - release/**
+      - stable
+    tags:
+      - "v*"
+      - "validator-v*"
+  workflow_dispatch:
+
+# Required for GHCR publish + provenance
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+  attestations: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: "-C target-cpu=native"
+  DOCKER_BUILDKIT: "1"
+
+jobs:
+  # 1) Gate: build Rust first. Docker publish only runs if this passes.
+  build:
+    name: Rust build (sanity)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-targets: |
+            debug
+            release
+          workspaces: |
+            . -> target
+
+      - name: System deps
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            build-essential clang cmake pkg-config libssl-dev libclang-dev llvm-dev \
+            libudev-dev librocksdb-dev protobuf-compiler
+
+      - name: Cargo build (release)
+        run: |
+          set -euxo pipefail
+          # Prefer aqy-node; fall back to aiy-node or full workspace
+          cargo build --release -p aqy-node || cargo build --release -p aiy-node || cargo build --release
+
+  # 2) Build & push Docker image to GHCR if build succeeded
+  docker:
+    name: Build & Push Docker (GHCR)
+    needs: build
+    runs-on: ubuntu-latest
+    # Only publish on push events (branches/tags)
+    if: github.event_name == 'push' && (startsWith(github.ref, 'refs/heads/') || startsWith(github.ref, 'refs/tags/'))
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker metadata (tags/labels)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/ab2bc/aqy-node
+          flavor: |
+            latest=false
+          tags: |
+            # tag pushes like v1.2.3 -> :v1.2.3
+            type=ref,event=tag
+            # branch pushes like main -> :main
+            type=ref,event=branch
+            # add the git sha tag
+            type=sha
+            # always add raw main tag when pushing main
+            type=raw,value=main,enable=${{ startsWith(github.ref, 'refs/heads/main') }}
+          labels: |
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+
+      - name: Build & push (multi-arch) from local repo (no clone)
+        uses: docker/build-push-action@v6
+        with:
+          # IMPORTANT: repo root is the build context
+          context: .
+          # Dockerfile lives in aqy-localnet-v2
+          file: ./aqy-localnet-v2/Dockerfile
+          push: true
+          platforms: linux/amd64,linux/arm64
+          build-args: |
+            RUST_MIN_STACK=67108864
+            SOURCE_REPO=${{ github.server_url }}/${{ github.repository }}
+            SOURCE_COMMIT=${{ github.sha }}
+          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=registry,ref=ghcr.io/ab2bc/aqy-node:buildcache
+          cache-to: type=registry,ref=ghcr.io/ab2bc/aqy-node:buildcache,mode=max

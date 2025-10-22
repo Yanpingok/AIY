@@ -16,9 +16,9 @@
 module regulated_token::denylist_rule {
     use std::option;
     use std::vector;
-    use sui::bag::{Self, Bag};
-    use sui::tx_context::TxContext;
-    use sui::token::{Self, TokenPolicy, TokenPolicyCap, ActionRequest};
+    use aiy::bag::{Self, Bag};
+    use aiy::tx_context::TxContext;
+    use aiy::token::{Self, TokenPolicy, TokenPolicyCap, ActionRequest};
 
     /// Trying to `verify` but the sender or the recipient is on the denylist.
     const EUserBlocked: u64 = 0;

@@ -47,7 +47,7 @@ done
 NETWORK="testnet"
 VERSION="1.13.0"
 
-# a map from os version identifiers in Sui's binary distribution to os version identifiers
+# a map from os version identifiers in Aiy's binary distribution to os version identifiers
 # representing VSCode's target platforms used for creating platform-specific plugin distributions
 declare -A SUPPORTED_OS
 SUPPORTED_OS[macos-arm64]=darwin-arm64
@@ -59,19 +59,19 @@ TMP_DIR=$( mktemp -d -t vscode-create )
 trap "clean_tmp_dir $TMP_DIR" EXIT
 
 for DIST_OS VSCODE_OS in "${(@kv)SUPPORTED_OS}"; do
-    # Sui distribution identifier
-    SUI_DISTRO=$NETWORK"-v"$VERSION
-    # name of the Sui distribution archive file, for example sui-testnet-v1.13.0-macos-arm64.tgz
-    SUI_ARCHIVE="sui-"$SUI_DISTRO"-"$DIST_OS".tgz"
-    # a path to downloaded Sui archive
-    SUI_ARCHIVE_PATH=$TMP_DIR"/"$SUI_ARCHIVE
+    # Aiy distribution identifier
+    AIY_DISTRO=$NETWORK"-v"$VERSION
+    # name of the Aiy distribution archive file, for example aiy-testnet-v1.13.0-macos-arm64.tgz
+    AIY_ARCHIVE="aiy-"$AIY_DISTRO"-"$DIST_OS".tgz"
+    # a path to downloaded Aiy archive
+    AIY_ARCHIVE_PATH=$TMP_DIR"/"$AIY_ARCHIVE
 
-    # download Sui archive file to a given location and uncompress it
-    curl https://github.com/MystenLabs/sui/releases/download/"$SUI_DISTRO"/"$SUI_ARCHIVE" -L -o $SUI_ARCHIVE_PATH
-    tar -xf $SUI_ARCHIVE_PATH --directory $TMP_DIR
+    # download Aiy archive file to a given location and uncompress it
+    curl https://github.com/MystenLabs/sui/releases/download/"$AIY_DISTRO"/"$AIY_ARCHIVE" -L -o $AIY_ARCHIVE_PATH
+    tar -xf $AIY_ARCHIVE_PATH --directory $TMP_DIR
 
     # names of the move-analyzer binary, both the one becoming part of the extension ($SERVER_BIN)
-    # and the one in the Sui archive ($ARCHIVE_SERVER_BIN)
+    # and the one in the Aiy archive ($ARCHIVE_SERVER_BIN)
     SERVER_BIN="move-analyzer"
     ARCHIVE_SERVER_BIN=$SERVER_BIN"-"$DIST_OS
     if [[ "$DIST_OS" == *"windows"* ]]; then

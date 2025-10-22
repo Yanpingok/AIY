@@ -1,0 +1,37 @@
+[package]
+name = "aiy-framework-tests"
+version = "0.1.0"
+edition = "2021"
+authors = ["Mysten Labs <eng@mystenlabs.com>"]
+description = "Runs Move tests for aiy-framework"
+license = "Apache-2.0"
+publish = false
+
+[lints]
+workspace = true
+
+[[test]]
+name = "move_tests"
+harness = false
+
+[dev-dependencies]
+datatest-stable.workspace = true
+prometheus.workspace = true
+
+aiy-framework.workspace = true
+aiy-move.workspace = true
+aiy-move-build.workspace = true
+aiy-protocol-config.workspace = true
+aiy-types.workspace = true
+
+move-bytecode-verifier = { path = "../../external-crates/move/crates/move-bytecode-verifier" }
+aiy-adapter = { path = "../../aiy-execution/latest/aiy-adapter", package = "aiy-adapter-latest" }
+aiy-verifier = { path = "../../aiy-execution/latest/aiy-verifier", package = "aiy-verifier-latest" }
+
+move-bytecode-verifier-meter.workspace = true
+move-cli.workspace = true
+move-package.workspace = true
+move-unit-test.workspace = true
+aiy-config.workspace = true
+
+[dependencies]

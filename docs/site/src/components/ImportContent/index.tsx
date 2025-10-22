@@ -206,7 +206,7 @@ export default function ImportContent({
     )
 
     .replace(
-      /\[dependencies\]\nsui\s?=\s?{\s?local\s?=.*sui-framework.*\n/i,
+      /\[dependencies\]\naiy\s?=\s?{\s?local\s?=.*aiy-framework.*\n/i,
       "[dependencies]",
     );
 

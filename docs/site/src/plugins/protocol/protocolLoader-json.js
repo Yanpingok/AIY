@@ -11,13 +11,13 @@ const protocolInject = async function (source) {
   const createId = (name) => {
     return name.replace(/[\._]/g, "-").replace(/\//g, "_");
   };
-  const suiSorted = (array) => {
+  const aiySorted = (array) => {
     return array.sort((a, b) => {
-      const aStartsWithSui = a.name.startsWith("sui");
-      const bStartsWithSui = b.name.startsWith("sui");
+      const aStartsWithAiy = a.name.startsWith("aiy");
+      const bStartsWithAiy = b.name.startsWith("aiy");
 
-      if (aStartsWithSui && !bStartsWithSui) return -1;
-      if (!aStartsWithSui && bStartsWithSui) return 1;
+      if (aStartsWithAiy && !bStartsWithAiy) return -1;
+      if (!aStartsWithAiy && bStartsWithAiy) return 1;
       return 0;
     });
   };
@@ -58,7 +58,7 @@ const protocolInject = async function (source) {
   for (const prototype of spec.scalarValueTypes) {
     types.push({ name: prototype.protoType, link: prototype.protoType });
   }
-  let tocSorted = suiSorted(toc);
+  let tocSorted = aiySorted(toc);
   tocSorted.push({
     name: "Scalar Value Types",
     link: "scalar-value-types",
@@ -101,13 +101,13 @@ const protocolInject = async function (source) {
   let messageSort = (array) => {
     return array.sort((a, b) => a.name.localeCompare(b.name));
   };
-  const files = suiSorted(spec.files);
-  const bordercolor = "border-sui-blue-dark dark:border-sui-blue";
+  const files = aiySorted(spec.files);
+  const bordercolor = "border-aiy-blue-dark dark:border-aiy-blue";
 
-  const tabStyle = `grid grid-cols-6 border border-solid border-b-0 border-sui-blue-dark ${bordercolor}`;
+  const tabStyle = `grid grid-cols-6 border border-solid border-b-0 border-aiy-blue-dark ${bordercolor}`;
   const tabRowStyle = `p-4 border-0 border-b border-solid ${bordercolor} col-span-full`;
-  const tabHeaderStyle = `${tabRowStyle} bg-sui-gray-50 dark:bg-sui-ghost-dark`;
-  const tabAltHeaderStyle = `${tabRowStyle} bg-sui-ghost-white dark:bg-sui-gray-95`;
+  const tabHeaderStyle = `${tabRowStyle} bg-aiy-gray-50 dark:bg-aiy-ghost-dark`;
+  const tabAltHeaderStyle = `${tabRowStyle} bg-aiy-ghost-white dark:bg-aiy-gray-95`;
   const colHeaderStyle = `p-2 border-0 border-r border-b border-solid col-span-2 flex items-center ${bordercolor} overflow-x-auto`;
   const colCellStyle = `p-2 col-span-4 border-0 border-b border-solid ${bordercolor}`;
   for (const file of files) {
@@ -174,13 +174,13 @@ const protocolInject = async function (source) {
           if (hasLabel) {
             let label =
               field[1].label[0].toUpperCase() + field[1].label.substring(1);
-            let labelBg = "bg-sui-ghost-white dark:bg-sui-ghost-dark";
+            let labelBg = "bg-aiy-ghost-white dark:bg-aiy-ghost-dark";
             if (field[1].label === "optional") {
               label = "Proto3 optional";
-              labelBg = "bg-sui-blue-light dark:bg-sui-blue-dark";
+              labelBg = "bg-aiy-blue-light dark:bg-aiy-blue-dark";
             } else if (field[1].label === "repeated") {
               label = "Repeated []";
-              labelBg = "bg-sui-warning-light dark:bg-sui-warning-dark";
+              labelBg = "bg-aiy-warning-light dark:bg-aiy-warning-dark";
             }
             content.push(
               `<div className="px-2 py-1 my-1 w-fit border border-solid rounded-full text-sm ${labelBg}">${label}</div>`,
@@ -302,11 +302,11 @@ const protocolInject = async function (source) {
   }
   content.push("\n## Scalar Value Types");
   const cellStyle =
-    "m-2 min-w-24 max-w-[13rem] rounded-lg border border-solid align-center text-center relative border-sui-gray-65";
+    "m-2 min-w-24 max-w-[13rem] rounded-lg border border-solid align-center text-center relative border-aiy-gray-65";
   const titleStyle =
-    "p-4 pb-2 font-bold text-sui-ghost-dark dark:text-sui-ghost-white bg-sui-gray-50 dark:bg-sui-ghost-dark border border-solid border-transparent rounded-t-lg";
+    "p-4 pb-2 font-bold text-aiy-ghost-dark dark:text-aiy-ghost-white bg-aiy-gray-50 dark:bg-aiy-ghost-dark border border-solid border-transparent rounded-t-lg";
   const valStyle =
-    "p-4 pt-2 border border-solid border-transparent border-t-sui-gray-65 whitespace-break-spaces";
+    "p-4 pt-2 border border-solid border-transparent border-t-aiy-gray-65 whitespace-break-spaces";
   for (const scalar of spec.scalarValueTypes) {
     content.push(`\n### ${scalar.protoType}`);
     content.push(

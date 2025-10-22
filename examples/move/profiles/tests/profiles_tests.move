@@ -5,9 +5,9 @@
 module profiles::profiles_tests;
 
 use profiles::profiles;
-use sui::derived_object;
-use sui::test_scenario;
-use sui::test_utils::destroy;
+use aiy::derived_object;
+use aiy::test_scenario;
+use aiy::test_utils::destroy;
 
 const ALICE: address = @0xA11CE;
 const BOB: address = @0xB0B;
@@ -89,7 +89,7 @@ fun test_empty_username() {
 }
 
 #[test]
-#[expected_failure(abort_code = sui::derived_object::EObjectAlreadyExists)]
+#[expected_failure(abort_code = aiy::derived_object::EObjectAlreadyExists)]
 fun test_duplicate_profile_creation() {
     let mut scenario = test_scenario::begin(ALICE);
 

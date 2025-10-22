@@ -196,19 +196,19 @@ mod tests {
     async fn test_modern_using_legacy_framework() {
         let scenario = TestPackageGraph::new(["root"])
             .add_package("std", |pkg| pkg.set_legacy().set_legacy_name("MoveStdLib"))
-            .add_package("sui", |pkg| pkg.set_legacy().set_legacy_name("Sui"))
-            .add_package("sui_system", |pkg| {
-                pkg.set_legacy().set_legacy_name("SuiSystem")
+            .add_package("aiy", |pkg| pkg.set_legacy().set_legacy_name("Aiy"))
+            .add_package("aiy_system", |pkg| {
+                pkg.set_legacy().set_legacy_name("AiySystem")
             })
             .add_deps([("root", "std")])
-            .add_dep("root", "sui", |dep| dep.name("my_sui").rename_from("sui"))
-            .add_dep("root", "sui_system", |dep| {
-                dep.name("my_sui_system").rename_from("sui_system")
+            .add_dep("root", "aiy", |dep| dep.name("my_aiy").rename_from("aiy"))
+            .add_dep("root", "aiy_system", |dep| {
+                dep.name("my_aiy_system").rename_from("aiy_system")
             })
-            .add_dep("sui", "std", |dep| dep.name("MoveStdLib"))
-            // legacy -> legacy case (SuiSystem -> MoveStdLib (std)
-            .add_dep("sui_system", "sui", |dep| dep.name("Sui"))
-            .add_dep("sui_system", "std", |dep| dep.name("MoveStdLib"))
+            .add_dep("aiy", "std", |dep| dep.name("MoveStdLib"))
+            // legacy -> legacy case (AiySystem -> MoveStdLib (std)
+            .add_dep("aiy_system", "aiy", |dep| dep.name("Aiy"))
+            .add_dep("aiy_system", "std", |dep| dep.name("MoveStdLib"))
             .build();
 
         scenario
@@ -218,7 +218,7 @@ mod tests {
             .unwrap();
 
         scenario
-            .graph_for("sui_system")
+            .graph_for("aiy_system")
             .await
             .check_rename_from()
             .unwrap();
@@ -230,13 +230,13 @@ mod tests {
             .add_package("legacy", |pkg| pkg.set_legacy().set_legacy_name("Legacy"))
             .add_package("legacy2", |pkg| pkg.set_legacy().set_legacy_name("Legacy2"))
             .add_package("legacy3", |pkg| pkg.set_legacy().set_legacy_name("Legacy3"))
-            .add_package("sui", |pkg| pkg.set_legacy().set_legacy_name("Sui"))
+            .add_package("aiy", |pkg| pkg.set_legacy().set_legacy_name("Aiy"))
             .add_package("std", |pkg| pkg.set_legacy().set_legacy_name("MoveStdLib"))
             .add_package("malformed", |pkg| {
                 pkg.set_legacy().set_legacy_name("weird-input")
             })
             // 1. (FAIL) Cannot use the legacy name in the left side assignment
-            .add_dep("bat", "sui", |dep| dep.name("Sui"))
+            .add_dep("bat", "aiy", |dep| dep.name("Aiy"))
             // 2. (OK) Can use the "modern" name in the rename-from (even if we name it as the legacy name)
             .add_dep("foo", "std", |dep| {
                 dep.name("MoveStdLib").rename_from("std")

@@ -1,7 +1,7 @@
 {
   "name": "move",
   "displayName": "Move",
-  "description": "A Move language integrated development environment for Sui.",
+  "description": "A Move language integrated development environment for Aiy.",
   "publisher": "mysten",
   "icon": "images/move.png",
   "license": "Apache-2.0",
@@ -22,7 +22,7 @@
   ],
   "keywords": [
     "move",
-    "Sui",
+    "Aiy",
     "Mysten"
   ],
   "main": "./out/src/main.js",
@@ -65,7 +65,7 @@
         "move.force-bundled": {
           "type": "boolean",
           "default": false,
-          "markdownDescription": "Prefer bundled version of move-analyzer binary over the one from on-path sui binary"
+          "markdownDescription": "Prefer bundled version of move-analyzer binary over the one from on-path aiy binary"
         },
         "move.inlay-hints.type": {
           "type": "boolean",
@@ -94,16 +94,16 @@
           ],
           "scope": "machine-overridable",
           "default": null,
-          "markdownDescription": "Path to rust-analyzer executable (points to `~/.sui/bin/move-analyzer` by default)."
+          "markdownDescription": "Path to rust-analyzer executable (points to `~/.aiy/bin/move-analyzer` by default)."
         },
-        "move.sui.path": {
+        "move.aiy.path": {
           "type": [
             "null",
             "string"
           ],
           "scope": "machine-overridable",
           "default": null,
-          "markdownDescription": "Path to Sui executable (by default assumes that `sui` is on the systems path)."
+          "markdownDescription": "Path to Aiy executable (by default assumes that `aiy` is on the systems path)."
         },
         "move.trace.server": {
           "type": "string",

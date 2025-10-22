@@ -1,0 +1,16 @@
+---
+source: crates/move-compiler/tests/move_check_testaiyte.rs
+info:
+  flavor: aiy
+  edition: legacy
+  lint: false
+---
+error[Aiy E02007]: invalid object declaration
+  ┌─ tests/aiy_mode/struct_with_key/key_struct_id_field_incorrect_struct_name.move:5:9
+  │
+4 │     struct S has key {
+  │                  --- The 'key' ability is used to declare objects in Aiy
+5 │         id: object::ID
+  │         ^^  ---------- But found type: 'aiy::object::ID'
+  │         │    
+  │         Invalid object 'S'. Structs with the 'key' ability must have 'id: aiy::object::UID' as their first field

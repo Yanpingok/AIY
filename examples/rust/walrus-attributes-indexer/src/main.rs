@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use clap::Parser;
-use sui_indexer_alt_framework::{
+use aiy_indexer_alt_framework::{
     cluster::{self, IndexerClusterBuilder},
     pipeline::sequential::SequentialConfig,
     Result,

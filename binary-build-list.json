@@ -1,21 +1,21 @@
 {
     "release_binaries": [
-        "sui",
-        "sui-node",
-        "sui-tool",
-        "sui-faucet",
-        "sui-data-ingestion",
-        "sui-bridge",
-        "sui-bridge-cli",
-        "sui-graphql-rpc",
-        "sui-test-validator",
+        "aiy",
+        "aiy-node",
+        "aiy-tool",
+        "aiy-faucet",
+        "aiy-data-ingestion",
+        "aiy-bridge",
+        "aiy-bridge-cli",
+        "aiy-graphql-rpc",
+        "aiy-test-validator",
         "move-analyzer"
     ],
     "internal_binaries": [
         "stress",
-        "sui-proxy",
-        "sui-metric-checker",
-        "sui-analytics-indexer",
-        "sui-security-watchdog"
+        "aiy-proxy",
+        "aiy-metric-checker",
+        "aiy-analytics-indexer",
+        "aiy-security-watchdog"
 	]
 }

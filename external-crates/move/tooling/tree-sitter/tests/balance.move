@@ -4,10 +4,10 @@
 /// A storable handler for Balances in general. Is used in the `Coin`
 /// module to allow balance operations and can be used to implement
 /// custom coins with `Supply` and `Balance`s.
-module sui::balance {
-    use sui::tx_context::{Self, TxContext};
+module aiy::balance {
+    use aiy::tx_context::{Self, TxContext};
 
-    friend sui::sui;
+    friend aiy::aiy;
 
     /// For when trying to destroy a non-zero balance.
     const ENonZero: u64 = 0;
@@ -163,14 +163,14 @@ module sui::balance {
 }
 
 #[test_only]
-module sui::balance_tests {
-    use sui::balance;
-    use sui::sui::SUI;
-    use sui::test_utils;
+module aiy::balance_tests {
+    use aiy::balance;
+    use aiy::aiy::AIY;
+    use aiy::test_utils;
 
     #[test]
     fun test_balance() {
-        let balance = balance::zero<SUI>();
+        let balance = balance::zero<AIY>();
         let another = balance::create_for_testing(1000);
 
         balance::join(&mut balance, another);

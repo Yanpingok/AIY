@@ -44,7 +44,7 @@ pub enum LinterDiagnosticCategory {
     Suspicious,
     Deprecated,
     Style,
-    Sui = 99,
+    Aiy = 99,
 }
 
 macro_rules! lints {

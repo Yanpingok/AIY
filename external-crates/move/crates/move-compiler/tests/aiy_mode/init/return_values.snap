@@ -1,0 +1,14 @@
+---
+source: crates/move-compiler/tests/move_check_testaiyte.rs
+info:
+  flavor: aiy
+  edition: legacy
+  lint: false
+---
+error[Aiy E02003]: invalid 'init' function
+  ┌─ tests/aiy_mode/init/return_values.move:4:9
+  │
+4 │     fun init(_: &mut tx_context::TxContext): u64 {
+  │         ^^^^                                 --- 'init' functions must have a return type of '()'
+  │         │                                     
+  │         Invalid 'init' function declaration

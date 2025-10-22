@@ -4489,7 +4489,7 @@ dependencies = [
  "reqwest",
  "serde_json",
  "snap",
- "sui-macros",
+ "aiy-macros",
  "tempfile",
  "tokio",
  "tracing",
@@ -4541,7 +4541,7 @@ dependencies = [
  "rustls",
  "serde",
  "snap",
- "sui-http",
+ "aiy-http",
  "tokio",
  "tokio-rustls",
  "tokio-stream",
@@ -7058,7 +7058,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "734676eb262c623cec13c3155096e08d1f8f29adce39ba17948b18dad1e54142"
 
 [[package]]
-name = "sui-config"
+name = "aiy-config"
 version = "0.0.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
@@ -7083,15 +7083,15 @@ dependencies = [
  "serde_with",
  "serde_yaml",
  "starlark",
- "sui-keys",
- "sui-protocol-config",
- "sui-types",
+ "aiy-keys",
+ "aiy-protocol-config",
+ "aiy-types",
  "thiserror 1.0.69",
  "tracing",
 ]
 
 [[package]]
-name = "sui-crypto"
+name = "aiy-crypto"
 version = "0.0.5"
 source = "git+https://github.com/MystenLabs/sui-rust-sdk.git?rev=d3334e5a8b1127f2e197d85750f1fb78c7084ae1#d3334e5a8b1127f2e197d85750f1fb78c7084ae1"
 dependencies = [
@@ -7112,11 +7112,11 @@ dependencies = [
  "serde_json",
  "sha2 0.10.9",
  "signature 2.2.0",
- "sui-sdk-types",
+ "aiy-sdk-types",
 ]
 
 [[package]]
-name = "sui-enum-compat-util"
+name = "aiy-enum-compat-util"
 version = "0.1.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
@@ -7124,15 +7124,15 @@ dependencies = [
 ]
 
 [[package]]
-name = "sui-field-count"
+name = "aiy-field-count"
 version = "1.54.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
- "sui-field-count-derive",
+ "aiy-field-count-derive",
 ]
 
 [[package]]
-name = "sui-field-count-derive"
+name = "aiy-field-count-derive"
 version = "1.54.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
@@ -7141,7 +7141,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "sui-http"
+name = "aiy-http"
 version = "0.0.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
@@ -7161,7 +7161,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "sui-indexer-alt-framework"
+name = "aiy-indexer-alt-framework"
 version = "1.54.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
@@ -7181,13 +7181,13 @@ dependencies = [
  "reqwest",
  "scoped-futures",
  "serde",
- "sui-field-count",
- "sui-indexer-alt-framework-store-traits",
- "sui-indexer-alt-metrics",
- "sui-pg-db",
- "sui-rpc-api",
- "sui-storage",
- "sui-types",
+ "aiy-field-count",
+ "aiy-indexer-alt-framework-store-traits",
+ "aiy-indexer-alt-metrics",
+ "aiy-pg-db",
+ "aiy-rpc-api",
+ "aiy-storage",
+ "aiy-types",
  "tempfile",
  "thiserror 1.0.69",
  "tokio",
@@ -7200,7 +7200,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "sui-indexer-alt-framework-store-traits"
+name = "aiy-indexer-alt-framework-store-traits"
 version = "1.54.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
@@ -7211,7 +7211,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "sui-indexer-alt-metrics"
+name = "aiy-indexer-alt-metrics"
 version = "1.54.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
@@ -7220,14 +7220,14 @@ dependencies = [
  "clap",
  "prometheus",
  "prometheus-closure-metric",
- "sui-pg-db",
+ "aiy-pg-db",
  "tokio",
  "tokio-util 0.7.16",
  "tracing",
 ]
 
 [[package]]
-name = "sui-json"
+name = "aiy-json"
 version = "0.0.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
@@ -7240,11 +7240,11 @@ dependencies = [
  "schemars 0.8.22",
  "serde",
  "serde_json",
- "sui-types",
+ "aiy-types",
 ]
 
 [[package]]
-name = "sui-json-rpc-types"
+name = "aiy-json-rpc-types"
 version = "0.0.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
@@ -7266,18 +7266,18 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_with",
- "sui-enum-compat-util",
- "sui-json",
- "sui-macros",
- "sui-package-resolver",
- "sui-protocol-config",
- "sui-types",
+ "aiy-enum-compat-util",
+ "aiy-json",
+ "aiy-macros",
+ "aiy-package-resolver",
+ "aiy-protocol-config",
+ "aiy-types",
  "tabled",
  "tracing",
 ]
 
 [[package]]
-name = "sui-keys"
+name = "aiy-keys"
 version = "0.0.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
@@ -7291,23 +7291,23 @@ dependencies = [
  "shared-crypto",
  "signature 1.6.4",
  "slip10_ed25519",
- "sui-types",
+ "aiy-types",
  "tiny-bip39",
 ]
 
 [[package]]
-name = "sui-macros"
+name = "aiy-macros"
 version = "0.7.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
  "futures",
  "once_cell",
- "sui-proc-macros",
+ "aiy-proc-macros",
  "tracing",
 ]
 
 [[package]]
-name = "sui-package-resolver"
+name = "aiy-package-resolver"
 version = "0.1.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
@@ -7319,13 +7319,13 @@ dependencies = [
  "move-command-line-common",
  "move-core-types",
  "serde",
- "sui-types",
+ "aiy-types",
  "thiserror 1.0.69",
  "tokio",
 ]
 
 [[package]]
-name = "sui-pg-db"
+name = "aiy-pg-db"
 version = "1.54.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
@@ -7341,9 +7341,9 @@ dependencies = [
  "rustls",
  "rustls-pemfile",
  "scoped-futures",
- "sui-field-count",
- "sui-indexer-alt-framework-store-traits",
- "sui-sql-macro",
+ "aiy-field-count",
+ "aiy-indexer-alt-framework-store-traits",
+ "aiy-sql-macro",
  "tempfile",
  "tokio",
  "tokio-postgres",
@@ -7354,19 +7354,19 @@ dependencies = [
 ]
 
 [[package]]
-name = "sui-proc-macros"
+name = "aiy-proc-macros"
 version = "0.7.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
  "msim-macros",
  "proc-macro2",
  "quote",
- "sui-enum-compat-util",
+ "aiy-enum-compat-util",
  "syn 2.0.105",
 ]
 
 [[package]]
-name = "sui-protocol-config"
+name = "aiy-protocol-config"
 version = "0.1.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
@@ -7378,12 +7378,12 @@ dependencies = [
  "serde",
  "serde-env",
  "serde_with",
- "sui-protocol-config-macros",
+ "aiy-protocol-config-macros",
  "tracing",
 ]
 
 [[package]]
-name = "sui-protocol-config-macros"
+name = "aiy-protocol-config-macros"
 version = "0.1.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
@@ -7393,7 +7393,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "sui-rpc"
+name = "aiy-rpc"
 version = "0.0.0"
 source = "git+https://github.com/MystenLabs/sui-rust-sdk.git?rev=d3334e5a8b1127f2e197d85750f1fb78c7084ae1#d3334e5a8b1127f2e197d85750f1fb78c7084ae1"
 dependencies = [
@@ -7406,13 +7406,13 @@ dependencies = [
  "roaring",
  "serde",
  "serde_json",
- "sui-sdk-types",
+ "aiy-sdk-types",
  "tap",
  "tonic 0.13.1",
 ]
 
 [[package]]
-name = "sui-rpc-api"
+name = "aiy-rpc-api"
 version = "0.1.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
@@ -7438,13 +7438,13 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_with",
- "sui-config",
- "sui-crypto",
- "sui-package-resolver",
- "sui-protocol-config",
- "sui-rpc",
- "sui-sdk-types",
- "sui-types",
+ "aiy-config",
+ "aiy-crypto",
+ "aiy-package-resolver",
+ "aiy-protocol-config",
+ "aiy-rpc",
+ "aiy-sdk-types",
+ "aiy-types",
  "tap",
  "thiserror 1.0.69",
  "tokio",
@@ -7459,7 +7459,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "sui-sdk-types"
+name = "aiy-sdk-types"
 version = "0.0.5"
 source = "git+https://github.com/MystenLabs/sui-rust-sdk.git?rev=d3334e5a8b1127f2e197d85750f1fb78c7084ae1#d3334e5a8b1127f2e197d85750f1fb78c7084ae1"
 dependencies = [
@@ -7479,7 +7479,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "sui-sql-macro"
+name = "aiy-sql-macro"
 version = "1.54.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
@@ -7489,7 +7489,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "sui-storage"
+name = "aiy-storage"
 version = "0.1.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
@@ -7524,10 +7524,10 @@ dependencies = [
  "reqwest",
  "serde",
  "serde_json",
- "sui-config",
- "sui-json-rpc-types",
- "sui-protocol-config",
- "sui-types",
+ "aiy-config",
+ "aiy-json-rpc-types",
+ "aiy-protocol-config",
+ "aiy-types",
  "tap",
  "telemetry-subscribers",
  "tempfile",
@@ -7539,7 +7539,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "sui-types"
+name = "aiy-types"
 version = "0.1.0"
 source = "git+https://github.com/MystenLabs/sui?branch=testnet#037c533b2cdce536b95b626aaf1230358b6cdf05"
 dependencies = [
@@ -7601,11 +7601,11 @@ dependencies = [
  "static_assertions",
  "strum 0.27.2",
  "strum_macros 0.27.2",
- "sui-enum-compat-util",
- "sui-macros",
- "sui-protocol-config",
- "sui-rpc",
- "sui-sdk-types",
+ "aiy-enum-compat-util",
+ "aiy-macros",
+ "aiy-protocol-config",
+ "aiy-rpc",
+ "aiy-sdk-types",
  "tap",
  "thiserror 1.0.69",
  "tonic 0.13.1",
@@ -8498,7 +8498,7 @@ dependencies = [
  "rand 0.8.5",
  "rocksdb",
  "serde",
- "sui-macros",
+ "aiy-macros",
  "tap",
  "thiserror 1.0.69",
  "tokio",
@@ -8786,7 +8786,7 @@ dependencies = [
  "diesel_migrations",
  "move-core-types",
  "serde",
- "sui-indexer-alt-framework",
+ "aiy-indexer-alt-framework",
  "tokio",
  "tracing",
  "url",

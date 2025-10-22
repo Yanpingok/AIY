@@ -25,7 +25,7 @@ const guides = [
 					id: 'guides/developer/getting-started',
 				},
 				items: [
-					'guides/developer/getting-started/sui-install',
+					'guides/developer/getting-started/aiy-install',
 					'guides/developer/getting-started/connect',
 					'guides/developer/getting-started/local-network',
 					'guides/developer/getting-started/get-address',
@@ -35,7 +35,7 @@ const guides = [
 			},
 			{
 				type: 'category',
-				label: 'Your First Sui dApp',
+				label: 'Your First Aiy dApp',
 				link: {
 					type: 'doc',
 					id: 'guides/developer/first-app',
@@ -50,29 +50,29 @@ const guides = [
 			},
 			{
 				type: 'category',
-				label: 'Sui 101',
+				label: 'Aiy 101',
 				link: {
 					type: 'doc',
-					id: 'guides/developer/sui-101',
+					id: 'guides/developer/aiy-101',
 				},
 				items: [
-					'guides/developer/sui-101/object-ownership',
-					'guides/developer/sui-101/using-events',
-					'guides/developer/sui-101/access-time',
-					'guides/developer/sui-101/sign-and-send-txn',
-					'guides/developer/sui-101/sponsor-txn',
-					'guides/developer/sui-101/avoid-equivocation',
+					'guides/developer/aiy-101/object-ownership',
+					'guides/developer/aiy-101/using-events',
+					'guides/developer/aiy-101/access-time',
+					'guides/developer/aiy-101/sign-and-send-txn',
+					'guides/developer/aiy-101/sponsor-txn',
+					'guides/developer/aiy-101/avoid-equivocation',
 					{
 						type: 'category',
 						label: 'Working with PTBs',
 						link: {
 							type: 'doc',
-							id: 'guides/developer/sui-101/working-with-ptbs',
+							id: 'guides/developer/aiy-101/working-with-ptbs',
 						},
 						items: [
-							'guides/developer/sui-101/building-ptb',
-							'guides/developer/sui-101/coin-mgt',
-							'guides/developer/sui-101/simulating-refs',
+							'guides/developer/aiy-101/building-ptb',
+							'guides/developer/aiy-101/coin-mgt',
+							'guides/developer/aiy-101/simulating-refs',
 						],
 					},
 				],
@@ -204,7 +204,7 @@ const guides = [
 			id: 'guides/operator',
 		},
 		items: [
-			'guides/operator/sui-full-node',
+			'guides/operator/aiy-full-node',
 			'guides/operator/genesis',
 			'guides/operator/monitoring',
 			'guides/operator/alerts',
@@ -216,7 +216,7 @@ const guides = [
 			'guides/operator/bridge-node-configuration',
 			{
 				type: 'category',
-				label: "Sui Validator Nodes",
+				label: "Aiy Validator Nodes",
 				link: {
 					type: 'doc',
 					id: 'guides/operator/validator-index',
@@ -232,17 +232,17 @@ const guides = [
 	},
 	{
 		type: 'category',
-		label: 'SuiPlay0X1',
+		label: 'AiyPlay0X1',
 		collapsed: false,
 		link: {
 			type: 'doc',
-			id: 'guides/suiplay0x1',
+			id: 'guides/aiyplay0x1',
 		},
 		items: [
-			'guides/suiplay0x1/integration',
-			'guides/suiplay0x1/migration-strategies',
-			'guides/suiplay0x1/wallet-integration',
-			'guides/suiplay0x1/best-practices',
+			'guides/aiyplay0x1/integration',
+			'guides/aiyplay0x1/migration-strategies',
+			'guides/aiyplay0x1/wallet-integration',
+			'guides/aiyplay0x1/best-practices',
 		],
 	}
 ];

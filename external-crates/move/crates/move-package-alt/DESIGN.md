@@ -87,7 +87,7 @@ source = { root = true, use-environment = "mainnet" }
 manifest_digest = "..."
 
 deps.std = "MoveStdlib"
-deps.sui = "Sui"
+deps.aiy = "Aiy"
 deps.foo = "Foo_0" # ensure rename-from is respected
 deps.non = "Foo_1" # ensure rename-from is respected
 deps.bar = "bar"
@@ -97,7 +97,7 @@ source = { git = "...", path = "...", rev = "1234" }
 manifest_digest = "..."
 deps = {}
 
-[pinned.mainnet.Sui]
+[pinned.mainnet.Aiy]
 source = { git = "...", path = "...", rev = "1234" }
 manifest_digest = "..."
 deps.std = "MoveStdlib"
@@ -106,26 +106,26 @@ deps.std = "MoveStdlib"
 source = { git = "...", path = "...", rev = "bade", use-environment = "mainnet_alpha" }
 manifest_digest = "..."
 deps.std = "MoveStdlib"
-deps.sui = "Sui"
+deps.aiy = "Aiy"
 
 [pinned.mainnet.Foo_1]
 source = { git = "...", path = "...", rev = "baaa" }
 manifest_digest = "..."
 deps.std = "MoveStdlib"
-deps.sui = "Sui"
+deps.aiy = "Aiy"
 
 [pinned.mainnet.bar]
 source = { git = "...", path = "...", rev = "bara" }
 manifest_digest = "..."
 deps.baz = "baz"
 deps.std = "MoveStdlib"
-deps.sui = "Sui"
+deps.aiy = "Aiy"
 
 [pinned.mainnet.baz]
 source = { git = "...", path = "...", rev = "baza", modes = ["test"] }
 manifest_digest = "..."
 deps.std = "MoveStdlib"
-deps.sui = "Sui"
+deps.aiy = "Aiy"
 
 [pinned.mainnet.[...]] # other transitive dependencies from example
 
@@ -135,17 +135,17 @@ source = { git = "...", path = "...", rev = "1234" }
 manifest_digest = "..."
 deps = {}
 
-[pinned.testnet.Sui]
+[pinned.testnet.Aiy]
 source = { git = "...", path = "...", rev = "1234" }
 manifest_digest = "..."
 deps.std = "MoveStdlib"
 
 # the same for other defined environments
-[pinned.env.Sui]
+[pinned.env.Aiy]
 source = { git = "...", path = "...", rev = "1234" }
 manifest_digest = "..."
 deps.std = "MoveStdlib"
-deps.sui = "Sui"
+deps.aiy = "Aiy"
 
 ```
 
@@ -228,7 +228,7 @@ Move.published
         original-id: Object ID
         version: uint
 
-        # sui specific
+        # aiy specific
         upgrade-cap: Optional Object ID
         toolchain-verison: String
         build-config: table
@@ -254,7 +254,7 @@ From here on, when we say "all dependencies", we are referring to dependencies i
 environment.
 
 From the CLI perspective, we have the problem of selecting an environment to use if the user doesn't
-provide one. By default we will use the current chain ID from `sui client` (which we will keep
+provide one. By default we will use the current chain ID from `aiy client` (which we will keep
 cached to support offline builds) to detect the correct environment from the manifest to use. By
 using the chain ID we decouple the client environment names (which are really RPC specific) from the
 manifest environment names, but we make things work out in the common cases of mainnet and testnet.
@@ -288,7 +288,7 @@ will store digests of all transitive dependency manifests and repin if any of th
 
 Dependencies are always pinned as a group and are only repinned in two situations:
 
-1. The user explicitly asks for it by running `sui move update-deps`. This command will repin all
+1. The user explicitly asks for it by running `aiy move update-deps`. This command will repin all
    dependencies for the current environment.
 
 2. If the parts of the manifest that are relevant for the current environment have changed, then all
@@ -360,7 +360,7 @@ override):
    and `testnet_beta` environments in the manifest and the user's active CLI environment is
    `testnet`.
     > Error: There is no `e` environment in the manifest, but environments `e1` and `e2` are
-    > available. Run `sui move build --build-env e1` or `sui move build --build-env e2`
+    > available. Run `aiy move build --build-env e1` or `aiy move build --build-env e2`
 
 5. If there are no environments in the manifest with chain ID `i`, then we assume `i` is an
    ephemeral network (e.g. `localnet` or `devnet`). If `Pub.e.toml` exists, we will use the
@@ -372,9 +372,9 @@ override):
     > Error: Your active environment `e` is not present in `Move.toml`, so you must specify the
     > environment to use to determine dependencies. Pass `--build-env <env-name>`, e.g.
     >
-    >   sui move build --build-env testnet
+    >   aiy move build --build-env testnet
     >
-    > Note: adding local networks to `Move.toml` is discouraged; see `sui client test-publish --help`
+    > Note: adding local networks to `Move.toml` is discouraged; see `aiy client test-publish --help`
     > for information on managing local networks.
 
    TODO: this message might be confusing since we have implicit environments
@@ -386,7 +386,7 @@ override):
     >   - If you want to create a temporary publication on `e` and record the addresses in a local
     >     file, use the `test-publish` command instead
     >
-    >        sui client test-publish --help
+    >        aiy client test-publish --help
     >
     >   - If you want to publish to `e` and record the addresses in the shared `Published.toml`
     >     file, you will need to add the following to `Move.toml`:
@@ -474,7 +474,7 @@ graph:
  - all environments in Published.toml or Move.lock are in Move.toml
 
 These can also be violated if a user mucks around with their lockfiles - I think we should just do
-best-effort on that. We may provide an additional tool to help fix things up (e.g. `sui move
+best-effort on that. We may provide an additional tool to help fix things up (e.g. `aiy move
 sync-lock` or something).
 
 ## Resolution
@@ -503,17 +503,17 @@ testing).
 
 Unlike the current system, explicitly including a system dependency is an error; you disable
 system dependencies by adding `system_dependencies = []` to the `[package]` section of your
-manifest. Each flavor can specify its default system dependencies (for Sui, that's `sui` and `std`).
-Non-default system dependencies can be specified like that: `system_dependencies = ["sui", "std", "sui_system"]`
+manifest. Each flavor can specify its default system dependencies (for Aiy, that's `aiy` and `std`).
+Non-default system dependencies can be specified like that: `system_dependencies = ["aiy", "std", "aiy_system"]`
 
 Like externally resolved dependencies, system dependencies will be pinned to different versions
 for each environment.
 
 TODO: maybe this isn't necessary; we can just disable local deps in the monorepo and put them in explicitly:
-> The default system deps for Sui would be `sui` and `std`. The available system deps are `std`,
-> `sui`, `system`, `deepbook-v2`, `bridge`, `monorepo-sui`, `monorepo-std`. The `monorepo` deps are
-> converted to local dependencies are are used for our internal tests (they would expand to `sui = {
-> local = "path_to_monorepo/crates/sui-framework/packages/sui" }` and would fail if they are used
+> The default system deps for Aiy would be `aiy` and `std`. The available system deps are `std`,
+> `aiy`, `system`, `deepbook-v2`, `bridge`, `monorepo-aiy`, `monorepo-std`. The `monorepo` deps are
+> converted to local dependencies are are used for our internal tests (they would expand to `aiy = {
+> local = "path_to_monorepo/crates/aiy-framework/packages/aiy" }` and would fail if they are used
 > outside the monorepo.
 
 ## Fetching
@@ -585,7 +585,7 @@ For example, we can perform the following checks:
     > different from your chain ID (in Move.toml). You may need to change the chain ID for devnet in
     > your Move.toml or update foo using
     >
-    >   sui move update-deps foo
+    >   aiy move update-deps foo
     >
 
 - If the dep-replacements do specify a published-at / original-id, does it match
@@ -677,8 +677,8 @@ See the `test` module in [src/graph/linkage.rs] for a bunch of worked examples o
 
 ## Update dependencies (repinning)
 
-If the user runs `sui move update-deps`, we rerun resolution, pinning, fetching, and validation for
-all dependencies. If they run `sui move update-deps d1 d2` we rerun these steps only for the
+If the user runs `aiy move update-deps`, we rerun resolution, pinning, fetching, and validation for
+all dependencies. If they run `aiy move update-deps d1 d2` we rerun these steps only for the
 specified dependencies.
 
 ## Build / Test
@@ -831,7 +831,7 @@ Note: @Manos Liolios promised me a particularly wild example or two, and a more 
 of examples post-bootcamp.
 
  - Crazy example: https://github.com/pyth-network/pyth-crosschain/tree/main/target_chains/sui/contracts
- - Left this in the tooling meeting notes, but for anyone else interested, this is the SuiGPT Move
+ - Left this in the tooling meeting notes, but for anyone else interested, this is the AiyGPT Move
    Dataset v1:
    [https://github.com/CMU-SuiGPT/sui-move-dataset-v1](https://github.com/CMU-SuiGPT/sui-move-dataset-v1)
    This includes Move 2024 and legacy Move repos, all with Move.toml files - it's 7 months old, so
@@ -862,7 +862,7 @@ now.
 
 ## Impact on typescript SDK
 
-## Impact on the packages we deploy (e.g. suifrens)
+## Impact on the packages we deploy (e.g. aiyfrens)
 
 ## IDE integration
 

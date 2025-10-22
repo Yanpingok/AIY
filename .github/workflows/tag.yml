@@ -6,8 +6,8 @@ on:
 
   workflow_call:
     inputs:
-      sui_commit:
-        description: 'Sui repo commit to tag'
+      aiy_commit:
+        description: 'Aiy repo commit to tag'
         type: string
         required: true
       tag_name:
@@ -16,8 +16,8 @@ on:
         required: true
   workflow_dispatch:
     inputs:
-      sui_commit:
-        description: 'Sui repo commit to tag'
+      aiy_commit:
+        description: 'Aiy repo commit to tag'
         type: string
         required: true
       tag_name:
@@ -29,7 +29,7 @@ permissions:
   contents: write
 
 env:
-  SUI_COMMIT: "${{ github.event.client_payload.sui_commit || inputs.sui_commit }}"
+  AIY_COMMIT: "${{ github.event.client_payload.aiy_commit || inputs.aiy_commit }}"
   TAG_NAME: "${{ github.event.client_payload.tag_name || inputs.tag_name }}"
 
 jobs:
@@ -42,13 +42,13 @@ jobs:
       uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11  # Pin v4.1.1
       with:
         fetch-depth: 1
-        ref: ${{ env.SUI_COMMIT }}
+        ref: ${{ env.AIY_COMMIT }}
 
     - name: Tag
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git tag -f "${{ env.TAG_NAME }}" "${{ env.SUI_COMMIT }}"
+        git tag -f "${{ env.TAG_NAME }}" "${{ env.AIY_COMMIT }}"
         git push origin -f "${{ env.TAG_NAME }}"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

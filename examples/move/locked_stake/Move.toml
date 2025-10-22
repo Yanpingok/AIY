@@ -4,8 +4,8 @@ version = "0.0.1"
 edition = "2024.beta"
 
 [dependencies]
-Sui = { local = "../../../crates/sui-framework/packages/sui-framework" }
-SuiSystem = { local = "../../../crates/sui-framework/packages/sui-system" }
+Aiy = { local = "../../../crates/aiy-framework/packages/aiy-framework" }
+AiySystem = { local = "../../../crates/aiy-framework/packages/aiy-system" }
 
 [addresses]
 locked_stake = "0x0"

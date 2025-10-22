@@ -383,7 +383,7 @@ impl TransactionClient {
     }
 }
 
-/// `TransactionVerifier` implementation is supplied by Sui to validate transactions in a block,
+/// `TransactionVerifier` implementation is supplied by Aiy to validate transactions in a block,
 /// before acceptance of the block.
 pub trait TransactionVerifier: Send + Sync + 'static {
     /// Determines if this batch of transactions is valid.
@@ -440,7 +440,7 @@ mod tests {
         PING_TRANSACTION_INDEX,
     };
     use futures::{stream::FuturesUnordered, StreamExt};
-    use sui_protocol_config::ProtocolConfig;
+    use aiy_protocol_config::ProtocolConfig;
     use tokio::time::timeout;
 
     use crate::transaction::NoopTransactionVerifier;

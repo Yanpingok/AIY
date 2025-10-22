@@ -54,7 +54,7 @@ const concepts = [
 				label: 'Move Overview',
 				link: {
 					type: 'doc',
-					id: 'concepts/sui-move-concepts',
+					id: 'concepts/aiy-move-concepts',
 				},
 				items: [
 					{
@@ -62,12 +62,12 @@ const concepts = [
 						label: 'Packages',
 						link: {
 							type: 'doc',
-							id: 'concepts/sui-move-concepts/packages',
+							id: 'concepts/aiy-move-concepts/packages',
 						},
 						items: [
-							'concepts/sui-move-concepts/packages/upgrade',
-							'concepts/sui-move-concepts/packages/custom-policies',
-							'concepts/sui-move-concepts/packages/automated-address-management',
+							'concepts/aiy-move-concepts/packages/upgrade',
+							'concepts/aiy-move-concepts/packages/custom-policies',
+							'concepts/aiy-move-concepts/packages/automated-address-management',
 						],
 					},
 					{
@@ -79,8 +79,8 @@ const concepts = [
 						},
 						items: ['concepts/dynamic-fields/tables-bags'],
 					},
-					'concepts/sui-move-concepts/derived-objects',
-					'concepts/sui-move-concepts/conventions'
+					'concepts/aiy-move-concepts/derived-objects',
+					'concepts/aiy-move-concepts/conventions'
 					
 				],
 			},
@@ -170,22 +170,22 @@ const concepts = [
 	},
 	{
 		type: 'category',
-		label: 'Sui Architecture',
+		label: 'Aiy Architecture',
 		link: {
 			type: 'doc',
-			id: 'concepts/sui-architecture',
+			id: 'concepts/aiy-architecture',
 		},
 		items: [
-			'concepts/sui-architecture/high-level',
-			'concepts/sui-architecture/sui-storage',
-			'concepts/sui-architecture/sui-security',
-			'concepts/sui-architecture/transaction-lifecycle',
-			'concepts/sui-architecture/consensus',
-			'concepts/sui-architecture/indexer-functions',
-			'concepts/sui-architecture/epochs',
-			'concepts/sui-architecture/protocol-upgrades',
-			'concepts/sui-architecture/data-management-things',
-			'concepts/sui-architecture/staking-rewards',
+			'concepts/aiy-architecture/high-level',
+			'concepts/aiy-architecture/aiy-storage',
+			'concepts/aiy-architecture/aiy-security',
+			'concepts/aiy-architecture/transaction-lifecycle',
+			'concepts/aiy-architecture/consensus',
+			'concepts/aiy-architecture/indexer-functions',
+			'concepts/aiy-architecture/epochs',
+			'concepts/aiy-architecture/protocol-upgrades',
+			'concepts/aiy-architecture/data-management-things',
+			'concepts/aiy-architecture/staking-rewards',
 		],
 	},
 	{
@@ -197,9 +197,9 @@ const concepts = [
 		},
 		items: [
 			'concepts/tokenomics/staking-unstaking',
-			'concepts/tokenomics/sui-bridging',
+			'concepts/tokenomics/aiy-bridging',
 			'concepts/tokenomics/gas-pricing',
-			'concepts/tokenomics/gas-in-sui',
+			'concepts/tokenomics/gas-in-aiy',
 			'concepts/tokenomics/vesting-strategies'
 		],
 	},

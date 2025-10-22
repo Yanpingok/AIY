@@ -3,8 +3,8 @@ name = "global_write"
 edition = "2024.beta"
 
 [dependencies]
-Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/mainnet" }
+Aiy = { git = "https://github.com/ab2bc/sui.git", subdir = "crates/aiy-framework/packages/aiy-framework", rev = "framework/mainnet" }
 
 [addresses]
 global_write = "0x0"
-Sui = "0x2"
+Aiy = "0x2"

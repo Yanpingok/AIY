@@ -1,0 +1,15 @@
+---
+source: crates/move-compiler/tests/move_check_testaiyte.rs
+info:
+  flavor: aiy
+  edition: legacy
+  lint: false
+---
+error[Aiy E01001]: invalid object construction
+   ┌─ tests/aiy_mode/id_leak/through_indirect_return.move:11:9
+   │
+11 │         Foo { id }
+   │         ^^^^^^^^^^
+   │         │     │
+   │         │     The UID must come directly from `aiy::object::new`, or `aiy::derived_object::claim`. For tests, it can come from `aiy::test_scenario::new_object`
+   │         Invalid object creation without a newly created UID.

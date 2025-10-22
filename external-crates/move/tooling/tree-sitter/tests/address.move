@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-module sui::address {
-    use sui::hex;
+module aiy::address {
+    use aiy::hex;
     use std::ascii;
     use std::bcs;
     use std::string;
@@ -65,7 +65,7 @@ module sui::address {
         string::from_ascii(to_ascii_string(a))
     }
 
-    /// Length of a Sui address in bytes
+    /// Length of a Aiy address in bytes
     public fun length(): u64 {
         LENGTH
     }

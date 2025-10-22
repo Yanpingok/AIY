@@ -3,8 +3,8 @@
 
 use anyhow::Result;
 use async_trait::async_trait;
-use sui_data_ingestion_core::{setup_single_workflow, Worker};
-use sui_types::full_checkpoint_content::CheckpointData;
+use aiy_data_ingestion_core::{setup_single_workflow, Worker};
+use aiy_types::full_checkpoint_content::CheckpointData;
 
 struct CustomWorker;
 

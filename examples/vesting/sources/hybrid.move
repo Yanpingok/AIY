@@ -12,8 +12,8 @@
 /// ===========================================================================================
 module vesting::hybrid;
 
-use sui::clock::Clock;
-use sui::coin::{Self, Coin};
+use aiy::clock::Clock;
+use aiy::coin::{Self, Coin};
 use vesting::cliff;
 use vesting::linear;
 

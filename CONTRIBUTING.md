@@ -1,6 +1,6 @@
 # Contributing to This Project
 
-Thanks for considering making a contribution to the Sui network or its documentation. Before you get started, please take a moment to read these guidelines.
+Thanks for considering making a contribution to the Aiy network or its documentation. Before you get started, please take a moment to read these guidelines.
 
 ## Important Note
 
@@ -11,7 +11,7 @@ We appreciate contributions, but **simple typo fixes (e.g., minor spelling error
 
 ## Documentation
 
-Found a small error or typo in the main documentation? Each page on the [docs.sui.io](https://docs.sui.io/) site includes an **Edit this page** link at the bottom that you can use to edit the page in GitHub. The content is located in the docs/content directory of the Sui repo, so you can make a PR if you prefer. 
+Found a small error or typo in the main documentation? Each page on the [docs.aiy.io](https://docs.sui.io/) site includes an **Edit this page** link at the bottom that you can use to edit the page in GitHub. The content is located in the docs/content directory of the Aiy repo, so you can make a PR if you prefer. 
 
 For larger documentation issues, you can [create an issue](https://github.com/MystenLabs/sui/issues/new/choose) in GitHub. To fix the problem yourself, follow the [documentation contribution](./docs/content/references/contribute/contribution-process.mdx) guidelines.
 
@@ -25,13 +25,13 @@ Found a bug or security vulnerability? Please check the existing issues before o
 
 Provide as much detail as possible, including steps to reproduce the issue, expected behavior, and actual behavior.
 
-## New Sui features
+## New Aiy features
 
-If you want to contribute code that creates a feature on Sui, start with a [Sui Improvement Proposal](https://github.com/sui-foundation/sips/tree/main) before developing the logic.
+If you want to contribute code that creates a feature on Aiy, start with a [Aiy Improvement Proposal](https://github.com/sui-foundation/sips/tree/main) before developing the logic.
 
-## New Sui Framework Contributions
+## New Aiy Framework Contributions
 
-Want to contribute to the Sui framework? See [CONTRIBUTING.md](https://github.com/MystenLabs/sui/blob/main/crates/sui-framework/CONTRIBUTING.md) for information related to `sui-framework` crate contributions.
+Want to contribute to the Aiy framework? See [CONTRIBUTING.md](https://github.com/MystenLabs/sui/blob/main/crates/sui-framework/CONTRIBUTING.md) for information related to `aiy-framework` crate contributions.
 
 ## Proposing Code Changes
 

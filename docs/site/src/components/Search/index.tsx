@@ -24,17 +24,17 @@ export default function Search() {
   );
 
   const queryParam = getQueryParam("q");
-  const [activeTab, setActiveTab] = React.useState("sui_docs");
+  const [activeTab, setActiveTab] = React.useState("aiy_docs");
   const [tabCounts, setTabCounts] = React.useState<Record<string, number>>({
-    sui_docs: 0,
+    aiy_docs: 0,
   });
   const [query, setQuery] = React.useState(queryParam);
 
   const tabs = [
-    { label: "Sui", indexName: "sui_docs" },
-    { label: "SuiNS", indexName: "suins_docs" },
+    { label: "Aiy", indexName: "aiy_docs" },
+    { label: "AiyNS", indexName: "aiyns_docs" },
     { label: "The Move Book", indexName: "move_book" },
-    { label: "SDKs", indexName: "sui_sdks" },
+    { label: "SDKs", indexName: "aiy_sdks" },
     { label: "Walrus", indexName: "walrus_docs" },
   ];
 
@@ -48,13 +48,13 @@ export default function Search() {
   return (
     <InstantSearch
       searchClient={searchClient}
-      indexName="sui_docs"
+      indexName="aiy_docs"
       future={{ preserveSharedStateOnUnmount: true }}
       initialUiState={{
-        sui_docs: { query: queryParam },
-        suins_docs: { query: queryParam },
+        aiy_docs: { query: queryParam },
+        aiyns_docs: { query: queryParam },
         move_book: { query: queryParam },
-        sui_sdks: { query: queryParam },
+        aiy_sdks: { query: queryParam },
         walrus_docs: { query: queryParam },
       }}
     >
@@ -68,7 +68,7 @@ export default function Search() {
         </Index>
       ))}
 
-      <div className="grid grid-cols-12 gap-4 sui-search">
+      <div className="grid grid-cols-12 gap-4 aiy-search">
         <div className="col-span-12">
           <ControlledSearchBox
             placeholder={`Search`}

@@ -16,7 +16,7 @@ Individual preferences supercede and extend project preferences:
 
 ```bash
 # Build a specific crate. Generally don't need to do release build.
-cargo build -p sui-core
+cargo build -p aiy-core
 
 # Check code without building (preferred)
 cargo check
@@ -26,15 +26,15 @@ cargo check
 
 ```bash
 # Run e2e tests. simtests must be run with `cargo simtest` to avoid false negatives
-cargo simtest -p sui-e2e-tests
+cargo simtest -p aiy-e2e-tests
 
 # Run Rust unittests. skip simulation tests as they may cause false negatives with `cargo nextest`
-SUI_SKIP_SIMTESTS=1 cargo nextest run
+AIY_SKIP_SIMTESTS=1 cargo nextest run
 ```
 
 **Important Notes for Testing:**
 - When compiling or running tests in this repository, set timeout limits to at least 10 minutes due to the large codebase size
-- For faster iteration, use -p to select only the most relevant packages for testing. Use multiple `-p` flags if necessary, e.g. `cargo nextest run -p sui-types -p sui-core`
+- For faster iteration, use -p to select only the most relevant packages for testing. Use multiple `-p` flags if necessary, e.g. `cargo nextest run -p aiy-types -p aiy-core`
 - Use `cargo nextest --lib` to run only library tests and skip integration tests for faster feedback
 - Consult crate-specific CLAUDE.md files for instructions on which tests to run, when changing files in those crates
 
@@ -56,26 +56,26 @@ cargo xclippy
 ### Core Components Structure
 
 ```
-sui/
+aiy/
 ├── crates/                   # Main Rust crates
-│   ├── sui-core/             # Core blockchain logic
-│   ├── sui-node/             # Validator node implementation
-│   ├── sui-framework/        # Move system packages & stdlib
-│   ├── sui-types/            # Core type definitions
-│   ├── sui-json-rpc/         # JSON-RPC API server
-│   ├── sui-graphql-rpc/      # GraphQL API server
-│   └── sui-indexer-alt/      # Blockchain data indexer
+│   ├── aiy-core/             # Core blockchain logic
+│   ├── aiy-node/             # Validator node implementation
+│   ├── aiy-framework/        # Move system packages & stdlib
+│   ├── aiy-types/            # Core type definitions
+│   ├── aiy-json-rpc/         # JSON-RPC API server
+│   ├── aiy-graphql-rpc/      # GraphQL API server
+│   └── aiy-indexer-alt/      # Blockchain data indexer
 ├── consensus/                # Consensus mechanism (Mysticeti)
-├── sui-execution/            # Move execution layer with versions (v0, v1, v2 and latest)
+├── aiy-execution/            # Move execution layer with versions (v0, v1, v2 and latest)
 ├── apps/                     # Frontend applications
 └── external-crates/          # Move compiler and VM
 ```
 
 ### Key Architectural Patterns
 
-1. **Authority System**: Sui uses a set of validators (authorities) that process transactions in parallel. Each authority maintains its own state and participates in Byzantine consensus.
+1. **Authority System**: Aiy uses a set of validators (authorities) that process transactions in parallel. Each authority maintains its own state and participates in Byzantine consensus.
 
-2. **Object Model**: Unlike account-based blockchains, Sui uses an object-centric model where:
+2. **Object Model**: Unlike account-based blockchains, Aiy uses an object-centric model where:
    - Each object has a unique ID and version
    - Objects can be owned, shared, or immutable
 

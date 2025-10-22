@@ -96,7 +96,7 @@ exports.processOptions = (text, options) => {
     )
     .replace(/^\s*\/\/\s*docs::\/?.*\r?$\n?/gm, "")
     .replace(
-      /\[dependencies\]\nsui\s?=\s?{\s?local\s?=.*sui-framework.*\n/i,
+      /\[dependencies\]\naiy\s?=\s?{\s?local\s?=.*aiy-framework.*\n/i,
       "[dependencies]",
     );
   processed = removeComments(processed, options);

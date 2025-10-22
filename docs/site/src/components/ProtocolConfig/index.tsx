@@ -10,7 +10,7 @@ export default function ProtocolConfig(props) {
   const data = {
     jsonrpc: "2.0",
     id: 1,
-    method: "sui_getProtocolConfig",
+    method: "aiy_getProtocolConfig",
     params: [],
   };
   const urls = [
@@ -107,7 +107,7 @@ export default function ProtocolConfig(props) {
   }
 
   return (
-    <Tabs groupId="sui-network">
+    <Tabs groupId="aiy-network">
       <TabItem value="mainnet" label="Mainnet">
         <DisplayResults results={results.mainnet} />
       </TabItem>

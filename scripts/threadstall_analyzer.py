@@ -18,7 +18,7 @@ class ThreadDumpAnalyzer:
         self.interesting_prefixes = [
             'crates/',
             'consensus/',
-            'sui-execution/',
+            'aiy-execution/',
             'external-crates/',
         ]
 

@@ -1,0 +1,11 @@
+[package]
+name = "AiyExtra"
+edition = "2024.beta"
+
+[dependencies]
+AiySystem = { local = "../../../../aiy-framework/packages/aiy-system" }
+Aiy = { local = "../../../../aiy-framework/packages/aiy-framework" }
+MoveStdlib = { local = "../../../../aiy-framework/packages/move-stdlib" }
+
+[addresses]
+aiy_extra = "0x42"

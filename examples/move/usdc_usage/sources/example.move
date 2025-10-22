@@ -3,8 +3,8 @@
 
 module usdc_usage::example;
 
-use sui::coin::Coin;
-use sui::sui::SUI;
+use aiy::coin::Coin;
+use aiy::aiy::AIY;
 use usdc::usdc::USDC;
 
 public struct Sword has key, store {
@@ -19,7 +19,7 @@ public fun buy_sword_with_usdc(coin: Coin<USDC>, ctx: &mut TxContext): Sword {
     sword
 }
 
-public fun buy_sword_with_sui(coin: Coin<SUI>, ctx: &mut TxContext): Sword {
+public fun buy_sword_with_aiy(coin: Coin<AIY>, ctx: &mut TxContext): Sword {
     let sword = create_sword(coin.value(), ctx);
     // In production: transfer to actual recipient! Don't transfer to 0x0!
     transfer::public_transfer(coin, @0x0);

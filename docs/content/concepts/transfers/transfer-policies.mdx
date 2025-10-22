@@ -1,10 +1,10 @@
 ---
 title: Transfer Policies
-description: Learn about transfer policies on Sui.
+description: Learn about transfer policies on Aiy.
 keywords: [ transfer, policy, transferpolicy, transfer receipt, transfer request, transferrequest ]
 ---
 
-A [`TransferPolicy`](/references/framework/sui_sui/transfer_policy) on Sui is a customizable primitive that enables the owner of a type to create custom rules that define how the type can be transferred. You can use a `TransferPolicy` within a Sui Kiosk marketplace or any other system that integrates the `TransferPolicy` primitive. You can set any number of rules, such as paying a royalty or commission, and all must be satisfied in a single transaction for the transfer to succeed.
+A [`TransferPolicy`](/references/framework/aiy_aiy/transfer_policy) on Aiy is a customizable primitive that enables the owner of a type to create custom rules that define how the type can be transferred. You can use a `TransferPolicy` within a Aiy Kiosk marketplace or any other system that integrates the `TransferPolicy` primitive. You can set any number of rules, such as paying a royalty or commission, and all must be satisfied in a single transaction for the transfer to succeed.
 
 In a kiosk, creating and sharing a `TransferPolicy<T>` makes the type `T` tradable in that kiosk. On every kiosk purchase, the `TransferPolicy` must confirm the `TransferRequest`, or the transaction fails.
 
@@ -35,9 +35,9 @@ A rule needs to provide 4 main components:
 
 ```
 module examples::dummy_rule {
-    use sui::coin::Coin;
-    use sui::sui::SUI;
-    use sui::transfer_policy::{
+    use aiy::coin::Coin;
+    use aiy::aiy::AIY;
+    use aiy::transfer_policy::{
         Self as policy,
         TransferPolicy,
         TransferPolicyCap,
@@ -67,13 +67,13 @@ module examples::dummy_rule {
     /// Receipt is a rule witness, so there's no way to create
     /// it anywhere else but in this module.
     ///
-    /// This example also illustrates that rules can add Coin<SUI>
+    /// This example also illustrates that rules can add Coin<AIY>
     /// to the balance of the TransferPolicy allowing creators to
     /// collect fees.
     public fun pay<T>(
         policy: &mut TransferPolicy<T>,
         request: &mut TransferRequest<T>,
-        payment: Coin<SUI>
+        payment: Coin<AIY>
     ) {
         policy::add_to_balance(Rule {}, policy, payment);
         policy::add_receipt(Rule {}, request);
@@ -81,17 +81,17 @@ module examples::dummy_rule {
 }
 ```
 
-The `TransferPolicy` module allows removing any rule at any time, as guaranteed by the constraints on the rule's configuration. This example module has no configuration and accepts a `Coin<SUI>` of any value.
+The `TransferPolicy` module allows removing any rule at any time, as guaranteed by the constraints on the rule's configuration. This example module has no configuration and accepts a `Coin<AIY>` of any value.
 
 ### Royalty rules
 
 To implement a percentage-based fee, such as royalties, a rule module must know the item's purchase price. The `TransferRequest` provides information that supports this and similar scenarios:
 
 - Item ID
-- Amount paid (SUI)
+- Amount paid (AIY)
 - From ID: The object that was used for selling, such as the kiosk
 
-The `sui::transfer_policy` module provides public functions to access these fields: `paid()`, `item()`, and `from()`.
+The `aiy::transfer_policy` module provides public functions to access these fields: `paid()`, `item()`, and `from()`.
 
 ```
 module examples::royalty_rule {
@@ -120,7 +120,7 @@ module examples::royalty_rule {
     public fun pay<T>(
         policy: &mut TransferPolicy<T>,
         request: &mut TransferRequest<T>,
-        payment: &mut Coin<SUI>,
+        payment: &mut Coin<AIY>,
         ctx: &mut TxContext
     ) {
         // using the getter to read the paid amount
@@ -143,7 +143,7 @@ Rules apply to more than just payments and fees. Some rules might permit trading
 ```
 module examples::time_rule {
     // skipping some dependencies
-    use sui::clock::{Self, Clock};
+    use aiy::clock::{Self, Clock};
 
     struct Rule has drop {}
     struct Config has store, drop { start_time: u64 }
@@ -177,7 +177,7 @@ The `TransferRequest` includes a field called `receipts`, which is a `VecSet` of
 In the following example, both the rules and receipts are empty, so they match trivially and the request is confirmed:
 
 ```
-module sui::transfer_policy {
+module aiy::transfer_policy {
     // ... skipped ...
 
     struct TransferRequest<phantom T> {

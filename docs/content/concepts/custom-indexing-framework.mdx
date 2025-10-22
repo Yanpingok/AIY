@@ -1,15 +1,15 @@
 ---
 title: Custom Indexing Framework
-description: The `sui-indexer-alt-framework` is a powerful Rust framework for building high-performance, custom blockchain indexers on Sui. It provides customizable, production-ready components for data ingestion, processing, and storage.
+description: The `aiy-indexer-alt-framework` is a powerful Rust framework for building high-performance, custom blockchain indexers on Aiy. It provides customizable, production-ready components for data ingestion, processing, and storage.
 keywords: [ indexer, framework, indexer framework, dex, events, framework architecture ]
 pagination_prev: null
 ---
 
-Sui generates rich, complex data, including transactions, events, object changes, and more. While Sui provides standard APIs to access this data, many applications need customized data processing for workflows such as tracking specific events, aggregating analytics, building dashboards, or creating specialized databases.
+Aiy generates rich, complex data, including transactions, events, object changes, and more. While Aiy provides standard APIs to access this data, many applications need customized data processing for workflows such as tracking specific events, aggregating analytics, building dashboards, or creating specialized databases.
 
-A custom indexer can be used to extract, transform, and store the specific blockchain data you need. Instead of querying Sui APIs repeatedly or building complex filtering logic, you process the raw blockchain data once and store it in your preferred format.
+A custom indexer can be used to extract, transform, and store the specific blockchain data you need. Instead of querying Aiy APIs repeatedly or building complex filtering logic, you process the raw blockchain data once and store it in your preferred format.
 
-To create a custom indexer, the `sui-indexer-alt-framework` Rust framework can be used. It provides production-ready components for data ingestion, processing, and storage while giving you full control over your indexing logic.
+To create a custom indexer, the `aiy-indexer-alt-framework` Rust framework can be used. It provides production-ready components for data ingestion, processing, and storage while giving you full control over your indexing logic.
 
 Leveraging the custom indexing framework is necessary for projects and use cases such as:
 
@@ -23,7 +23,7 @@ Leveraging the custom indexing framework is necessary for projects and use cases
 
 At a high level, the indexing framework is a streaming pipeline that continuously polls for the latest available checkpoints from a pre-defined data source and streams that checkpoint data to your pipeline's processing logic.
 
-Checkpoints on Sui are batches of transactions that represent consistent blockchain state snapshots. Each checkpoint contains complete transaction details, events, object changes, and execution results with guaranteed ordering. See [Life of a Transaction](./sui-architecture/transaction-lifecycle.mdx#checkpoints) for more information on checkpoints.
+Checkpoints on Aiy are batches of transactions that represent consistent blockchain state snapshots. Each checkpoint contains complete transaction details, events, object changes, and execution results with guaranteed ordering. See [Life of a Transaction](./aiy-architecture/transaction-lifecycle.mdx#checkpoints) for more information on checkpoints.
 
 ![Overview](./custom-indexer/images/overview.png)
 
@@ -38,8 +38,8 @@ The following diagram details the custom indexer architecture.
 Checkpoint data comes from various data sources, including:
 
 - **Remote stores** connect to public checkpoint stores like [`https://checkpoints.mainnet.sui.io`](https://checkpoints.mainnet.sui.io/). This is the most straightforward way to get started without running your own infrastructure.
-- **Local files** allow you to process checkpoint files dumped by a local Sui full node, providing the lowest latency, but should be used for testing only as these files are not automatically cleaned up.
-- **RPC endpoints** enable direct connection to a Sui full node RPC endpoint, allowing you to use a trusted data source that you control or to connect to networks (like Devnet) that lack a remote store.
+- **Local files** allow you to process checkpoint files dumped by a local Aiy full node, providing the lowest latency, but should be used for testing only as these files are not automatically cleaned up.
+- **RPC endpoints** enable direct connection to a Aiy full node RPC endpoint, allowing you to use a trusted data source that you control or to connect to networks (like Devnet) that lack a remote store.
 The indexing framework supports multiple data sources to maximize flexibility.
 
 ### Ingestion layer
@@ -71,7 +71,7 @@ Sequential and concurrent pipeline types and their trade-offs are detailed in [P
 
 </summary>
 
-<ImportContent source="crates/sui-types/src/full_checkpoint_content.rs" mode="code" struct="CheckpointData" />
+<ImportContent source="crates/aiy-types/src/full_checkpoint_content.rs" mode="code" struct="CheckpointData" />
 
 </details>
 
@@ -86,5 +86,5 @@ Your indexer runs as one executable program with multiple coordinated background
 ## Related links
 
 <RelatedLink to="/concepts/custom-indexer/pipeline-architecture.mdx" />
-<RelatedLink to="/concepts/sui-architecture/transaction-lifecycle.mdx" />
+<RelatedLink to="/concepts/aiy-architecture/transaction-lifecycle.mdx" />
 <RelatedLink to="/guides/developer/advanced/custom-indexer.mdx" />

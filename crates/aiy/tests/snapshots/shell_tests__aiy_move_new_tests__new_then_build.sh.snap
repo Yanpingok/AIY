@@ -1,0 +1,24 @@
+---
+source: crates/aiy/tests/shell_tests.rs
+description: tests/shell_tests/aiy_move_new_tests/new_then_build.sh
+---
+----- script -----
+# Copyright (c) Mysten Labs, Inc.
+# SPDX-License-Identifier: Apache-2.0
+
+# tests that aiy move new followed by aiy move build succeeds
+
+aiy move new example
+cd example && aiy move build
+
+----- results -----
+success: true
+exit_code: 0
+----- stdout -----
+
+----- stderr -----
+INCLUDING DEPENDENCY Bridge
+INCLUDING DEPENDENCY AiySystem
+INCLUDING DEPENDENCY Aiy
+INCLUDING DEPENDENCY MoveStdlib
+BUILDING example

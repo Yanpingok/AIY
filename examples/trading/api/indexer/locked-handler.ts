@@ -1,6 +1,6 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-import { SuiEvent } from '@mysten/sui/client';
+import { AiyEvent } from '@mysten/aiy/client';
 import { Prisma } from '@prisma/client';
 
 import { prisma } from '../db';
@@ -25,7 +25,7 @@ type LockDestroyed = {
  * We're constructing the updates to support multiple events involving a single record
  * as part of the same batch of events (but using a single write/record to the DB).
  * */
-export const handleLockObjects = async (events: SuiEvent[], type: string) => {
+export const handleLockObjects = async (events: AiyEvent[], type: string) => {
 	const updates: Record<string, Prisma.LockedCreateInput> = {};
 
 	for (const event of events) {

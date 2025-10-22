@@ -9,8 +9,8 @@
 /// description, and icon URL.
 module examples::burn_only_supply;
 
-use sui::coin::Coin;
-use sui::coin_registry::{Self, Currency};
+use aiy::coin::Coin;
+use aiy::coin_registry::{Self, Currency};
 
 // Total supply of the `BURN_ONLY_SUPPLY` coin is 1B (with 6 decimals).
 const TOTAL_SUPPLY: u64 = 1000000000_000000;

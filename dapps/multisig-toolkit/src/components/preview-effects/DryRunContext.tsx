@@ -1,14 +1,14 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { getFullnodeUrl, SuiClient } from '@mysten/sui/client';
+import { getFullnodeUrl, AiyClient } from '@mysten/aiy/client';
 import { createContext, ReactNode, useContext } from 'react';
 
 export type Network = 'mainnet' | 'testnet' | 'devnet' | 'localnet';
 
 type DryRunContextType = {
 	network: Network;
-	client: SuiClient;
+	client: AiyClient;
 };
 
 const DryRunContext = createContext<DryRunContextType | null>(null);
@@ -22,7 +22,7 @@ export const DryRunProvider = ({
 }) => {
 	return (
 		<DryRunContext.Provider
-			value={{ network, client: new SuiClient({ url: getFullnodeUrl(network) }) }}
+			value={{ network, client: new AiyClient({ url: getFullnodeUrl(network) }) }}
 		>
 			{children}
 		</DryRunContext.Provider>

@@ -1,8 +1,8 @@
 ---
-title: GraphQL for Sui RPC (Beta)
+title: GraphQL for Aiy RPC (Beta)
 beta: devnet, testnet, mainnet
-description: Use GraphQL to make Sui RPC calls. This feature is currently in Beta. 
-keywords: [ graphql, graphql headers, x-sui-rpc-version, x-sui-rpc-show-usage, variables, fragments, pagination, graphql limits, make rpc call, sui rpc calls ]
+description: Use GraphQL to make Aiy RPC calls. This feature is currently in Beta. 
+keywords: [ graphql, graphql headers, x-aiy-rpc-version, x-aiy-rpc-show-usage, variables, fragments, pagination, graphql limits, make rpc call, aiy rpc calls ]
 ---
 
 This section explains some of the common concepts when working with GraphQL, such as altering behavior using HTTP headers, re-using query snippets with variables and fragments, consuming paginated queries, and understanding and working within the limits enforced by the service.
@@ -40,14 +40,14 @@ Switch any apps that still use the GraphQL Alpha endpoints (`https://sui-mainnet
 
 The service accepts the following optional headers:
 
-- `x-sui-rpc-version` to specify which RPC version to use (currently only one version is supported),
-- `x-sui-rpc-show-usage` returns the response with extra query complexity information.
+- `x-aiy-rpc-version` to specify which RPC version to use (currently only one version is supported),
+- `x-aiy-rpc-show-usage` returns the response with extra query complexity information.
 
-By default, each request returns the service's version in the response header: `x-sui-rpc-version`.
+By default, each request returns the service's version in the response header: `x-aiy-rpc-version`.
 
 ```sh
 $ curl -i -X POST https://graphql.testnet.sui.io/graphql\
-     --header 'x-sui-rpc-show-usage: true'                 \
+     --header 'x-aiy-rpc-show-usage: true'                 \
      --header 'Content-Type: application/json'             \
      --data '{
           "query": "query { epoch { referenceGasPrice } }"
@@ -60,7 +60,7 @@ The response for the previous request looks similar to the following:
 HTTP/2 200 
 content-type: application/json
 content-length: 179
-x-sui-rpc-version: 1.56.1-
+x-aiy-rpc-version: 1.56.1-
 vary: origin, access-control-request-method, access-control-request-headers
 access-control-allow-origin: *
 date: Tue, 09 Sep 2025 23:34:04 GMT
@@ -237,7 +237,7 @@ Fields that return a paginated response accept at least the following optional p
 
 They also return a type that conforms to the [GraphQL Cursor Connections Specification](https://relay.dev/graphql/connections.htm), meaning its name ends in `Connection`, and it contains at least the following fields:
 
-- `pageInfo`, of type <UnsafeLink href="/references/sui-api/sui-graphql/beta/reference/types/objects/page-info">PageInfo</UnsafeLink>, which indicates whether there are more pages before or after the page returned.
+- `pageInfo`, of type <UnsafeLink href="/references/aiy-api/aiy-graphql/beta/reference/types/objects/page-info">PageInfo</UnsafeLink>, which indicates whether there are more pages before or after the page returned.
 - `nodes`, the content of the paginated response, as a list of the type being paginated (`TransactionBlock` in the previous example).
 - `edges`, similar to `nodes` but associating each node with its [cursor](#cursors).
 
@@ -274,7 +274,7 @@ To see these principles put into practice, consult the examples for [paginating 
 
 ## Limits
 
-The GraphQL service for Sui RPC is rate-limited on all available instances to keep network throughput optimized and to protect against excessive or abusive calls to the service.
+The GraphQL service for Aiy RPC is rate-limited on all available instances to keep network throughput optimized and to protect against excessive or abusive calls to the service.
 
 ### Rate limits
 
@@ -322,5 +322,5 @@ The results are the first and last checkpoint for which pagination continues to 
 ## Related links
 
 <RelatedLink to="/guides/developer/getting-started/graphql-rpc.mdx" />
-<RelatedLink to="/references/sui-graphql.mdx" />
+<RelatedLink to="/references/aiy-graphql.mdx" />
 <RelatedLink to="/concepts/graphql-indexer" />

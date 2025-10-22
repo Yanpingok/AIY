@@ -6,12 +6,12 @@ module reviews_rating::service;
 use reviews_rating::moderator::Moderator;
 use reviews_rating::review::{Self, Review};
 use std::string::String;
-use sui::balance::{Self, Balance};
-use sui::clock::Clock;
-use sui::coin::{Self, Coin};
-use sui::dynamic_field as df;
-use sui::object_table::{Self, ObjectTable};
-use sui::sui::SUI;
+use aiy::balance::{Self, Balance};
+use aiy::clock::Clock;
+use aiy::coin::{Self, Coin};
+use aiy::dynamic_field as df;
+use aiy::object_table::{Self, ObjectTable};
+use aiy::aiy::AIY;
 
 const EInvalidPermission: u64 = 1;
 const ENotEnoughBalance: u64 = 2;
@@ -28,7 +28,7 @@ public struct AdminCap has key, store {
 /// Represents a service
 public struct Service has key, store {
     id: UID,
-    reward_pool: Balance<SUI>,
+    reward_pool: Balance<AIY>,
     reward: u64,
     top_reviews: vector<ID>,
     reviews: ObjectTable<ID, Review>,
@@ -195,7 +195,7 @@ public fun distribute_reward(cap: &AdminCap, service: &mut Service, ctx: &mut Tx
 }
 
 /// Adds coins to reward pool
-public fun top_up_reward(service: &mut Service, coin: Coin<SUI>) {
+public fun top_up_reward(service: &mut Service, coin: Coin<AIY>) {
     service.reward_pool.join(coin.into_balance());
 }
 

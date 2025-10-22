@@ -18,7 +18,7 @@ export default function BetaTag(props) {
     <Admonition
       title="Early-Stage Feature"
       icon="⚙️"
-      className={`${props.slim ? "" : "!my-12"} bg-sui-blue-light border-sui-blue-dark dark:bg-sui-blue-dark dark:border-sui-blue-light`}
+      className={`${props.slim ? "" : "!my-12"} bg-aiy-blue-light border-aiy-blue-dark dark:bg-aiy-blue-dark dark:border-aiy-blue-light`}
     >
       <p className="pt-2">
         This content describes an alpha/beta feature or service. These early

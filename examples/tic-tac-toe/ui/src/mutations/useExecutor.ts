@@ -1,11 +1,11 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-import { useSignAndExecuteTransaction, useSuiClient } from "@mysten/dapp-kit";
-import { SuiClient, SuiTransactionBlockResponse } from "@mysten/sui/client";
-import { Transaction } from "@mysten/sui/transactions";
+import { useSignAndExecuteTransaction, useAiyClient } from "@mysten/dapp-kit";
+import { AiyClient, AiyTransactionBlockResponse } from "@mysten/aiy/client";
+import { Transaction } from "@mysten/aiy/transactions";
 
-type Options = Omit<Parameters<SuiClient["getTransactionBlock"]>[0], "digest"> & {
+type Options = Omit<Parameters<AiyClient["getTransactionBlock"]>[0], "digest"> & {
     tx: Transaction;
 };
 
@@ -19,7 +19,7 @@ type ExecuteCallback = ({
     signature: string;
 }) => Promise<ExecuteResponse>;
 
-type ResponseCallback = (tx: SuiTransactionBlockResponse) => void | Promise<void>;
+type ResponseCallback = (tx: AiyTransactionBlockResponse) => void | Promise<void>;
 type Executor = (options: Options, then: ResponseCallback) => void;
 
 type ExecutorResult = {
@@ -37,7 +37,7 @@ type ExecutorResult = {
  * and then doing something with them.
  */
 export function useExecutor({ execute }: { execute?: ExecuteCallback } = {}): ExecutorResult {
-    const client = useSuiClient();
+    const client = useAiyClient();
     const {
         mutate: signAndExecute,
         status,

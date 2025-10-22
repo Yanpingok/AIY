@@ -25,9 +25,9 @@ require("dotenv").config();
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Sui Documentation",
+  title: "Aiy Documentation",
   tagline:
-    "Sui is a next-generation smart contract platform with high throughput, low latency, and an asset-oriented programming model powered by Move",
+    "Aiy is a next-generation smart contract platform with high throughput, low latency, and an asset-oriented programming model powered by Move",
   favicon: "/img/favicon.ico",
   headTags: [
     {
@@ -69,9 +69,9 @@ const config = {
       "@graphql-markdown/docusaurus",
       {
         id: "alpha",
-        schema: "../../crates/sui-graphql-rpc/schema.graphql",
+        schema: "../../crates/aiy-graphql-rpc/schema.graphql",
         rootPath: "../content", // docs will be generated under rootPath/baseURL
-        baseURL: "references/sui-api/sui-graphql/alpha/reference",
+        baseURL: "references/aiy-api/aiy-graphql/alpha/reference",
         loaders: {
           GraphQLFileLoader: "@graphql-tools/graphql-file-loader",
         },
@@ -116,9 +116,9 @@ const config = {
       "@graphql-markdown/docusaurus",
       {
         id: "beta",
-        schema: "../../crates/sui-indexer-alt-graphql/schema.graphql",
+        schema: "../../crates/aiy-indexer-alt-graphql/schema.graphql",
         rootPath: "../content",
-        baseURL: "references/sui-api/sui-graphql/beta/reference",
+        baseURL: "references/aiy-api/aiy-graphql/beta/reference",
         docOptions: {
           frontMatter: {
             isGraphQlBeta: true,
@@ -218,7 +218,7 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      image: "img/sui-doc-og.png",
+      image: "img/aiy-doc-og.png",
       docs: {
         sidebar: {
           autoCollapseCategories: false,
@@ -226,10 +226,10 @@ const config = {
       },
 
       navbar: {
-        title: "Sui Documentation",
+        title: "Aiy Documentation",
         logo: {
-          alt: "Sui Docs Logo",
-          src: "img/sui-logo.svg",
+          alt: "Aiy Docs Logo",
+          src: "img/aiy-logo.svg",
         },
         items: [
           {
@@ -252,12 +252,12 @@ const config = {
       },
       footer: {
         logo: {
-          alt: "Sui Logo",
-          src: "img/sui-logo-footer.svg",
+          alt: "Aiy Logo",
+          src: "img/aiy-logo-footer.svg",
           href: "https://sui.io",
         },
         style: "dark",
-        copyright: `© ${new Date().getFullYear()} Sui Foundation | Documentation distributed under <a href="https://github.com/MystenLabs/sui/blob/main/docs/site/LICENSE">CC BY 4.0</a>`,
+        copyright: `© ${new Date().getFullYear()} Aiy Foundation | Documentation distributed under <a href="https://github.com/MystenLabs/sui/blob/main/docs/site/LICENSE">CC BY 4.0</a>`,
       },
       codeblock: {
         showGithubLink: true,

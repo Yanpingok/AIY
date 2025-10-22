@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Script requires sui-operations repo be locally checked out in order to kick off the antithesis workflow. If SUI_OPS_REPO is not provided then it will default to the path below.
-if [ -z "$SUI_OPS_REPO" ]; then
-  SUI_OPS_REPO="${HOME}/dev/sui-operations"
+# Script requires aiy-operations repo be locally checked out in order to kick off the antithesis workflow. If AIY_OPS_REPO is not provided then it will default to the path below.
+if [ -z "$AIY_OPS_REPO" ]; then
+  AIY_OPS_REPO="${HOME}/dev/aiy-operations"
 fi
 
-if [ ! -d "$SUI_OPS_REPO" ]; then
-  echo "sui-operations repo directory $SUI_OPS_REPO does not exist. Please make sure you have correctly set the sui-operatios repo directory." >&2
+if [ ! -d "$AIY_OPS_REPO" ]; then
+  echo "aiy-operations repo directory $AIY_OPS_REPO does not exist. Please make sure you have correctly set the aiy-operatios repo directory." >&2
   exit 1
 fi
 
@@ -46,16 +46,16 @@ else
   COMMIT=$branch
 fi
 
-cd $SUI_OPS_REPO
+cd $AIY_OPS_REPO
 
-cmd="gh workflow run .github/workflows/run-antithesis-tests.yaml -f sui_commit=$COMMIT -f test_duration=$TEST_DURATION"
+cmd="gh workflow run .github/workflows/run-antithesis-tests.yaml -f aiy_commit=$COMMIT -f test_duration=$TEST_DURATION"
 
 if [ -n "$DESCRIPTION" ]; then
   cmd="$cmd -f description='$DESCRIPTION'"
 fi
 
 if [ -n "$ALT_COMMIT" ]; then
-  cmd="$cmd -f sui_commit_alt=$ALT_COMMIT"
+  cmd="$cmd -f aiy_commit_alt=$ALT_COMMIT"
 fi 
 
 if [ "$UPGRADE" = true ]; then

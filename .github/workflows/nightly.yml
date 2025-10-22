@@ -47,15 +47,15 @@ jobs:
     steps:
       - uses: technote-space/workflow-conclusion-action@45ce8e0eb155657ab8ccf346ade734257fd196a5 # Pin v4.1.1
 
-      - name: Checkout sui repo main branch
+      - name: Checkout aiy repo main branch
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11  # Pin v4.1.1
     
-      - name: Get sui commit
+      - name: Get aiy commit
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          export sui_sha=$(git rev-parse HEAD)
-          echo "sui_sha=${sui_sha}" >> $GITHUB_ENV
+          export aiy_sha=$(git rev-parse HEAD)
+          echo "aiy_sha=${aiy_sha}" >> $GITHUB_ENV
 
       - name: Get current oncall
         run: |
@@ -91,14 +91,14 @@ jobs:
         uses: slackapi/slack-github-action@37ebaef184d7626c5f204ab8d3baff4262dd30f0 # pin@v1.27.0
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          SUI_SHA: ${{ env.sui_sha }}
+          AIY_SHA: ${{ env.aiy_sha }}
           SLACK_ID: ${{ env.slack_id }}
           ONCALL_NAME: ${{ env.oncall_name }}
           WORKFLOW_CONCLUSION: ${{ env.WORKFLOW_CONCLUSION }}
         with:
-          channel-id: 'build-failures-sui'
+          channel-id: 'build-failures-aiy'
           slack-message: |
-            :sui::error-cross: Workflow *${{ github.workflow }}* has `${{ env.WORKFLOW_CONCLUSION }}`.
-            Sui commit: <https://github.com/MystenLabs/sui/commit/${{ env.SUI_SHA }}|${{ env.SUI_SHA }}>
+            :aiy::error-cross: Workflow *${{ github.workflow }}* has `${{ env.WORKFLOW_CONCLUSION }}`.
+            Aiy commit: <https://github.com/MystenLabs/sui/commit/${{ env.AIY_SHA }}|${{ env.AIY_SHA }}>
              <@${{ env.SLACK_ID }}>, current `${{ env.ONCALL_NAME }}` oncall, please debug failures.
             Logs are here: <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.run_id }}>

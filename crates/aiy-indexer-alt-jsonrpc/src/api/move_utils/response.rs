@@ -1,0 +1,145 @@
+// Copyright (c) Mysten Labs, Inc.
+// SPDX-License-Identifier: Apache-2.0
+
+use anyhow::anyhow;
+use move_binary_format::file_format::{Ability, AbilitySet, Visibility};
+use aiy_json_rpc_types::{
+    AiyMoveAbility, AiyMoveAbilitySet, AiyMoveNormalizedFunction, AiyMoveNormalizedType,
+    AiyMoveVisibility,
+};
+use aiy_package_resolver::{FunctionDef, OpenSignature, OpenSignatureBody, Reference};
+use aiy_types::{base_types::ObjectID, Identifier};
+
+use crate::{
+    context::Context,
+    error::{invalid_params, RpcError},
+};
+
+use super::error::Error;
+
+/// Load information about a function, and convert it into a JSON-RPC response.
+pub(super) async fn function(
+    ctx: &Context,
+    package: ObjectID,
+    module: &str,
+    name: &str,
+) -> Result<AiyMoveNormalizedFunction, RpcError<Error>> {
+    use Error as E;
+
+    if !Identifier::is_valid(module) {
+        return Err(invalid_params(E::BadIdentifier(module.to_owned())));
+    }
+
+    if !Identifier::is_valid(name) {
+        return Err(invalid_params(E::BadIdentifier(name.to_owned())));
+    }
+
+    let sig = ctx
+        .package_resolver()
+        .function_signature(*package, module, name)
+        .await
+        .map_err(|e| {
+            use aiy_package_resolver::error::Error as PRE;
+            match &e {
+                // These errors can be triggered by passing a type that doesn't exist for the
+                // dynamic field name.
+                PRE::NotAPackage(_)
+                | PRE::PackageNotFound(_)
+                | PRE::ModuleNotFound(_, _)
+                | PRE::FunctionNotFound(_, _, _) => invalid_params(E::NotFound(e)),
+
+                // These errors can be triggered by requesting a type whose layout is too large
+                // (requires too may resources to resolve)
+                PRE::TooManyTypeNodes(_, _)
+                | PRE::TooManyTypeParams(_, _)
+                | PRE::TypeParamNesting(_, _) => invalid_params(E::ResolutionLimit(e)),
+
+                // The other errors are a form of internal error.
+                PRE::Bcs(_)
+                | PRE::Store { .. }
+                | PRE::DatatypeNotFound(_, _, _)
+                | PRE::Deserialize(_)
+                | PRE::EmptyPackage(_)
+                | PRE::LinkageNotFound(_)
+                | PRE::NoTypeOrigin(_, _, _)
+                | PRE::NotAnIdentifier(_)
+                | PRE::TypeArityMismatch(_, _)
+                | PRE::TypeParamOOB(_, _)
+                | PRE::UnexpectedReference
+                | PRE::UnexpectedSigner
+                | PRE::UnexpectedError(_)
+                | PRE::ValueNesting(_) => {
+                    RpcError::from(anyhow!(e).context("Failed to resolve type layout"))
+                }
+            }
+        })?;
+
+    Ok(normalized_function(&sig))
+}
+
+fn normalized_function(sig: &FunctionDef) -> AiyMoveNormalizedFunction {
+    AiyMoveNormalizedFunction {
+        visibility: visibility(sig.visibility),
+        is_entry: sig.is_entry,
+        type_parameters: sig.type_params.iter().map(|a| ability_set(*a)).collect(),
+        parameters: sig.parameters.iter().map(normalized_signature).collect(),
+        return_: sig.return_.iter().map(normalized_signature).collect(),
+    }
+}
+
+fn normalized_signature(sig: &OpenSignature) -> AiyMoveNormalizedType {
+    use AiyMoveNormalizedType as T;
+
+    let body = normalized_type(&sig.body);
+    match sig.ref_ {
+        Some(Reference::Immutable) => T::Reference(Box::new(body)),
+        Some(Reference::Mutable) => T::MutableReference(Box::new(body)),
+        None => body,
+    }
+}
+
+fn normalized_type(sig: &OpenSignatureBody) -> AiyMoveNormalizedType {
+    use OpenSignatureBody as S;
+    use AiyMoveNormalizedType as T;
+    match sig {
+        S::Address => T::Address,
+        S::Bool => T::Bool,
+        S::U8 => T::U8,
+        S::U16 => T::U16,
+        S::U32 => T::U32,
+        S::U64 => T::U64,
+        S::U128 => T::U128,
+        S::U256 => T::U256,
+        S::Vector(sig) => T::Vector(Box::new(normalized_type(sig))),
+        S::Datatype(t, params) => T::new_struct(
+            t.package.to_canonical_string(/* with_prefix */ true),
+            t.module.to_string(),
+            t.name.to_string(),
+            params.iter().map(normalized_type).collect(),
+        ),
+        S::TypeParameter(ix) => T::TypeParameter(*ix),
+    }
+}
+
+fn visibility(v: Visibility) -> AiyMoveVisibility {
+    match v {
+        Visibility::Public => AiyMoveVisibility::Public,
+        Visibility::Friend => AiyMoveVisibility::Friend,
+        Visibility::Private => AiyMoveVisibility::Private,
+    }
+}
+
+fn ability_set(a: AbilitySet) -> AiyMoveAbilitySet {
+    AiyMoveAbilitySet {
+        abilities: a.into_iter().map(ability).collect(),
+    }
+}
+
+fn ability(a: Ability) -> AiyMoveAbility {
+    match a {
+        Ability::Copy => AiyMoveAbility::Copy,
+        Ability::Drop => AiyMoveAbility::Drop,
+        Ability::Store => AiyMoveAbility::Store,
+        Ability::Key => AiyMoveAbility::Key,
+    }
+}

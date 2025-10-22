@@ -62,17 +62,17 @@ Installing and running the prototype
 
 To install the prototype, run
 ```sh
-suiup install sui --nightly=sui-pkg-alt -y
+aiyup install aiy --nightly=aiy-pkg-alt -y
 ```
 
-This will compile `sui` from the prototype branch, so it will need the rust
+This will compile `aiy` from the prototype branch, so it will need the rust
 toolchain installed and it will take a while to finish.
 
 If you want to use `mvr` dependencies, you will need a patched version of `mvr`
 as well. You can install it using
 
 ```sh
-suiup install mvr --nightly=ml/cli-pkg-alt -y
+aiyup install mvr --nightly=ml/cli-pkg-alt -y
 ```
 
 Changes to the `Move.toml` file
@@ -276,15 +276,15 @@ that you can add to dependencies in the `[dep-replacements]` section:
 CLI changes
 ===========
 
-Our prototype is integrated into the `sui` binary, so most of the commands you
+Our prototype is integrated into the `aiy` binary, so most of the commands you
 are familiar with work the same way. There are a few changes though:
 
 ### Compiling for specific environments
 
 Because of `dep-replacements` (and also some details about how package
 conflicts are determined), all operations must be done in a specific
-environment. By default, the `sui` binary tries to choose the right environment
-based on the sui client environment (as determined by `sui client active-env`).
+environment. By default, the `aiy` binary tries to choose the right environment
+based on the aiy client environment (as determined by `aiy client active-env`).
 
 If there is not an obvious choice of environment (either because the manifest
 declares multiple environments with the same chain ID or because it doesn't

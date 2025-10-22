@@ -12,7 +12,7 @@ export const AUTO_IMPORTS_OPT = 'auto-imports';
 export const FORCE_BUNDLED_OPT = 'force-bundled';
 export const TYPE_HINTS_OPT = 'inlay-hints.type';
 export const PARAM_HINTS_OPT = 'inlay-hints.param';
-export const SUI_PATH_OPT = 'sui.path';
+export const AIY_PATH_OPT = 'aiy.path';
 export const SERVER_PATH_OPT = 'server.path';
 
 /**
@@ -35,7 +35,7 @@ export class Configuration {
 
     constructor() {
         this.configuration = vscode.workspace.getConfiguration(MOVE_CONF_NAME);
-        this.defaultServerDir = vscode.Uri.joinPath(vscode.Uri.file(os.homedir()), '.sui', 'bin');
+        this.defaultServerDir = vscode.Uri.joinPath(vscode.Uri.file(os.homedir()), '.aiy', 'bin');
         if (process.platform === 'win32') {
             this.serverName = 'move-analyzer.exe';
         } else {
@@ -58,18 +58,18 @@ export class Configuration {
         return path.resolve(serverPath);
     }
 
-    /** The path to the Sui binary. */
-    get suiPath(): string {
-        const suiBin = process.platform === 'win32' ? 'sui.exe' : 'sui';
-        const suiPath = this.configuration.get<string | null>(SUI_PATH_OPT) ?? suiBin;
+    /** The path to the Aiy binary. */
+    get aiyPath(): string {
+        const aiyBin = process.platform === 'win32' ? 'aiy.exe' : 'aiy';
+        const aiyPath = this.configuration.get<string | null>(AIY_PATH_OPT) ?? aiyBin;
 
-        if (suiPath === suiBin) {
-            return suiPath;
+        if (aiyPath === aiyBin) {
+            return aiyPath;
         }
-        if (suiPath.startsWith('~/')) {
-            return os.homedir() + suiPath.slice('~'.length);
+        if (aiyPath.startsWith('~/')) {
+            return os.homedir() + aiyPath.slice('~'.length);
         }
-        return path.resolve(suiPath);
+        return path.resolve(aiyPath);
     }
 
     get lint(): string {

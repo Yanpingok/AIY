@@ -15,18 +15,18 @@
 
 # Move build directory
 build
-!crates/sui-single-node-benchmark/tests/data/package_publish_from_bytecode/package_a/build
-!crates/sui-single-node-benchmark/tests/data/package_publish_from_bytecode/package_b/build
+!crates/aiy-single-node-benchmark/tests/data/package_publish_from_bytecode/package_a/build
+!crates/aiy-single-node-benchmark/tests/data/package_publish_from_bytecode/package_b/build
 storage
 !consensus/core/src/storage
-!crates/sui-types/src/storage
+!crates/aiy-types/src/storage
 
 # Move-related files
 Move.lock
-!crates/sui-framework/packages/move-stdlib/Move.lock
-!crates/sui-framework/packages/sui-framework/Move.lock
-!crates/sui-framework/packages/sui-system/Move.lock
-!crates/sui-framework/packages/deepbook/Move.lock
+!crates/aiy-framework/packages/move-stdlib/Move.lock
+!crates/aiy-framework/packages/aiy-framework/Move.lock
+!crates/aiy-framework/packages/aiy-system/Move.lock
+!crates/aiy-framework/packages/deepbook/Move.lock
 .trace
 .coverage_map.mvcov
 
@@ -61,7 +61,7 @@ playwright/.cache/
 
 # logs
 wallet.log.*
-sui.log.*
+aiy.log.*
 .vercel
 npm-debug.log*
 yarn-debug.log*
@@ -72,7 +72,7 @@ yarn-error.log*
 .env
 checkpoints_dir/*
 light_client.yaml
-docs/content/references/sui-api/sui-graphql/*
+docs/content/references/aiy-api/aiy-graphql/*
 docs/content/references/framework/**
 
 lcov.info

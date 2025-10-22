@@ -6,8 +6,8 @@ import './index.css';
 import '@fontsource-variable/inter';
 import '@fontsource-variable/red-hat-mono';
 
-import { SuiClientProvider, WalletProvider } from '@mysten/dapp-kit';
-import { getFullnodeUrl } from '@mysten/sui/client';
+import { AiyClientProvider, WalletProvider } from '@mysten/dapp-kit';
+import { getFullnodeUrl } from '@mysten/aiy/client';
 import { QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -19,18 +19,18 @@ import { router } from './routes';
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 	<React.StrictMode>
 		<QueryClientProvider client={queryClient}>
-			<SuiClientProvider
-				defaultNetwork="sui:mainnet"
+			<AiyClientProvider
+				defaultNetwork="aiy:mainnet"
 				networks={{
-					'sui:testnet': { url: getFullnodeUrl('testnet') },
-					'sui:mainnet': { url: getFullnodeUrl('mainnet') },
-					'sui:devnet': { url: getFullnodeUrl('devnet') },
+					'aiy:testnet': { url: getFullnodeUrl('testnet') },
+					'aiy:mainnet': { url: getFullnodeUrl('mainnet') },
+					'aiy:devnet': { url: getFullnodeUrl('devnet') },
 				}}
 			>
 				<WalletProvider>
 					<RouterProvider router={router} />
 				</WalletProvider>
-			</SuiClientProvider>
+			</AiyClientProvider>
 		</QueryClientProvider>
 	</React.StrictMode>,
 );

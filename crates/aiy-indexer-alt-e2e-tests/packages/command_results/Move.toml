@@ -1,0 +1,9 @@
+[package]
+name = "command_results"
+edition = "2024.beta"
+
+[dependencies]
+Aiy = { local = "../../../aiy-framework/packages/aiy-framework" }
+
+[addresses]
+command_results = "0x0"

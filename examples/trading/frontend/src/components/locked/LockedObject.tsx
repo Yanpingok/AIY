@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { CONSTANTS } from "@/constants";
-import { useSuiClientQuery } from "@mysten/dapp-kit";
+import { useAiyClientQuery } from "@mysten/dapp-kit";
 import { Locked } from "./partials/Locked";
-import { SuiObjectData } from "@mysten/sui/client";
+import { AiyObjectData } from "@mysten/aiy/client";
 
 /**
  * Acts as a wrapper between the `Locked` object fetched from API
@@ -20,7 +20,7 @@ export function LockedObject({
   itemId,
   hideControls,
 }: {
-  object: SuiObjectData;
+  object: AiyObjectData;
   itemId?: string;
   hideControls?: boolean;
 }) {
@@ -34,7 +34,7 @@ export function LockedObject({
     return object.owner.AddressOwner;
   };
 
-  const getKeyId = (item: SuiObjectData) => {
+  const getKeyId = (item: AiyObjectData) => {
     if (
       !(item.content?.dataType === "moveObject") ||
       !("key" in item.content.fields)
@@ -44,7 +44,7 @@ export function LockedObject({
   };
 
   // Get the itemID for the locked object (We've saved it as a DOF on the SC).
-  const suiObjectId = useSuiClientQuery(
+  const aiyObjectId = useAiyClientQuery(
     "getDynamicFieldObject",
     {
       parentId: object.objectId,
@@ -64,7 +64,7 @@ export function LockedObject({
   return (
     <Locked
       locked={{
-        itemId: itemId || suiObjectId.data?.objectId!,
+        itemId: itemId || aiyObjectId.data?.objectId!,
         objectId: object.objectId,
         keyId: getKeyId(object),
         creator: owner(),

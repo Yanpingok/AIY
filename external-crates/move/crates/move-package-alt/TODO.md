@@ -45,9 +45,9 @@ Needs review
  - [ ] package/manifest.rs
 
  - [ ] tests/test_runner.rs
- - [ ] tests/data/flavor_sui/Move@parsed.snap
- - [ ] tests/data/flavor_sui/Move.parsed
- - [ ] tests/data/flavor_sui/Move.toml
+ - [ ] tests/data/flavor_aiy/Move@parsed.snap
+ - [ ] tests/data/flavor_aiy/Move.parsed
+ - [ ] tests/data/flavor_aiy/Move.toml
  - [ ] tests/data/edition_unknown/Move@parsed.snap
  - [ ] tests/data/edition_unknown/Move.parsed
  - [ ] tests/data/edition_unknown/Move.toml

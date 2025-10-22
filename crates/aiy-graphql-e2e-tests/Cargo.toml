@@ -1,0 +1,33 @@
+[package]
+name = "aiy-graphql-e2e-tests"
+version = "0.1.0"
+authors = ["Mysten Labs <eng@mystenlabs.com>"]
+description = "End to end tests for Aiy GraphQL"
+license = "Apache-2.0"
+publish = false
+edition = "2021"
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+anyhow.workspace = true
+async-trait.workspace = true
+telemetry-subscribers.workspace = true
+datatest-stable.workspace = true
+serde_json.workspace = true
+aiy-graphql-rpc.workspace = true
+aiy-transactional-test-runner.workspace = true
+tokio.workspace = true
+
+[[test]]
+name = "tests"
+harness = false
+
+[dependencies]
+
+[target.'cfg(msim)'.dependencies]
+msim.workspace = true
+
+[features]
+staging = ["aiy-graphql-rpc/staging"]

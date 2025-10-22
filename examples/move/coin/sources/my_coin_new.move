@@ -3,7 +3,7 @@
 
 module examples::my_coin_new;
 
-use sui::coin_registry;
+use aiy::coin_registry;
 
 // The type identifier of coin. The coin will have a type
 // tag of kind: `Coin<package_object::mycoin::MYCOIN>`

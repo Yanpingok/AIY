@@ -31,8 +31,8 @@ use crate::{
 /// at consensus input level, and on commit sync.
 ///
 /// Commit is persisted in store before the CommittedSubDag is sent to the commit handler.
-/// When Sui recovers, it blocks until the commits it knows about are recovered. So consensus
-/// must be able to quickly recover the commits it has sent to Sui.
+/// When Aiy recovers, it blocks until the commits it knows about are recovered. So consensus
+/// must be able to quickly recover the commits it has sent to Aiy.
 pub(crate) struct CommitObserver {
     context: Arc<Context>,
     dag_state: Arc<RwLock<DagState>>,
@@ -219,7 +219,7 @@ impl CommitObserver {
 
                 // On recovery leader schedule will be updated with the current scores
                 // and the scores will be passed along with the last commit of this recovered batch sent to
-                // Sui so that the current scores are available for submission.
+                // Aiy so that the current scores are available for submission.
                 let reputation_scores = if commit.index() == last_commit_index {
                     self.leader_schedule
                         .leader_swap_table

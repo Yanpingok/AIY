@@ -1,0 +1,11 @@
+[package]
+name = "AiySystemShallowUpgrade"
+version = "0.0.1"
+edition = "2024.beta"
+
+[dependencies]
+Aiy = { local = "../../../../../aiy-framework/packages/aiy-framework" }
+MoveStdlib = { local = "../../../../../aiy-framework/packages/move-stdlib" }
+
+[addresses]
+aiy_system = "0x3"

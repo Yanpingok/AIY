@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { createNetworkConfig } from "@mysten/dapp-kit";
-import { getFullnodeUrl } from "@mysten/sui/client";
+import { getFullnodeUrl } from "@mysten/aiy/client";
 
 import DevnetPackage from "./env.devnet.ts";
 import LocalnetPackage from "./env.localnet.ts";

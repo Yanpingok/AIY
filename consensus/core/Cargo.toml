@@ -42,9 +42,9 @@ rustls.workspace = true
 serde.workspace = true
 shared-crypto.workspace = true
 strum_macros.workspace = true
-sui-macros.workspace = true
-sui-protocol-config.workspace = true
-sui-tls.workspace = true
+aiy-macros.workspace = true
+aiy-protocol-config.workspace = true
+aiy-tls.workspace = true
 tap.workspace = true
 tempfile.workspace = true
 thiserror.workspace = true
@@ -57,7 +57,7 @@ tower-http.workspace = true
 tracing.workspace = true
 typed-store.workspace = true
 tonic-rustls.workspace = true
-sui-http.workspace = true
+aiy-http.workspace = true
 
 [dev-dependencies]
 criterion.workspace = true
